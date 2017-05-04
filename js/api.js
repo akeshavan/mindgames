@@ -80,7 +80,7 @@ do_save = function(score, edits){
 get_next = function(){
   var page = getRandomInt(1,collection_size)
   startProgress()
-  $.get("https://glacial-garden-24920.herokuapp.com/image?where=mode==train&max_results=1&page="+page, function(data, status, jqXhr){
+  $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+page, function(data, status, jqXhr){
     view.setZoom(1)
 
     base.setSource(data._items[0].base_image_url)
