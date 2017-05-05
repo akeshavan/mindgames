@@ -12,6 +12,7 @@ window.onresize = function(){
   console.log("resizing")
   base.fitBounds(view.bounds)
   roi.fitBounds(view.bounds)
+  window.zoomFactor = 1
 }
 
 /*$( window ).resize(function() {
@@ -391,51 +392,69 @@ draw.line = function(x0, y0, x1, y1, val, roi, paintVal){
 
 }
 
+function Queue(item) {
+  var inbox = []
+  var outbox = [item]
+  this.push = function(item) {inbox.push(item)}
+  this.pop = function() {
+    if (outbox.length === 0) {
+      inbox.reverse()
+      // swap the inbox and outbox
+      var oldOutbox = outbox
+      outbox = inbox
+      inbox = oldOutbox
+    }
+    return outbox.pop()
+  }
+  Object.defineProperty(this, "length", { get: function() {
+    return inbox.length + outbox.length
+  }})
+}
+
+
 draw.floodFill = function(roi, node, targetVal, replacementVal){
   /*
     flood fill algorithm. roi = roi raster object, node is an object
     with keys x,y that refer to the raster-space pixels
   */
-  if (targetVal == replacementVal){return}
-  if (roi.pixelLog[node.x][node.y] != targetVal){return}
-  var neighboors = function(y){
+
+  if (targetVal === replacementVal) {return}
+  if (roi.pixelLog[node.x][node.y] != targetVal) {return}
+  function neighboors(y) {
     var nei = [];
     if (y > 0) {nei.push(y - 1)}
     if (y < roi.height - 1) {nei.push(y + 1)}
     return nei
   }
 
-  var cnt = 0;
-  var stack = [node]
-  while (stack.length > 0) {
-    // cnt += 1;
-    node = stack.pop();
+  var queue = new Queue(node)
+  while (queue.length > 0) {
+    node = queue.pop();
     var x = node.x;
     var y = node.y;
-    // console.log(cnt, x, y);
-    // console.log(x, y);
     if (roi.pixelLog[x][y] != targetVal) {continue}
 
-    while (x > 0 && roi.pixelLog[x - 1][y] == targetVal) {
+    while (x > 0 && roi.pixelLog[x - 1][y] === targetVal) {
       x -= 1;
     }
 
     var nei = neighboors(y);
-    while (x < (roi.width - 1) && roi.pixelLog[x][y] == targetVal) {
+    while (x < (roi.width - 1) && roi.pixelLog[x][y] === targetVal) {
       draw.addHistory(x, y, roi.pixelLog[x][y], replacementVal);
       roi.setPixelLog(x, y, draw.LUT[replacementVal], replacementVal);
       for (i = 0; i < nei.length; i++){
         var y_nei = nei[i]
-        if (roi.pixelLog[x][y_nei] == targetVal) {
-          stack.push({x:x,y:y_nei})
+        if (roi.pixelLog[x][y_nei] === targetVal) {
+          queue.push({x:x, y:y_nei})
         }
       }
       x += 1;
-      // cnt += 1;
     }
   }
+
   return
 }
+
 
 /*=============================================================================
                             CONTROLLER FUNCTIONS
