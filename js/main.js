@@ -809,7 +809,7 @@ mc.on('pinch', function(e) {
     if (e){
       if (window.mode == "view"){
         e.preventDefault()
-        tmpzoom = e.scale/window.startScale*window.zoomFactor
+        tmpzoom = xfm.clamp(e.scale/window.startScale*window.zoomFactor, 1, 5)
         view.setZoom(tmpzoom)
         //console.log("pinchin", e.scale)
         //var zf = e.scale/window.zoomFactor
@@ -826,7 +826,7 @@ mc.on('pinchend', function(e) {
     if (e){
       if (window.mode == "view"){
         e.preventDefault()
-        console.log("pinchend", tmpzoom)
+
         window.zoomFactor = tmpzoom
         //var zf = e.scale/window.zoomFactor
         //window.zoomFactor = zf
@@ -842,7 +842,7 @@ mc.on('pinchstart', function(e) {
     if (e){
       if (window.mode == "view"){
         e.preventDefault()
-        console.log("pinchstart", e.scale)
+
         window.startScale = e.scale
         //var zf = e.scale/window.zoomFactor
         //window.zoomFactor = zf
