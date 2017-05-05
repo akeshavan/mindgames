@@ -154,6 +154,24 @@ Raster.prototype.setPixelLog = function(x,y,val,paintVal){
   }
 }
 
+Raster.prototype.setPixelLogNoColor = function(x,y,val){
+  /*
+    Sets the pixel and pixelLog at coordinate x,y to val. Val should be a color.
+  */
+
+  x = Math.floor(x)
+  y = Math.floor(y)
+  //this.setPixel(x,y,val)
+  try {
+    this.pixelLog[x][y]= val //|| val
+    return 0
+  }
+  catch(err){
+    //console.log(x,y,"out of bounds")
+    return 1
+  }
+}
+
 Raster.prototype.fillPixelLog = function(obj,color_mapper){
   for (ii in obj){
     for (jj in obj[ii]){
@@ -162,6 +180,15 @@ Raster.prototype.fillPixelLog = function(obj,color_mapper){
       this.setPixelLog(ii,jj,color, val)
     }
   }
+}
+
+Raster.prototype.fillPixelLogFlat = function(obj,val, color_mapper){
+  var me = this
+  obj.forEach(function(v, idx, arr){
+      //var val = obj[ii][jj]
+      var color = color_mapper[val]
+      me.setPixelLog(v.x,v.y,color, val)
+    })
 }
 
 // Thanks https://github.com/licson0729/CanvasEffects
@@ -236,8 +263,8 @@ function doFloodFill(e, me){
     Starts the recursive flood fill on the raster starting from e.point
   */
   var local = xfm.get_local(e)
-  console.log("targetVal", me.pixelLog[local.x][local.y])
-  console.log("replacementVal", window.paintVal)
+  //console.log("targetVal", me.pixelLog[local.x][local.y])
+  //console.log("replacementVal", window.paintVal)
   draw.floodFill(me, local, me.pixelLog[local.x][local.y], window.paintVal)
   draw.reset()
 }
@@ -353,18 +380,28 @@ draw.addHistory = function(x0,y0,oldval,newval){
   }
 }
 
-draw.revert = function(roi){
+draw.revert = function(roi, init_pop){
   /*
-    Revert based on history
+    Revert based on history. if init_pop is 0 then it undo's a bad floodFill
   */
+  if (init_pop == undefined){init_pop = 1}
   if (draw.history.length > 1){
-    draw.history.pop() //this one is always empty
+    if (init_pop){
+      draw.history.pop() //this one is always empty
+    }
     var values = draw.history.pop()
-    values.forEach(function(val, idx, arr){
-      roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
-    })
+    if (init_pop){
+      values.forEach(function(val, idx, arr){
+        roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
+      })
+    }
+    else{
+      values.forEach(function(val, idx, arr){
+        roi.setPixelLogNoColor(val.x,val.y, val.prev)
+      })
+    }
     draw.history.push([])
-    console.log(draw.history)
+    //console.log(draw.history)
   }
 }
 
@@ -417,7 +454,8 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     flood fill algorithm. roi = roi raster object, node is an object
     with keys x,y that refer to the raster-space pixels
   */
-
+  var num_fill = 0
+  var to_fill = {}
   if (targetVal === replacementVal) {return}
   if (roi.pixelLog[node.x][node.y] != targetVal) {return}
   function neighboors(y) {
@@ -441,7 +479,8 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     var nei = neighboors(y);
     while (x < (roi.width - 1) && roi.pixelLog[x][y] === targetVal) {
       draw.addHistory(x, y, roi.pixelLog[x][y], replacementVal);
-      roi.setPixelLog(x, y, draw.LUT[replacementVal], replacementVal);
+      roi.setPixelLogNoColor(x, y, draw.LUT[replacementVal], replacementVal);
+      ++num_fill
       for (i = 0; i < nei.length; i++){
         var y_nei = nei[i]
         if (roi.pixelLog[x][y_nei] === targetVal) {
@@ -452,6 +491,14 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     }
   }
 
+  if (num_fill < 30000){
+    roi.fillPixelLogFlat(draw.history[draw.history.length-1], replacementVal, draw.LUT)
+  }
+  else{
+    alert("You are filling too much, close your loops")
+    //console.log(draw.history)
+    draw.revert(roi, 0)
+  }
   return
 }
 
@@ -475,7 +522,7 @@ changeMode = function(e){
   }
 
   window.mode = e
-  console.log("setting menu icon", window.mode)
+  //console.log("setting menu icon", window.mode)
 
   setMenuIcon(window.mode)
   //$("#currentTool").html(window.mode)
@@ -532,7 +579,7 @@ doBright = function(e){
   */
   //console.log("setting brightness")
   var amount = (parseInt(e) - 50)/50 + 1
-  console.log("bright", amount)
+  //console.log("bright", amount)
   //base.brightness(amount)
   return amount
 }
@@ -544,7 +591,7 @@ doCont = function(e){
   */
   //console.log("setting brightness")
   var amount = (parseInt(e)*2) - 100
-  console.log("cont", amount)
+  //console.log("cont", amount)
   return amount
   //base.contrast(amount)
 
@@ -718,7 +765,6 @@ function start(base_url){
     }
 
     //default mode:
-    console.log("TODO: figure out why this function runs")
     if (!window.mode){
       changeMode("paint")
     }
