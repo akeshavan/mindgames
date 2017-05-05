@@ -812,15 +812,18 @@ mc.on('pinch', function(e) {
       if (window.mode == "view"){
         e.preventDefault()
         //var zoomFactor = window.zoomFactor*e.scale
-        if (e.scale < 1 || e.scale < window.prevZoom){
+        /*if (e.scale < 1 || e.scale < window.prevZoom){
           var x = {deltaY: -1}
 
         }
         else{
           var x = {deltaY: 1}
         }
-        window.prevZoom = e.scale
-        doZoom(x)
+        window.prevZoom = e.scale*/
+        var zf = e.scale/window.zoomFactor
+        window.zoomFactor = zf
+        view.setZoom(window.zoomFactor)
+        //doZoom(x)
       }
       /*if (e.scale < 0.95 || e.scale > 1.05){
           view.setZoom(e.scale)
