@@ -59,3 +59,18 @@ function getProfile (token, callback) {
 
 }
 }
+
+function iOSLogin(callback){
+startProgress()
+var profile = {login:"iOS user", avatar_url: "/images/Octocat1.jpg"}//store.get("github_profile")
+store.set("github_profile", profile)
+currentData = null
+if (profile){
+  var output = Mustache.render('<img class="demo-avatar" src="{{avatar_url}}"/>', profile)
+  $("#login_info").html(output)
+  $("#login_name").html(profile.login)
+  callback()
+  stopProgress()
+}
+
+}
