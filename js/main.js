@@ -801,39 +801,55 @@ var Pinch = new Hammer.Pinch();
 mc.add(Pinch);
 
 window.prevZoom
+var tmpzoom = 1
 // subscribe to events
 mc.on('pinch', function(e) {
     // do something cool
 
     if (e){
-      //e.stopPropagation()
-      //var tmp = window.mode
-      //window.mode = null
       if (window.mode == "view"){
         e.preventDefault()
-        //var zoomFactor = window.zoomFactor*e.scale
-        /*if (e.scale < 1 || e.scale < window.prevZoom){
-          var x = {deltaY: -1}
-
-        }
-        else{
-          var x = {deltaY: 1}
-        }
-        window.prevZoom = e.scale*/
-        var zf = e.scale/window.zoomFactor
-        window.zoomFactor = zf
-        view.setZoom(window.zoomFactor)
-        //doZoom(x)
+        tmpzoom = e.scale/window.startScale*window.zoomFactor
+        view.setZoom(tmpzoom)
+        //console.log("pinchin", e.scale)
+        //var zf = e.scale/window.zoomFactor
+        //window.zoomFactor = zf
+        //view.setZoom(window.zoomFactor)
       }
-      /*if (e.scale < 0.95 || e.scale > 1.05){
-          view.setZoom(e.scale)
-          console.log("event is", e.deltaX, e.deltaY)
-      }*/
-      //e.gesture.stopPropagation()
-      //window.mode = tmp
     }
-    //e.stopPropagation()
-    //e.preventDefault()
+
+});
+
+mc.on('pinchend', function(e) {
+    // do something cool
+
+    if (e){
+      if (window.mode == "view"){
+        e.preventDefault()
+        console.log("pinchend", tmpzoom)
+        window.zoomFactor = tmpzoom
+        //var zf = e.scale/window.zoomFactor
+        //window.zoomFactor = zf
+        //view.setZoom(window.zoomFactor)
+      }
+    }
+
+});
+
+mc.on('pinchstart', function(e) {
+    // do something cool
+
+    if (e){
+      if (window.mode == "view"){
+        e.preventDefault()
+        console.log("pinchstart", e.scale)
+        window.startScale = e.scale
+        //var zf = e.scale/window.zoomFactor
+        //window.zoomFactor = zf
+        //view.setZoom(window.zoomFactor)
+      }
+    }
+
 });
 
 
