@@ -517,7 +517,9 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     alert("You are filling too much, close your loops")
     //draw.history = [[]]
     //console.log(draw.history)
+    startProgress()
     draw.revert(roi, 0)
+    stopProgress()
   }
   return
 }
