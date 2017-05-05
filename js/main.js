@@ -158,7 +158,7 @@ Raster.prototype.setPixelLog = function(x,y,color,paintVal){
   }
 }
 
-Raster.prototype.setPixelLogNoColor = function(x,y,val){
+Raster.prototype.setPixelLogNoColor = function(x,y,color, paintVal){
   /*
     Sets the pixel and pixelLog at coordinate x,y to val. Val should be a color.
   */
@@ -166,11 +166,11 @@ Raster.prototype.setPixelLogNoColor = function(x,y,val){
   x = Math.floor(x)
   y = Math.floor(y)
   //this.setPixel(x,y,val)
-  if ($.isNumeric(val)){
+  if (!$.isNumeric(paintVal)){
     console.log("ERROR", paintVal, "not a number")
   }
   try {
-    this.pixelLog[x][y]= val //|| val
+    this.pixelLog[x][y]= paintVal //|| val
     return 0
   }
   catch(err){
@@ -402,22 +402,22 @@ draw.revert = function(roi, init_pop){
       draw.history.pop() //this one is always empty
     }
     var values = draw.history.pop()
-    //if (init_pop){
+    if (init_pop){
       values.forEach(function(val, idx, arr){
         roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
       })
-    //}
-    /*else{
+    }
+    else{
       console.log("reverting w/ no color")
       values.forEach(function(val, idx, arr){
         if ($.isNumeric(val.prev)){
-          roi.setPixelLogNoColor(val.x,val.y, val.prev)
+          roi.setPixelLogNoColor(val.x,val.y, draw.LUT[val.prev], val.prev)
         }
         else{
           console.log(val.prev)
         }
       })
-    }*/
+    }
     draw.history.push([])
     //console.log(draw.history)
   }
@@ -508,7 +508,8 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
       }
       x += 1;
     }
-  }
+  }// end while loop
+
   console.log(num_fill)
   if (num_fill < 30000){
     roi.fillPixelLogFlat(draw.history[draw.history.length-1], replacementVal, draw.LUT)
@@ -517,8 +518,10 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     alert("You are filling too much, close your loops")
     //draw.history = [[]]
     //console.log(draw.history)
+    console.log("starting revert")
     startProgress()
     draw.revert(roi, 0)
+    console.log("ending revert")
     stopProgress()
   }
   return
