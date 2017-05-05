@@ -486,7 +486,7 @@ doZoom = function(e){
   /*
     Zoom based on how far the user drags in the y direction
   */
-  var zoomFactor = window.zoomFactor + e.delta.y/200
+  var zoomFactor = window.zoomFactor +  e.deltaY/200
   window.zoomFactor = xfm.clamp(zoomFactor, 1, 3)
   view.setZoom(window.zoomFactor)
 }
@@ -735,6 +735,7 @@ var Pinch = new Hammer.Pinch();
 // add the recognizer
 mc.add(Pinch);
 
+window.prevZoom
 // subscribe to events
 mc.on('pinch', function(e) {
     // do something cool
@@ -745,9 +746,16 @@ mc.on('pinch', function(e) {
       //window.mode = null
       if (window.mode == "view"){
         e.preventDefault()
-        var zoomFactor = window.zoomFactor*e.scale
-        window.zoomFactor = xfm.clamp(zoomFactor, 1, 5)
-        view.setZoom(window.zoomFactor)
+        //var zoomFactor = window.zoomFactor*e.scale
+        if (e.scale < 1 || e.scale < window.prevZoom){
+          var x = {deltaY: -1}
+
+        }
+        else{
+          var x = {deltaY: 1}
+        }
+        window.prevZoom = e.scale
+        doZoom(x)
       }
       /*if (e.scale < 0.95 || e.scale > 1.05){
           view.setZoom(e.scale)
