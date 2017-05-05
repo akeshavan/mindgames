@@ -3,7 +3,7 @@
 ============================================================================= */
 
 var all_rasters = []
-
+window.all_rasters = all_rasters
 window.onresize = function(){
   /*
     When the window size changes, change the bounds of all rasters
@@ -136,14 +136,18 @@ Raster.prototype.diff = function(data){
   return score
 }
 
-Raster.prototype.setPixelLog = function(x,y,val,paintVal){
+Raster.prototype.setPixelLog = function(x,y,color,paintVal){
   /*
     Sets the pixel and pixelLog at coordinate x,y to val. Val should be a color.
   */
 
+
   x = Math.floor(x)
   y = Math.floor(y)
-  this.setPixel(x,y,val)
+  this.setPixel(x,y,color)
+  if (!$.isNumeric(paintVal)){
+    console.log("ERROR", paintVal, "not a number")
+  }
   try {
     this.pixelLog[x][y]= paintVal //|| val
     return 0
@@ -162,6 +166,9 @@ Raster.prototype.setPixelLogNoColor = function(x,y,val){
   x = Math.floor(x)
   y = Math.floor(y)
   //this.setPixel(x,y,val)
+  if ($.isNumeric(val)){
+    console.log("ERROR", paintVal, "not a number")
+  }
   try {
     this.pixelLog[x][y]= val //|| val
     return 0
@@ -263,8 +270,13 @@ function doFloodFill(e, me){
     Starts the recursive flood fill on the raster starting from e.point
   */
   var local = xfm.get_local(e)
-  //console.log("targetVal", me.pixelLog[local.x][local.y])
-  //console.log("replacementVal", window.paintVal)
+  console.log(local.x, local.y)
+  console.log("targetVal", me.pixelLog[local.x][local.y])
+  console.log("replacementVal", window.paintVal)
+  if (!$.isNumeric(me.pixelLog[local.x][local.y])){
+    console.log("is not a number!!")
+    return
+  }
   draw.floodFill(me, local, me.pixelLog[local.x][local.y], window.paintVal)
   draw.reset()
 }
@@ -390,16 +402,22 @@ draw.revert = function(roi, init_pop){
       draw.history.pop() //this one is always empty
     }
     var values = draw.history.pop()
-    if (init_pop){
+    //if (init_pop){
       values.forEach(function(val, idx, arr){
         roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
       })
-    }
-    else{
+    //}
+    /*else{
+      console.log("reverting w/ no color")
       values.forEach(function(val, idx, arr){
-        roi.setPixelLogNoColor(val.x,val.y, val.prev)
+        if ($.isNumeric(val.prev)){
+          roi.setPixelLogNoColor(val.x,val.y, val.prev)
+        }
+        else{
+          console.log(val.prev)
+        }
       })
-    }
+    }*/
     draw.history.push([])
     //console.log(draw.history)
   }
@@ -454,6 +472,7 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     flood fill algorithm. roi = roi raster object, node is an object
     with keys x,y that refer to the raster-space pixels
   */
+
   var num_fill = 0
   var to_fill = {}
   if (targetVal === replacementVal) {return}
@@ -490,12 +509,13 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
       x += 1;
     }
   }
-
+  console.log(num_fill)
   if (num_fill < 30000){
     roi.fillPixelLogFlat(draw.history[draw.history.length-1], replacementVal, draw.LUT)
   }
   else{
     alert("You are filling too much, close your loops")
+    //draw.history = [[]]
     //console.log(draw.history)
     draw.revert(roi, 0)
   }
@@ -800,7 +820,7 @@ var Pinch = new Hammer.Pinch();
 // add the recognizer
 mc.add(Pinch);
 
-window.prevZoom
+window.prevZoom = 1
 // subscribe to events
 mc.on('pinch', function(e) {
     // do something cool
@@ -820,9 +840,10 @@ mc.on('pinch', function(e) {
           var x = {deltaY: 1}
         }
         window.prevZoom = e.scale*/
-        var zf = e.scale/window.zoomFactor
-        window.zoomFactor = zf
+        var zf = e.scale / window.prevZoom
+        window.zoomFactor = window.zoomFactor* zf
         view.setZoom(window.zoomFactor)
+        window.prevZoom = zf
         //doZoom(x)
       }
       /*if (e.scale < 0.95 || e.scale > 1.05){
