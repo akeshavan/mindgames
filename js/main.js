@@ -815,6 +815,7 @@ function start(base_url){
 startProgress()
 Login(function(){
   var random = getRandomInt(20)
+  console.log("random int is", random)
   $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+random, function(data, status, jqXhr){
     window.currentData = data
     var base_url = data._items[0].base_image_url
