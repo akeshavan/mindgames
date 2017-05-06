@@ -518,10 +518,18 @@ draw.floodFill = function(roi, node, targetVal, replacementVal){
     alert("You are filling too much, close your loops")
     //draw.history = [[]]
     //console.log(draw.history)
-    console.log("starting revert")
+    console.log("starting revert", draw.history)
     startProgress()
-    draw.revert(roi, 0)
-    console.log("ending revert")
+    if (draw.history.length == 1){
+      //omg WHY anisha this is so hacky. write better
+      draw.history.push([])
+      draw.revert(roi, 1)
+      //draw.history = [[]]
+    }
+    else{
+      draw.revert(roi, 0)
+    }
+    console.log("ending revert", draw.history)
     stopProgress()
   }
   return
@@ -805,6 +813,7 @@ function start(base_url){
 }
 
 startProgress()
+
 iOSLogin(function(){
   $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page=1", function(data, status, jqXhr){
     window.currentData = data
