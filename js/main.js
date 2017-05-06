@@ -103,7 +103,7 @@ Raster.prototype.clear = function(){
 }
 
 Raster.prototype.diff = function(data){
-  var score = {tp:0, fn:1, fp: 1}
+  var score = {tp:0, fn:0, fp: 0}
   for (ii=0;ii<this.width;ii++){
     for (jj=0;jj<this.height;jj++){
       var current = this.pixelLog[ii][jj]
@@ -128,6 +128,14 @@ Raster.prototype.diff = function(data){
            //turn blue
            this.setPixel(ii,jj,"steelblue")
          };
+      }
+      else{
+        //the x coordinate isn't there, so the x,y is a 0. if current is a 1 here, its a false positive
+        if (current){
+          ++score.fp
+          //turn blue
+          this.setPixel(ii,jj,"steelblue")
+        }
       }
 
     }
