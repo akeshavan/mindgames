@@ -103,7 +103,7 @@ Raster.prototype.clear = function(){
 }
 
 Raster.prototype.diff = function(data){
-  var score = {tp:0, fn:1, fp: 1}
+  var score = {tp:0, fn:0, fp: 0}
   for (ii=0;ii<this.width;ii++){
     for (jj=0;jj<this.height;jj++){
       var current = this.pixelLog[ii][jj]
@@ -128,6 +128,14 @@ Raster.prototype.diff = function(data){
            //turn blue
            this.setPixel(ii,jj,"steelblue")
          };
+      }
+      else{
+        //the x coordinate isn't there, so the x,y is a 0. if current is a 1 here, its a false positive
+        if (current){
+          ++score.fp
+          //turn blue
+          this.setPixel(ii,jj,"steelblue")
+        }
       }
 
     }
@@ -815,7 +823,9 @@ function start(base_url){
 startProgress()
 
 iOSLogin(function(){
-  $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page=1", function(data, status, jqXhr){
+  
+  var random = getRandomInt(1,20)
+  $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+random, function(data, status, jqXhr){
     window.currentData = data
     var base_url = data._items[0].base_image_url
     var truth_data_url = data._items[0].truth_data
