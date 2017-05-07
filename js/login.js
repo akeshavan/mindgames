@@ -59,3 +59,9 @@ function getProfile (token, callback) {
 
 }
 }
+
+function logout(){
+  store.clearAll()
+  console.log("logging out")
+  window.location.href = '/';
+}

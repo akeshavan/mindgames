@@ -80,6 +80,7 @@ do_save = function(score, edits){
 
 get_next = function(){
   var page = getRandomInt(1,collection_size)
+  console.log("next page is", page)
   $("#submit_button").prop("disabled",true);
   startProgress()
   $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+page, function(data, status, jqXhr){
@@ -99,7 +100,7 @@ get_next = function(){
     window.currentData = data
 
     show_eval()
-  
+
   })
 }
 
