@@ -557,7 +557,7 @@ changeMode = function(e){
   }
   else{
     if (e=="view"){
-      $("#zoompan").removeClass("mdl-button--colored")
+      /*$("#zoompan").removeClass("mdl-button--colored")*/
       e = window.prevMode
     }
   }
@@ -599,16 +599,19 @@ doZoom = function(e){
 }
 
 window.panFactor = {x:0, y:0}
-
+window.panMouseDown = null
 doPan = function(e){
   /*
     Pan based on how far the user drags in the x/y direction
   */
-
+  if (window.panMouseDown == null){
+    window.panMouseDown = e
+  }
   window.panFactor.x = e.point.x - window.panMouseDown.point.x
   window.panFactor.y = e.point.y - window.panMouseDown.point.y
 
   view.translate(window.panFactor.x, window.panFactor.y)
+
 }
 
 window.brightCirclePos = new Point(view.viewSize.width/2, view.viewSize.height/2);
@@ -671,10 +674,11 @@ dragHandler = function(e){
   /*
     What to do when the user drags based on the window.mode
   */
-
+  console.log("drag")
   if (e.event.button == 2){
     //right click and drag
     doPan(e)
+    window.prevMode = "view"
     return
   }
 
@@ -707,10 +711,11 @@ clickHandler = function(e){
   */
  //console.log(e.event.button)
 
-
-
+  console.log("click", e)
+  console.log("click")
   var me = this
   var mode = window.mode
+  if (window.prevMode != "view"){
   switch (mode) {
     case "paintFill":
       setPaintbrush("1")
@@ -726,7 +731,8 @@ clickHandler = function(e){
     default:
       break
 
-  }
+  }}
+  window.prevMode = mode
 }
 
 mousedownHandler = function(e){
@@ -734,6 +740,7 @@ mousedownHandler = function(e){
     What to do when the user mouses down based on window.mode
   */
 
+  console.log("mousdown")
   var me = this
   var mode = window.mode
   //console.log(e.event.button)
@@ -869,14 +876,16 @@ mc.on('pinchend', function(e) {
     // do something cool
 
     if (e){
-      if (window.mode == "view"){
+        window.mode = window.prevMode
+        window.prevMode = "view"
         e.preventDefault()
 
         window.zoomFactor = tmpzoom
+        window.panMouseDown = null
         //var zf = e.scale/window.zoomFactor
         //window.zoomFactor = zf
         //view.setZoom(window.zoomFactor)
-      }
+
     }
 
 });
@@ -885,14 +894,19 @@ mc.on('pinchstart', function(e) {
     // do something cool
 
     if (e){
-      if (window.mode == "view"){
-        e.preventDefault()
+      window.prevMode = window.mode
+      window.mode = "view"
+      console.log("e from hammer", e)
+      /*window.panMouseDown = {point:{}}
+      window.panMouseDown.point.x = base.position._x //e.srcEvent.offsetX
+      window.panMouseDown.point.y = base.position._y //e.srcEvent.offsetY*/
+      e.preventDefault()
 
-        window.startScale = e.scale
-        //var zf = e.scale/window.zoomFactor
-        //window.zoomFactor = zf
-        //view.setZoom(window.zoomFactor)
-      }
+      window.startScale = e.scale
+      //var zf = e.scale/window.zoomFactor
+      //window.zoomFactor = zf
+      //view.setZoom(window.zoomFactor)
+
     }
 
 });
