@@ -2,6 +2,7 @@
 do_eval = function(){
   console.log("DOING EVAL\n\n")
   startProgress()
+  $("#submit_button").prop("disabled",true);
   var data = window.currentData
   $.getJSON(data._items[0].truth_data, function(truth){
     var cscore = roi.diff(truth)
@@ -79,6 +80,7 @@ do_save = function(score, edits){
 
 get_next = function(){
   var page = getRandomInt(1,collection_size)
+  $("#submit_button").prop("disabled",true);
   startProgress()
   $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+page, function(data, status, jqXhr){
     view.setZoom(1)
@@ -95,8 +97,9 @@ get_next = function(){
     window.zoomFactor = 1
     window.panFactor = {x:0, y:0}
     window.currentData = data
-    
+
     show_eval()
+  
   })
 }
 
