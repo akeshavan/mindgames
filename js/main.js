@@ -9,7 +9,7 @@ window.onresize = function(){
     When the window size changes, change the bounds of all rasters
   */
   //all_rasters.map(function(r){r.fitBounds(view.bounds)})
-  console.log("resizing")
+  //console.log("resizing")
   base.fitBounds(view.bounds)
   roi.fitBounds(view.bounds)
   window.zoomFactor = 1
@@ -674,7 +674,7 @@ dragHandler = function(e){
   /*
     What to do when the user drags based on the window.mode
   */
-  console.log("drag")
+
   if (e.event.button == 2){
     //right click and drag
     doPan(e)
@@ -711,8 +711,7 @@ clickHandler = function(e){
   */
  //console.log(e.event.button)
 
-  console.log("click", e)
-  console.log("click")
+
   var me = this
   var mode = window.mode
   if (window.prevMode != "view"){
@@ -740,7 +739,7 @@ mousedownHandler = function(e){
     What to do when the user mouses down based on window.mode
   */
 
-  console.log("mousdown")
+  
   var me = this
   var mode = window.mode
   //console.log(e.event.button)
@@ -822,7 +821,7 @@ function start(base_url){
     window.view = view
     //("#currentTool").html(window.mode)
     $(".mdl-layout__drawer-button").addClass("mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored")
-
+    stopProgress()
 
   };
 }
@@ -896,7 +895,7 @@ mc.on('pinchstart', function(e) {
     if (e){
       window.prevMode = window.mode
       window.mode = "view"
-      console.log("e from hammer", e)
+      //console.log("e from hammer", e)
       /*window.panMouseDown = {point:{}}
       window.panMouseDown.point.x = base.position._x //e.srcEvent.offsetX
       window.panMouseDown.point.y = base.position._y //e.srcEvent.offsetY*/

@@ -95,7 +95,7 @@ get_next = function(){
     window.zoomFactor = 1
     window.panFactor = {x:0, y:0}
     window.currentData = data
-    stopProgress()
+    
     show_eval()
   })
 }

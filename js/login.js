@@ -1,5 +1,5 @@
 function Login(callback){
-startProgress()
+//startProgress()
 var profile = store.get("github_profile")
 currentData = null
 if (profile){
@@ -7,7 +7,7 @@ if (profile){
   $("#login_info").html(output)
   $("#login_name").html(profile.login)
   callback()
-  stopProgress()
+  //stopProgress()
 }
 else{
   try {
