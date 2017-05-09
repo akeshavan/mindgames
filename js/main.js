@@ -10,6 +10,7 @@ window.onresize = function(){
   */
   //all_rasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
+  view.setZoom(1)
   base.fitBounds(view.bounds)
   roi.fitBounds(view.bounds)
   window.zoomFactor = 1
@@ -739,7 +740,7 @@ mousedownHandler = function(e){
     What to do when the user mouses down based on window.mode
   */
 
-  
+
   var me = this
   var mode = window.mode
   //console.log(e.event.button)
