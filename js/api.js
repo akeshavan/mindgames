@@ -5,14 +5,17 @@ do_eval = function(){
   $("#submit_button").prop("disabled",true);
   var data = window.currentData
   $.getJSON(data._items[0].truth_data, function(truth){
-    var cscore = roi.diff(truth)
+    var cscore_and_diff = roi.diff(truth)
+    var cscore = cscore_and_diff[0]
+    var diffvals = cscore_and_diff[1]
+    window.diffvals = diffvals
     var profile = store.get("github_profile")
-    var score = {"name": profile.login, "edit_data_id": [data._items[0]._id]}
+    var score = {"name": profile.login, "edit_data_id": data._items[0]._id}
     score["xp"] = cscore.tp - cscore.fn - cscore.fp
     score["accuracy"] = 2* cscore.tp/(2* cscore.tp + cscore.fn + cscore.fp) //this is the dice coefficient
     console.log("score is", score)
     stopProgress()
-    do_save(score, JSON.stringify(roi.pixelLog))
+    do_save(score, JSON.stringify(diffvals))
   })
 }
 
