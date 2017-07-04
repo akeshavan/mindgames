@@ -665,14 +665,14 @@ endBright = function(){
 
 hide = function(){
   all_rasters[1].visible = !all_rasters[1].visible
-  if (all_rasters[1].visible){
+  /*if (all_rasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
   }
   else{
     $("#noshow").show()
     $("#show").hide()
-  }
+  }*/
 }
 
 dragHandler = function(e){
@@ -739,6 +739,26 @@ clickHandler = function(e){
   window.prevMode = mode
 }
 
+dblClickHandler = function(e){
+  var me = this
+  var mode = "paintFill"
+  if (window.prevMode != "view"){
+  switch (mode) {
+    case "paintFill":
+      setPaintbrush("1")
+      doFloodFill(e, me)
+      break;
+    case "eraseFill":
+      setPaintbrush("0")
+      doFloodFill(e, me)
+      break;
+    default:
+      break
+
+  }}
+  window.prevMode = mode
+}
+
 mousedownHandler = function(e){
   /*
     What to do when the user mouses down based on window.mode
@@ -770,7 +790,7 @@ mousedownHandler = function(e){
 }
 
 function mousewheel( event ) {
-
+  console.log("scrolling")
   event.preventDefault();
   event.stopPropagation();
   event.delta = {}
@@ -808,6 +828,7 @@ function start(base_url){
     roi.onMouseDown = mousedownHandler
     roi.onMouseUp = draw.reset
     roi.onClick = clickHandler
+    roi.onDoubleClick = dblClickHandler
 
     // base events if ROI is hidden
     base.onClick = function(e){

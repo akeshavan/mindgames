@@ -108,22 +108,143 @@
       width: 100%;
     }
 
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .75s
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+      opacity: 0
+    }
+
+    .menu {
+      background-color:rgba(255,255,255,0);
+      height:194px;
+      width: 100%;
+      z-index:999;
+      position:fixed;
+      bottom:0;
+    }
+
+    .menuHide {
+      background-color:rgba(255,255,255,0);
+      height:35.56px;
+      width: 100%;
+      z-index:999;
+      position:fixed;
+      bottom:0;
+    }
+
+    button{
+      margin: 5px;
+      box-shadow: 0 0 0 0px;
+      border-width: thin;
+      border-color: #dfdfe0;
+      background-color: white;
+      border-radius: 5px;
+      padding:5px;
+    }
+
+    .wrapper {
+        margin: auto;
+        background-color: rgba(255,255,255,1);
+        text-align: center;
+        position: relative;
+
+        padding-top: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .scrolls {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space:nowrap
+    }
+    .imageDiv {
+        border-style: solid;
+
+        border-width: 1px;
+        border-radius: 5px;
+        border-color: #dfdfe0;
+        margin: 2px;
+        width: 150px;
+        height: 150px;
+
+        /*max-height: 50px;*/
+        cursor: pointer;
+        display:inline-block;
+        *display:inline;
+        *zoom:1;
+        vertical-align:middle;
+    }
+
+    .imageDiv span{
+    line-height:150px;
+    }
+
     </style>
   </head>
 
-  <body>
+  <body oncontextmenu="return false;">
 
-        <div class="main">
+        <div class="main" id="main">
           <div class="img-container">
             <canvas id="myCanvas" resize >
           </div>
+
+        <transition name="fade">
+          <div v-if="show" class="menu">
+            <div style="text-align:center;">
+              <button v-on:click="hide">Toggle</button>
+              <button v-on:click="show = !show">Close Menu</button>
+              <button v-on:click="undo">Undo</button>
+            </div>
+            <div class="wrapper">
+              <div class="scrolls">
+                  <!-- Brush size -->
+
+                  <div class="imageDiv">
+                    <span></span>
+                    Brush size.
+                  </div>
+                  <!-- Brush color -->
+                  <div class="imageDiv">
+                    <span></span>
+                    Brush color.
+                  </div>
+                  <!-- Brightness -->
+                  <div class="imageDiv">
+                    <span></span>
+                    Brightness.
+                  </div>
+                  <!-- Contrast -->
+                  <div class="imageDiv">
+                    <span></span>
+                    Contrast.
+                  </div>
+              </div>
+            </div>
+
+          </div>
+          <div v-if="!show" class="menuHide">
+            <div style="text-align:center;">
+              <button v-on:click="hide">Toggle</button>
+              <button v-on:click="show = !show">Open Menu</button>
+              <button v-on:click="undo">Undo</button>
+            </div>
+
+
+          </div>
+        </transition>
+
         </div>
 
+
+
   </body>
+  <script src="https://unpkg.com/vue"></script>
 
   <script src="js/store.everything.min.js"></script>
   <script src="js/mustache.min.js"></script>
-  <!--<script src="js/material.min.js"></script>-->
   <script src="js/jquery.min.js"></script>
   <script src="js/paper.full.min.js"></script>
   <script src="js/hammer.min.js"></script>
@@ -134,5 +255,22 @@
   <script src="js/dialog-polyfill.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
   <script type="text/paperscript" canvas="myCanvas" src="js/main.js"></script>
+
+  <script>
+var app =  new Vue({
+    el: '#main',
+    data: {
+      show: false
+    },
+    methods:{
+      hide: function(){
+        hide()
+      },
+      undo: function(){
+        draw.revert(roi)
+      }
+    }
+  })
+  </script>
 
 </html>
