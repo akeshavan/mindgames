@@ -691,11 +691,11 @@ dragHandler = function(e){
   var mode = window.mode
   switch (mode) {
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       drawLine(e, me)
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       drawLine(e, me)
       break
     case "zoom":
@@ -722,11 +722,11 @@ clickHandler = function(e){
   if (window.prevMode != "view"){
   switch (mode) {
     case "paintFill":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       doFloodFill(e, me)
       break;
     case "eraseFill":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       doFloodFill(e, me)
       break;
     case "brightness":
@@ -745,11 +745,11 @@ dblClickHandler = function(e){
   if (window.prevMode != "view"){
   switch (mode) {
     case "paintFill":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       doFloodFill(e, me)
       break;
     case "eraseFill":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       doFloodFill(e, me)
       break;
     default:
@@ -778,10 +778,10 @@ mousedownHandler = function(e){
       window.panMouseDown = e
       break;
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       break
     default:
       break
