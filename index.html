@@ -45,8 +45,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--<link rel="stylesheet" href="css/blue.css">-->
-    <!--<link rel="stylesheet" href="css/dialog-polyfill.css">
-    <link rel="stylesheet" href="styles.css">-->
+    <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
     <style>
 
     html,
@@ -122,16 +124,16 @@
       width: 100%;
       z-index:999;
       position:fixed;
-      bottom:0;
+      bottom:20px;
     }
 
-    .menuHide {
+    .bottomMenu {
       background-color:rgba(255,255,255,0);
       height:35.56px;
       width: 100%;
       z-index:999;
       position:fixed;
-      bottom:0;
+      bottom:20px;
     }
 
     button{
@@ -146,7 +148,7 @@
 
     .wrapper {
         margin: auto;
-        background-color: rgba(255,255,255,1);
+        background-color: rgba(255,255,255,0);
         text-align: center;
         position: relative;
 
@@ -154,6 +156,8 @@
         padding-left: 5px;
         padding-right: 5px;
     }
+
+
     .scrolls {
         overflow-x: scroll;
         overflow-y: hidden;
@@ -161,13 +165,33 @@
     }
     .imageDiv {
         border-style: solid;
-
+        background-color: rgba(0,0,0,1);
         border-width: 1px;
         border-radius: 5px;
         border-color: #dfdfe0;
+        color: white;
         margin: 2px;
         width: 150px;
         height: 150px;
+
+        /*max-height: 50px;*/
+        cursor: pointer;
+        display:inline-block;
+        *display:inline;
+        *zoom:1;
+        vertical-align:middle;
+    }
+
+    .imageDivPart {
+        border-style: solid;
+        background-color: rgba(0,0,0,1);
+        border-width: 0px;
+        border-radius: 5px;
+        border-color: #dfdfe0;
+        color: white;
+        margin: 2px;
+        width: 3em;
+        height: 3em;
 
         /*max-height: 50px;*/
         cursor: pointer;
@@ -193,48 +217,87 @@
 
         <transition name="fade">
           <div v-if="show" class="menu">
-            <div style="text-align:center;">
-              <button v-on:click="hide">Toggle</button>
-              <button v-on:click="show = !show">Close Menu</button>
-              <button v-on:click="undo">Undo</button>
-            </div>
             <div class="wrapper">
-              <div class="scrolls">
+              <div class="scrolls" v-if="!show_opt">
                   <!-- Brush size -->
 
-                  <div class="imageDiv">
+                  <div class="imageDiv" v-on:click="show_opt = 'Brush Size'">
                     <span></span>
-                    Brush size.
+                    <i class="fa fa-paint-brush fa-5x" aria-hidden="true"></i>
+
+                    <div style="position: relative; bottom: 25px; color:white; width:150px">Brush Size</div>
                   </div>
                   <!-- Brush color -->
-                  <div class="imageDiv">
+                  <div class="imageDiv" v-on:click="show_opt = 'Brush Color'">
                     <span></span>
-                    Brush color.
+                    <i class="fa fa-tint fa-5x" aria-hidden="true"></i>
+                    <div style="position: relative; bottom: 25px; color:white; width:150px">Brush Color</div>
+
                   </div>
                   <!-- Brightness -->
-                  <div class="imageDiv">
+                  <div class="imageDiv" v-on:click="show_opt = 'Brightness'">
                     <span></span>
-                    Brightness.
+                    <i class="fa fa-sun-o fa-5x" aria-hidden="true"></i>
+                    <div style="position: relative; bottom: 25px; color:white; width:150px">Brighness</div>
+
                   </div>
                   <!-- Contrast -->
-                  <div class="imageDiv">
+                  <div class="imageDiv" v-on:click="show_opt = 'Contrast'">
                     <span></span>
-                    Contrast.
+                    <i class="fa fa-adjust fa-5x" aria-hidden="true"></i>
+                    <div style="position: relative; bottom: 25px; color:white; width:150px">Contrast</div>
+
                   </div>
               </div>
+
+
+              <!-- WHEN YOU OPEN THE MENU  -->
+              <div v-if="show_opt" style="height:154px; width:100%; background-color:rgba(0,0,0,1); border-radius:5px; color: white; border-width: 1px; border-color: white; border-style: solid;">
+
+                <div class="optTitle" style="display: block"><p style="font-size: x-large; margin-top: 1rem;">{{show_opt}}: {{options[show_opt].val}}</p></div>
+
+                <div class="imageDivPart" style="display: inline-block; ">
+                  <span></span>
+                  <i v-bind:class="options[show_opt].icon" aria-hidden="true"></i>
+                </div>
+
+                <div style="display: inline-block; width: calc(100% - 100px);">
+                  <input type="range"
+                  v-bind:min="options[show_opt].min"
+                  v-bind:max="options[show_opt].max"
+                  v-bind:step="options[show_opt].step"
+                  v-on:change="applySetting"
+                  v-model="options[show_opt].val" >
+                </div>
+
+                <br>
+                  <button class="btn btn-outline-info" v-on:click="show_opt=null">Back</button>
+
+
+              </div>
+
+
             </div>
 
           </div>
-          <div v-if="!show" class="menuHide">
-            <div style="text-align:center;">
-              <button v-on:click="hide">Toggle</button>
-              <button v-on:click="show = !show">Open Menu</button>
-              <button v-on:click="undo">Undo</button>
-            </div>
 
-
-          </div>
         </transition>
+
+        <div class="bottomMenu">
+          <div style="text-align:center;">
+            <button class="btn btn-lg btn-outline-info" v-on:click="hide" style="position:fixed; left:0;">
+              <i class="fa fa-eye" v-if="overlay"aria-hidden="true"></i>
+              <i class="fa fa-eye-slash" v-if="!overlay"aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-lg btn-outline-info" v-on:click="show = !show">
+              <i class="fa fa-chevron-down" v-if="show"aria-hidden="true"></i>
+              <i class="fa fa-chevron-up" v-if="!show"aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-lg btn-outline-info" v-on:click="undo" style="position:fixed; right:0;">
+              <i class="fa fa-undo" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
 
         </div>
 
@@ -242,7 +305,6 @@
 
   </body>
   <script src="https://unpkg.com/vue"></script>
-
   <script src="js/store.everything.min.js"></script>
   <script src="js/mustache.min.js"></script>
   <script src="js/jquery.min.js"></script>
@@ -254,20 +316,48 @@
   <script src="js/ui.js"></script>
   <script src="js/dialog-polyfill.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
   <script type="text/paperscript" canvas="myCanvas" src="js/main.js"></script>
+
 
   <script>
 var app =  new Vue({
     el: '#main',
     data: {
-      show: false
+      show: false,
+      show_opt: null,
+      options: {
+        "Brightness": {val: 50, min:0, max:100, step:1, icon: "fa fa-sun-o fa-3x"},
+        "Contrast": {val: 50, min:0, max:100, step:1, icon: "fa fa-adjust fa-3x"},
+        "Brush Size": {val: 1, min:1, max:3, step:1, icon: "fa fa-paint-brush fa-3x"},
+        "Brush Color": {val: 1, min:0, max:1, step:1, icon: "fa fa-tint fa-3x"}
+      },
+      overlay: true
     },
     methods:{
       hide: function(){
         hide()
+        this.overlay = !this.overlay
       },
       undo: function(){
         draw.revert(roi)
+      },
+      adjustBrightCont: function(){
+        base.brightness_contrast(doBright(this.options["Brightness"].val), doCont(this.options["Contrast"].val))
+      },
+      applySetting: function(){
+        switch (this.show_opt) {
+          case "Brightness":
+            this.adjustBrightCont()
+            break;
+          case "Contrast":
+            this.adjustBrightCont()
+            break
+          case "Brush Color":
+            setPaintbrush(this.options["Brush Color"].val)
+          default:
+            break
+        }
       }
     }
   })
