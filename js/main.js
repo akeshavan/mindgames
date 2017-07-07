@@ -3,15 +3,17 @@
 ============================================================================= */
 
 var all_rasters = []
-
+window.all_rasters = all_rasters
 window.onresize = function(){
   /*
     When the window size changes, change the bounds of all rasters
   */
   //all_rasters.map(function(r){r.fitBounds(view.bounds)})
-  console.log("resizing")
+  //console.log("resizing")
+  view.setZoom(1)
   base.fitBounds(view.bounds)
   roi.fitBounds(view.bounds)
+  window.zoomFactor = 1
 }
 
 /*$( window ).resize(function() {
@@ -102,7 +104,8 @@ Raster.prototype.clear = function(){
 }
 
 Raster.prototype.diff = function(data){
-  var score = {tp:0, fn:1, fp: 1}
+  var score = {tp:0, fn:0, fp: 0}
+  var difflog = []
   for (ii=0;ii<this.width;ii++){
     for (jj=0;jj<this.height;jj++){
       var current = this.pixelLog[ii][jj]
@@ -119,6 +122,7 @@ Raster.prototype.diff = function(data){
            ++score.fn
            //turn red
            this.setPixel(ii,jj,"tomato")
+           difflog.push([ii,jj,current])
          }
          else if(!truth && current == 1){
            //false positive
@@ -126,23 +130,58 @@ Raster.prototype.diff = function(data){
 
            //turn blue
            this.setPixel(ii,jj,"steelblue")
+           difflog.push([ii,jj,current])
          };
+      }
+      else{
+        //the x coordinate isn't there, so the x,y is a 0. if current is a 1 here, its a false positive
+        if (current){
+          ++score.fp
+          //turn blue
+          this.setPixel(ii,jj,"steelblue")
+          difflog.push([ii,jj,current])
+        }
       }
 
     }
   }
   this.opacity = 0.35
-  return score
+  return [score, difflog]
 }
 
-Raster.prototype.setPixelLog = function(x,y,val,paintVal){
+Raster.prototype.setPixelLog = function(x,y,color,paintVal){
+  /*
+    Sets the pixel and pixelLog at coordinate x,y to val. Val should be a color.
+  */
+
+
+  x = Math.floor(x)
+  y = Math.floor(y)
+  this.setPixel(x,y,color)
+  if (!$.isNumeric(paintVal)){
+    console.log("ERROR", paintVal, "not a number")
+  }
+  try {
+    this.pixelLog[x][y]= paintVal //|| val
+    return 0
+  }
+  catch(err){
+    //console.log(x,y,"out of bounds")
+    return 1
+  }
+}
+
+Raster.prototype.setPixelLogNoColor = function(x,y,color, paintVal){
   /*
     Sets the pixel and pixelLog at coordinate x,y to val. Val should be a color.
   */
 
   x = Math.floor(x)
   y = Math.floor(y)
-  this.setPixel(x,y,val)
+  //this.setPixel(x,y,val)
+  if (!$.isNumeric(paintVal)){
+    console.log("ERROR", paintVal, "not a number")
+  }
   try {
     this.pixelLog[x][y]= paintVal //|| val
     return 0
@@ -161,6 +200,15 @@ Raster.prototype.fillPixelLog = function(obj,color_mapper){
       this.setPixelLog(ii,jj,color, val)
     }
   }
+}
+
+Raster.prototype.fillPixelLogFlat = function(obj,val, color_mapper){
+  var me = this
+  obj.forEach(function(v, idx, arr){
+      //var val = obj[ii][jj]
+      var color = color_mapper[val]
+      me.setPixelLog(v.x,v.y,color, val)
+    })
 }
 
 // Thanks https://github.com/licson0729/CanvasEffects
@@ -235,8 +283,13 @@ function doFloodFill(e, me){
     Starts the recursive flood fill on the raster starting from e.point
   */
   var local = xfm.get_local(e)
+  console.log(local.x, local.y)
   console.log("targetVal", me.pixelLog[local.x][local.y])
   console.log("replacementVal", window.paintVal)
+  if (!$.isNumeric(me.pixelLog[local.x][local.y])){
+    console.log("is not a number!!")
+    return
+  }
   draw.floodFill(me, local, me.pixelLog[local.x][local.y], window.paintVal)
   draw.reset()
 }
@@ -260,7 +313,57 @@ function drawLine(e, me){
          draw.last.x,
          draw.last.y, draw.LUT[window.paintVal], me, paintVal)
   }
+
+  if (window.paintSize > 1){
+    drawLineRad(local, me, window.paintSize)
+  }
+
   draw.last = local
+
+}
+
+var sizeMapper = {2: [{x:-1, y:0},
+                     {x:0, y:-1},
+                     {x:0, y: 1},
+                     {x:1, y:0},
+                     {x:1, y:1},
+                     {x:1, y:-1},
+                     {x:-1, y:1},
+                     {x:1, y:-1}
+                   ],
+                  3: [
+                     {x:-1, y:0},
+                     {x:0, y:-1},
+                     {x:0, y: 1},
+                     {x:1, y:0},
+                     {x:1, y:1},
+                     {x:1, y:-1},
+                     {x:-1, y:1},
+                     {x:1, y:-1},
+                     {x:2, y: 0},
+                     {x:-2, y: 0},
+                     {x:0, y:2},
+                     {x:0, y:-2}
+                  ]
+                 }
+
+function drawLineRad(local, me, rad){
+
+  sizeMapper[rad].forEach(function(val, idx, arr){
+    draw.addHistory(local.x+val.x, local.y+val.y,
+                    me.pixelLog[local.x+val.x][local.y+val.y],
+                    window.paintVal)
+    me.setPixelLog(local.x+val.x, local.y+val.y, draw.LUT[window.paintVal], window.paintVal)
+
+    if (draw.last != null){
+
+      draw.line(local.x+val.x,
+           local.y+val.y,
+           draw.last.x+val.x,
+           draw.last.y+val.y,
+           draw.LUT[window.paintVal], me, paintVal)
+    }
+  })
 
 }
 
@@ -352,18 +455,34 @@ draw.addHistory = function(x0,y0,oldval,newval){
   }
 }
 
-draw.revert = function(roi){
+draw.revert = function(roi, init_pop){
   /*
-    Revert based on history
+    Revert based on history. if init_pop is 0 then it undo's a bad floodFill
   */
+  if (init_pop == undefined){init_pop = 1}
   if (draw.history.length > 1){
-    draw.history.pop() //this one is always empty
+    if (init_pop){
+      draw.history.pop() //this one is always empty
+    }
     var values = draw.history.pop()
-    values.forEach(function(val, idx, arr){
-      roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
-    })
+    if (init_pop){
+      values.forEach(function(val, idx, arr){
+        roi.setPixelLog(val.x,val.y,draw.LUT[val.prev], val.prev)
+      })
+    }
+    else{
+      console.log("reverting w/ no color")
+      values.forEach(function(val, idx, arr){
+        if ($.isNumeric(val.prev)){
+          roi.setPixelLogNoColor(val.x,val.y, draw.LUT[val.prev], val.prev)
+        }
+        else{
+          console.log(val.prev)
+        }
+      })
+    }
     draw.history.push([])
-    console.log(draw.history)
+    //console.log(draw.history)
   }
 }
 
@@ -391,51 +510,94 @@ draw.line = function(x0, y0, x1, y1, val, roi, paintVal){
 
 }
 
+function Queue(item) {
+  var inbox = []
+  var outbox = [item]
+  this.push = function(item) {inbox.push(item)}
+  this.pop = function() {
+    if (outbox.length === 0) {
+      inbox.reverse()
+      // swap the inbox and outbox
+      var oldOutbox = outbox
+      outbox = inbox
+      inbox = oldOutbox
+    }
+    return outbox.pop()
+  }
+  Object.defineProperty(this, "length", { get: function() {
+    return inbox.length + outbox.length
+  }})
+}
+
+
 draw.floodFill = function(roi, node, targetVal, replacementVal){
   /*
     flood fill algorithm. roi = roi raster object, node is an object
     with keys x,y that refer to the raster-space pixels
   */
-  if (targetVal == replacementVal){return}
-  if (roi.pixelLog[node.x][node.y] != targetVal){return}
-  var neighboors = function(y){
+
+  var num_fill = 0
+  var to_fill = {}
+  if (targetVal === replacementVal) {return}
+  if (roi.pixelLog[node.x][node.y] != targetVal) {return}
+  function neighboors(y) {
     var nei = [];
     if (y > 0) {nei.push(y - 1)}
     if (y < roi.height - 1) {nei.push(y + 1)}
     return nei
   }
 
-  var cnt = 0;
-  var stack = [node]
-  while (stack.length > 0) {
-    // cnt += 1;
-    node = stack.pop();
+  var queue = new Queue(node)
+  while (queue.length > 0) {
+    node = queue.pop();
     var x = node.x;
     var y = node.y;
-    // console.log(cnt, x, y);
-    // console.log(x, y);
     if (roi.pixelLog[x][y] != targetVal) {continue}
 
-    while (x > 0 && roi.pixelLog[x - 1][y] == targetVal) {
+    while (x > 0 && roi.pixelLog[x - 1][y] === targetVal) {
       x -= 1;
     }
 
     var nei = neighboors(y);
-    while (x < (roi.width - 1) && roi.pixelLog[x][y] == targetVal) {
+    while (x < (roi.width - 1) && roi.pixelLog[x][y] === targetVal) {
       draw.addHistory(x, y, roi.pixelLog[x][y], replacementVal);
-      roi.setPixelLog(x, y, draw.LUT[replacementVal], replacementVal);
+      roi.setPixelLogNoColor(x, y, draw.LUT[replacementVal], replacementVal);
+      ++num_fill
       for (i = 0; i < nei.length; i++){
         var y_nei = nei[i]
-        if (roi.pixelLog[x][y_nei] == targetVal) {
-          stack.push({x:x,y:y_nei})
+        if (roi.pixelLog[x][y_nei] === targetVal) {
+          queue.push({x:x, y:y_nei})
         }
       }
       x += 1;
-      // cnt += 1;
     }
+  }// end while loop
+
+  console.log(num_fill)
+  if (num_fill < 30000){
+    roi.fillPixelLogFlat(draw.history[draw.history.length-1], replacementVal, draw.LUT)
+  }
+  else{
+    alert("You are filling too much, close your loops")
+    //draw.history = [[]]
+    //console.log(draw.history)
+    console.log("starting revert", draw.history)
+    startProgress()
+    if (draw.history.length == 1){
+      //omg WHY anisha this is so hacky. write better
+      draw.history.push([])
+      draw.revert(roi, 1)
+      //draw.history = [[]]
+    }
+    else{
+      draw.revert(roi, 0)
+    }
+    console.log("ending revert", draw.history)
+    stopProgress()
   }
   return
 }
+
 
 /*=============================================================================
                             CONTROLLER FUNCTIONS
@@ -450,13 +612,13 @@ changeMode = function(e){
   }
   else{
     if (e=="view"){
-      $("#zoompan").removeClass("mdl-button--colored")
+      /*$("#zoompan").removeClass("mdl-button--colored")*/
       e = window.prevMode
     }
   }
 
   window.mode = e
-  console.log("setting menu icon", window.mode)
+  //console.log("setting menu icon", window.mode)
 
   setMenuIcon(window.mode)
   //$("#currentTool").html(window.mode)
@@ -467,6 +629,7 @@ changeMode = function(e){
 
 
 window.paintVal = 1
+window.paintSize = 1
 setPaintbrush = function(e){
   /*
     Set paintbrush value to integer(e). If e is not in the draw.LUT, set to 0.
@@ -480,28 +643,36 @@ setPaintbrush = function(e){
   window.paintVal = parseInt(e)
 }
 
+setPaintSize = function(e){
+  console.log("setting paint size")
+  window.paintSize = e
+}
+
 window.zoomFactor = 1
 
 doZoom = function(e){
   /*
     Zoom based on how far the user drags in the y direction
   */
-  var zoomFactor = window.zoomFactor + e.delta.y/200
+  var zoomFactor = window.zoomFactor +  e.deltaY/200
   window.zoomFactor = xfm.clamp(zoomFactor, 1, 3)
   view.setZoom(window.zoomFactor)
 }
 
 window.panFactor = {x:0, y:0}
-
+window.panMouseDown = null
 doPan = function(e){
   /*
     Pan based on how far the user drags in the x/y direction
   */
-
+  if (window.panMouseDown == null){
+    window.panMouseDown = e
+  }
   window.panFactor.x = e.point.x - window.panMouseDown.point.x
   window.panFactor.y = e.point.y - window.panMouseDown.point.y
 
   view.translate(window.panFactor.x, window.panFactor.y)
+
 }
 
 window.brightCirclePos = new Point(view.viewSize.width/2, view.viewSize.height/2);
@@ -513,7 +684,7 @@ doBright = function(e){
   */
   //console.log("setting brightness")
   var amount = (parseInt(e) - 50)/50 + 1
-  console.log("bright", amount)
+  //console.log("bright", amount)
   //base.brightness(amount)
   return amount
 }
@@ -525,7 +696,7 @@ doCont = function(e){
   */
   //console.log("setting brightness")
   var amount = (parseInt(e)*2) - 100
-  console.log("cont", amount)
+  //console.log("cont", amount)
   return amount
   //base.contrast(amount)
 
@@ -550,14 +721,14 @@ endBright = function(){
 
 hide = function(){
   all_rasters[1].visible = !all_rasters[1].visible
-  if (all_rasters[1].visible){
+  /*if (all_rasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
   }
   else{
     $("#noshow").show()
     $("#show").hide()
-  }
+  }*/
 }
 
 dragHandler = function(e){
@@ -568,6 +739,7 @@ dragHandler = function(e){
   if (e.event.button == 2){
     //right click and drag
     doPan(e)
+    window.prevMode = "view"
     return
   }
 
@@ -575,11 +747,11 @@ dragHandler = function(e){
   var mode = window.mode
   switch (mode) {
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       drawLine(e, me)
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       drawLine(e, me)
       break
     case "zoom":
@@ -601,16 +773,16 @@ clickHandler = function(e){
  //console.log(e.event.button)
 
 
-
   var me = this
   var mode = window.mode
+  if (window.prevMode != "view"){
   switch (mode) {
     case "paintFill":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       doFloodFill(e, me)
       break;
     case "eraseFill":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       doFloodFill(e, me)
       break;
     case "brightness":
@@ -619,13 +791,35 @@ clickHandler = function(e){
     default:
       break
 
-  }
+  }}
+  window.prevMode = mode
+}
+
+dblClickHandler = function(e){
+  var me = this
+  var mode = "paintFill"
+  if (window.prevMode != "view"){
+  switch (mode) {
+    case "paintFill":
+      //setPaintbrush("1")
+      doFloodFill(e, me)
+      break;
+    case "eraseFill":
+      //setPaintbrush("0")
+      doFloodFill(e, me)
+      break;
+    default:
+      break
+
+  }}
+  window.prevMode = mode
 }
 
 mousedownHandler = function(e){
   /*
     What to do when the user mouses down based on window.mode
   */
+
 
   var me = this
   var mode = window.mode
@@ -640,10 +834,10 @@ mousedownHandler = function(e){
       window.panMouseDown = e
       break;
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       break
     default:
       break
@@ -652,7 +846,7 @@ mousedownHandler = function(e){
 }
 
 function mousewheel( event ) {
-
+  console.log("scrolling")
   event.preventDefault();
   event.stopPropagation();
   event.delta = {}
@@ -690,6 +884,7 @@ function start(base_url){
     roi.onMouseDown = mousedownHandler
     roi.onMouseUp = draw.reset
     roi.onClick = clickHandler
+    roi.onDoubleClick = dblClickHandler
 
     // base events if ROI is hidden
     base.onClick = function(e){
@@ -699,7 +894,6 @@ function start(base_url){
     }
 
     //default mode:
-    console.log("TODO: figure out why this function runs")
     if (!window.mode){
       changeMode("paint")
     }
@@ -709,14 +903,16 @@ function start(base_url){
     window.view = view
     //("#currentTool").html(window.mode)
     $(".mdl-layout__drawer-button").addClass("mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored")
-
+    stopProgress()
 
   };
 }
 
 startProgress()
 Login(function(){
-  $.get("https://glacial-garden-24920.herokuapp.com/image?where=mode==train&max_results=1&page=1", function(data, status, jqXhr){
+  var random = getRandomInt(1,20)
+  console.log("random int is", random)
+  $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+random, function(data, status, jqXhr){
     window.currentData = data
     var base_url = data._items[0].base_image_url
     var truth_data_url = data._items[0].truth_data
@@ -726,7 +922,8 @@ Login(function(){
     start(base_url)
 
   });
-});
+})
+
 
 var stage = document.getElementById('myCanvas');
 var mc = new Hammer.Manager(stage, {stopPropagation:true, preventDefault:true});
@@ -735,29 +932,65 @@ var Pinch = new Hammer.Pinch();
 // add the recognizer
 mc.add(Pinch);
 
+
+window.prevZoom
+var tmpzoom = 1
+
 // subscribe to events
 mc.on('pinch', function(e) {
     // do something cool
 
     if (e){
-      //e.stopPropagation()
-      //var tmp = window.mode
-      //window.mode = null
       if (window.mode == "view"){
         e.preventDefault()
-        var zoomFactor = window.zoomFactor*e.scale
-        window.zoomFactor = xfm.clamp(zoomFactor, 1, 5)
-        view.setZoom(window.zoomFactor)
+        tmpzoom = xfm.clamp(e.scale/window.startScale*window.zoomFactor, 1, 5)
+        view.setZoom(tmpzoom)
+        //console.log("pinchin", e.scale)
+        //var zf = e.scale/window.zoomFactor
+        //window.zoomFactor = zf
+        //view.setZoom(window.zoomFactor)
       }
-      /*if (e.scale < 0.95 || e.scale > 1.05){
-          view.setZoom(e.scale)
-          console.log("event is", e.deltaX, e.deltaY)
-      }*/
-      //e.gesture.stopPropagation()
-      //window.mode = tmp
     }
-    //e.stopPropagation()
-    //e.preventDefault()
+
+});
+
+mc.on('pinchend', function(e) {
+    // do something cool
+
+    if (e){
+        window.mode = window.prevMode
+        window.prevMode = "view"
+        e.preventDefault()
+
+        window.zoomFactor = tmpzoom
+        window.panMouseDown = null
+        //var zf = e.scale/window.zoomFactor
+        //window.zoomFactor = zf
+        //view.setZoom(window.zoomFactor)
+
+    }
+
+});
+
+mc.on('pinchstart', function(e) {
+    // do something cool
+
+    if (e){
+      window.prevMode = window.mode
+      window.mode = "view"
+      //console.log("e from hammer", e)
+      /*window.panMouseDown = {point:{}}
+      window.panMouseDown.point.x = base.position._x //e.srcEvent.offsetX
+      window.panMouseDown.point.y = base.position._y //e.srcEvent.offsetY*/
+      e.preventDefault()
+
+      window.startScale = e.scale
+      //var zf = e.scale/window.zoomFactor
+      //window.zoomFactor = zf
+      //view.setZoom(window.zoomFactor)
+
+    }
+
 });
 
 

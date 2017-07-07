@@ -17,13 +17,15 @@ $("#contrast_slider").on("mouseup",function(e){
 
 
 function startProgress(){
-  var spot = $("#pbar")
-  spot.show()
+  //var spot = $("#pbar")
+  //spot.show()
+  app.loading = true
 }
 
 function stopProgress(){
-  var spot = $("#pbar")
-  spot.hide()
+  //var spot = $("#pbar")
+  //spot.hide()
+  app.loading = false
 }
 
 function setMenuIcon(mode){
@@ -75,10 +77,12 @@ myElement = $('#myCanvas').on('contextmenu', blockContextMenu);
 
 show_eval = function(){
   //var output =  Mustache.render('<h4>Color the MS Lesions <button class="btn btn-primary btn-xsmall" onclick="do_eval()">Evaluate</button></h4>')
-  $("#submit_button").html("Submit")
+  //$("#submit_button").html("Submit")
+  app.status = "Submit"
+  $("#submit_button").prop("disabled",false);
   console.log("setting click to do_eval")
-  $("#submit_button").attr("onclick", "do_eval()")
-  $("#titlebar").html("Color the Lesions")
+  //$("#submit_button").attr("onclick", "do_eval()")
+  //$("#titlebar").html("Color the Lesions")
 }
 
 show_save = function(score){
@@ -88,13 +92,19 @@ show_save = function(score){
   var message = ""
   var message = score.xp > 0 ? '<i class="material-icons">add_circle</i>' : '<i class="material-icons">remove_circle</i>'
   message = message + Math.abs(score.xp)
-  message = message + '<i class="material-icons" style="padding-left:1em;">gps_fixed</i>' + score.acc 
-
+  message = message + '<i class="material-icons" style="padding-left:1em;">gps_fixed</i>' + score.acc
+  app.score.dice = score.acc
+  app.score.points = score.xp
 
   //snackbarContainer.MaterialSnackbar.showSnackbar(data);
   $("#titlebar").html(message)
   //var output = Mustache.render('<h4> accuracy: {{acc}}, points: {{xp}} <button class="btn btn-success btn-xsmall" onclick="get_next()">Next</button> </h4>', score)
-  $("#submit_button").html("Next")
+  //$("#submit_button").html("Next")
+
+  app.status = "Next"
   console.log("setting click to get_next")
-  $("#submit_button").attr("onclick", "get_next()")
+  //$("#submit_button").attr("onclick", "get_next()")
+  $("#submit_button").prop("disabled",false);
+
+
 }

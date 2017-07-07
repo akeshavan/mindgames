@@ -1,1 +1,5 @@
-* only save changes from truth (or the 1s)
+# TODO list:
+
+* save user info on login
+* instructions tutorial
+* save total score & display
