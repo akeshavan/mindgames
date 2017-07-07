@@ -922,7 +922,8 @@ Login(function(){
     start(base_url)
 
   });
-});
+})
+
 
 var stage = document.getElementById('myCanvas');
 var mc = new Hammer.Manager(stage, {stopPropagation:true, preventDefault:true});

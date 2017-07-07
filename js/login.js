@@ -1,13 +1,12 @@
 function Login(callback){
 //startProgress()
 var profile = store.get("github_profile")
-currentData = null
 if (profile){
-  var output = Mustache.render('<img class="demo-avatar" src="{{avatar_url}}"/>', profile)
-  $("#login_info").html(output)
-  $("#login_name").html(profile.login)
+  app.login.username = profile.login
+  app.login.avatar = profile.avatar_url
+  app.login.github_id = profile.id
+  console.log("hello,", profile.login, "!")
   callback()
-  //stopProgress()
 }
 else{
   try {
@@ -17,9 +16,9 @@ else{
       console.log("data token is", data.token);
       getProfile(data.token, function(profile){
         console.log(profile)
-        var output = Mustache.render('<img class="demo-avatar" src="{{avatar_url}}"/>', profile)
-        $("#login_info").html(output)
-        $("#login_name").html(profile.login)
+        app.login.username = profile.login
+        app.login.avatar = profile.avatar_url
+        app.login.github_id = profile.id
 
         if (history.pushState) {
             var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -32,9 +31,10 @@ else{
     });
 
   } catch (e) {
-    var dialog = document.querySelector('#modal-example');
-    dialogPolyfill.registerDialog(dialog);
-    dialog.showModal()
+    $("#loginModal").modal({
+      backdrop: 'static',
+      keyboard: false
+    })
   }
 }
 

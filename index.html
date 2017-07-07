@@ -299,6 +299,8 @@
           </div>
         </div>
 
+        <modal v-bind:content="login" id="loginModal"></modal>
+
         </div>
 
 
@@ -321,6 +323,34 @@
 
 
   <script>
+
+  Vue.component('modal', {
+    template: `
+
+
+    <div class="modal fade" v-bind:id="id">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{content.title}}</h5>
+          </div>
+          <div class="modal-body">
+            <a v-bind:href="content.url"><img style="width:100%;" v-bind:src="content.image" /> </a>
+          </div>
+          <div class="modal-footer">
+            {{content.footer}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    `,
+    props: ["content", "id"]
+  })
+
+
+
 var app =  new Vue({
     el: '#main',
     data: {
@@ -332,7 +362,17 @@ var app =  new Vue({
         "Brush Size": {val: 1, min:1, max:3, step:1, icon: "fa fa-paint-brush fa-3x"},
         "Brush Color": {val: 1, min:0, max:1, step:1, icon: "fa fa-tint fa-3x"}
       },
-      overlay: true
+      overlay: true,
+      login: {
+        username: null,
+        avatar: null,
+        github_id: null,
+        score: 0,
+        footer: "click the icon to log in with GitHub",
+        title: "Log in with GitHub",
+        url: "https://github.com/login/oauth/authorize?client_id=bdf880910c19a91f4a7f",
+        image:"images/Octocat1.jpg"
+      }
     },
     methods:{
       hide: function(){
@@ -363,6 +403,9 @@ var app =  new Vue({
       }
     }
   })
+
+
+
   </script>
 
 </html>
