@@ -41,13 +41,13 @@
 
     <link rel="shortcut icon" href="images/favicon.png">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
     <!--<link rel="stylesheet" href="css/blue.css">-->
     <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
 
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="main_style.css">
 
@@ -176,15 +176,15 @@
 
         <div class="bottomMenu">
           <div style="text-align:center;">
-            <button class="btn btn-lg btn-outline-info" v-on:click="hide" style="position:fixed; left:0;">
+            <button class="btn btn-lg btn-outline-info left" v-on:click="hide">
               <i class="fa fa-eye" v-if="overlay"aria-hidden="true"></i>
               <i class="fa fa-eye-slash" v-if="!overlay"aria-hidden="true"></i>
             </button>
-            <button class="btn btn-lg btn-outline-info" v-on:click="show = !show">
+            <button class="btn btn-lg btn-outline-info" v-on:click="show = !show" id="menuButton">
               <i class="fa fa-chevron-down" v-if="show"aria-hidden="true"></i>
               <i class="fa fa-chevron-up" v-if="!show"aria-hidden="true"></i>
             </button>
-            <button class="btn btn-lg btn-outline-info" v-on:click="undo" style="position:fixed; right:0;">
+            <button class="btn btn-lg btn-outline-info right" v-on:click="undo">
               <i class="fa fa-undo" aria-hidden="true"></i>
             </button>
           </div>
