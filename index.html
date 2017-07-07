@@ -205,12 +205,63 @@
     line-height:150px;
     }
 
+    .avatar {
+      width: 35px;
+      height: 35px;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      z-index: 9999;
+    }
+
+    .avatar img {
+      border-style: solid;
+      border-width: thin;
+      border-color: #5bc0de;
+    }
+
+    .dropdown {
+      position: fixed;
+    }
+
+    .dropdown-menu{
+      top: 40px;
+      left: 5px;
+      border-style: solid;
+      border-width: thin;
+      border-color: #5bc0de;
+      background-color: black;
+    }
+
+    .dropdown-menu a{
+      color: white;
+    }
+
+    .dropdown-header{
+      color: #5bc0de;
+    }
+
     </style>
   </head>
 
   <body oncontextmenu="return false;">
 
         <div class="main" id="main">
+
+          <div class="dropdown">
+            <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="avatar">
+                <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle" style="width:100%;">
+              </div>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <h6 class="dropdown-header">{{login.username}}</h6>
+              <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
+            </div>
+          </div>
+
+
           <div class="img-container">
             <canvas id="myCanvas" resize >
           </div>
