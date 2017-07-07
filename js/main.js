@@ -313,7 +313,57 @@ function drawLine(e, me){
          draw.last.x,
          draw.last.y, draw.LUT[window.paintVal], me, paintVal)
   }
+
+  if (window.paintSize > 1){
+    drawLineRad(local, me, window.paintSize)
+  }
+
   draw.last = local
+
+}
+
+var sizeMapper = {2: [{x:-1, y:0},
+                     {x:0, y:-1},
+                     {x:0, y: 1},
+                     {x:1, y:0},
+                     {x:1, y:1},
+                     {x:1, y:-1},
+                     {x:-1, y:1},
+                     {x:1, y:-1}
+                   ],
+                  3: [
+                     {x:-1, y:0},
+                     {x:0, y:-1},
+                     {x:0, y: 1},
+                     {x:1, y:0},
+                     {x:1, y:1},
+                     {x:1, y:-1},
+                     {x:-1, y:1},
+                     {x:1, y:-1},
+                     {x:2, y: 0},
+                     {x:-2, y: 0},
+                     {x:0, y:2},
+                     {x:0, y:-2}
+                  ]
+                 }
+
+function drawLineRad(local, me, rad){
+
+  sizeMapper[rad].forEach(function(val, idx, arr){
+    draw.addHistory(local.x+val.x, local.y+val.y,
+                    me.pixelLog[local.x+val.x][local.y+val.y],
+                    window.paintVal)
+    me.setPixelLog(local.x+val.x, local.y+val.y, draw.LUT[window.paintVal], window.paintVal)
+
+    if (draw.last != null){
+
+      draw.line(local.x+val.x,
+           local.y+val.y,
+           draw.last.x+val.x,
+           draw.last.y+val.y,
+           draw.LUT[window.paintVal], me, paintVal)
+    }
+  })
 
 }
 
@@ -579,6 +629,7 @@ changeMode = function(e){
 
 
 window.paintVal = 1
+window.paintSize = 1
 setPaintbrush = function(e){
   /*
     Set paintbrush value to integer(e). If e is not in the draw.LUT, set to 0.
@@ -590,6 +641,11 @@ setPaintbrush = function(e){
   }
 
   window.paintVal = parseInt(e)
+}
+
+setPaintSize = function(e){
+  console.log("setting paint size")
+  window.paintSize = e
 }
 
 window.zoomFactor = 1
@@ -665,14 +721,14 @@ endBright = function(){
 
 hide = function(){
   all_rasters[1].visible = !all_rasters[1].visible
-  if (all_rasters[1].visible){
+  /*if (all_rasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
   }
   else{
     $("#noshow").show()
     $("#show").hide()
-  }
+  }*/
 }
 
 dragHandler = function(e){
@@ -691,11 +747,11 @@ dragHandler = function(e){
   var mode = window.mode
   switch (mode) {
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       drawLine(e, me)
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       drawLine(e, me)
       break
     case "zoom":
@@ -722,16 +778,36 @@ clickHandler = function(e){
   if (window.prevMode != "view"){
   switch (mode) {
     case "paintFill":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       doFloodFill(e, me)
       break;
     case "eraseFill":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       doFloodFill(e, me)
       break;
     case "brightness":
       doBright(e)
       break
+    default:
+      break
+
+  }}
+  window.prevMode = mode
+}
+
+dblClickHandler = function(e){
+  var me = this
+  var mode = "paintFill"
+  if (window.prevMode != "view"){
+  switch (mode) {
+    case "paintFill":
+      //setPaintbrush("1")
+      doFloodFill(e, me)
+      break;
+    case "eraseFill":
+      //setPaintbrush("0")
+      doFloodFill(e, me)
+      break;
     default:
       break
 
@@ -758,10 +834,10 @@ mousedownHandler = function(e){
       window.panMouseDown = e
       break;
     case "paint":
-      setPaintbrush("1")
+      //setPaintbrush("1")
       break
     case "erase":
-      setPaintbrush("0")
+      //setPaintbrush("0")
       break
     default:
       break
@@ -770,7 +846,7 @@ mousedownHandler = function(e){
 }
 
 function mousewheel( event ) {
-
+  console.log("scrolling")
   event.preventDefault();
   event.stopPropagation();
   event.delta = {}
@@ -808,6 +884,7 @@ function start(base_url){
     roi.onMouseDown = mousedownHandler
     roi.onMouseUp = draw.reset
     roi.onClick = clickHandler
+    roi.onDoubleClick = dblClickHandler
 
     // base events if ROI is hidden
     base.onClick = function(e){
@@ -845,7 +922,8 @@ Login(function(){
     start(base_url)
 
   });
-});
+})
+
 
 var stage = document.getElementById('myCanvas');
 var mc = new Hammer.Manager(stage, {stopPropagation:true, preventDefault:true});
