@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--<link rel="stylesheet" href="css/blue.css">-->
     <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
@@ -241,6 +242,34 @@
       color: #5bc0de;
     }
 
+    nav {
+      display: inline-block;
+      position: fixed;
+      width: 100%;
+      color: white;
+      text-align:center;
+    }
+
+    nav h4 {
+      margin-top: 0.5em;
+      margin-left: 45px;
+      margin-right: 82.58px;
+      border-style: solid;
+      border-width: thin;
+      border-radius: 5px;
+      padding: 4px;
+      margin-top: 5px;
+      border-color: #5bc0de;
+    }
+
+    .submitButton{
+      display: inline-block;
+    }
+
+    #submit_button {
+      width: 73.58px;
+    }
+
     </style>
   </head>
 
@@ -248,28 +277,39 @@
 
         <div class="main" id="main">
 
-          <div class="dropdown">
-            <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <div class="avatar">
-                <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle" style="width:100%;">
+          <nav>
+            <div class="dropdown">
+              <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="avatar">
+                  <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle" style="width:100%;">
+                </div>
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <h6 class="dropdown-header">{{login.username}}</h6>
+                <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
               </div>
-            </a>
+            </div> <!-- End Dropdown menu for user -->
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <h6 class="dropdown-header">{{login.username}}</h6>
-              <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
+            <div class="statusBar">
+              <h4 v-if="status == 'Submit'">{{instruction}}</h4>
+              <h4 v-if="status == 'Next'">
+                <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
+                <i class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
+              </h4>
             </div>
-          </div> <!-- End Dropdown menu for user -->
 
-          <!-- Start submit button -->
-          <div class="submitButton">
-            <div style="text-align:center;">
+            <!-- Start submit button -->
+            <div class="submitButton">
 
-              <button class="btn btn-med btn-outline-info" style="position:fixed; right:0;" id="submit_button" v-on:click="runEval">
-                {{status}}
-              </button>
+
+                <button class="btn btn-med btn-outline-info" style="position:fixed; right:0; top:0;" id="submit_button" v-on:click="runEval">
+                  {{status}}
+                </button>
+
             </div>
-          </div>
+
+          </nav>
 
 
           <div class="img-container">
@@ -434,7 +474,12 @@ var app =  new Vue({
         url: "https://github.com/login/oauth/authorize?client_id=bdf880910c19a91f4a7f",
         image:"images/Octocat1.jpg"
       },
-      status: "Submit"
+      status: "Submit",
+      instruction: "Color the Lesions",
+      score: {
+        dice: 0,
+        points: 0
+      }
     },
     methods:{
       hide: function(){
