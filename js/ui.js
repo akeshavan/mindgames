@@ -95,8 +95,12 @@ show_save = function(score){
   //snackbarContainer.MaterialSnackbar.showSnackbar(data);
   $("#titlebar").html(message)
   //var output = Mustache.render('<h4> accuracy: {{acc}}, points: {{xp}} <button class="btn btn-success btn-xsmall" onclick="get_next()">Next</button> </h4>', score)
-  $("#submit_button").html("Next")
+  //$("#submit_button").html("Next")
+
+  app.status = "Next"
   console.log("setting click to get_next")
-  $("#submit_button").attr("onclick", "get_next()")
+  //$("#submit_button").attr("onclick", "get_next()")
   $("#submit_button").prop("disabled",false);
+
+
 }

@@ -259,6 +259,16 @@
               <h6 class="dropdown-header">{{login.username}}</h6>
               <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
             </div>
+          </div> <!-- End Dropdown menu for user -->
+
+          <!-- Start submit button -->
+          <div class="submitButton">
+            <div style="text-align:center;">
+
+              <button class="btn btn-med btn-outline-info" style="position:fixed; right:0;" id="submit_button" v-on:click="runEval">
+                {{status}}
+              </button>
+            </div>
           </div>
 
 
@@ -423,7 +433,8 @@ var app =  new Vue({
         title: "Log in with GitHub",
         url: "https://github.com/login/oauth/authorize?client_id=bdf880910c19a91f4a7f",
         image:"images/Octocat1.jpg"
-      }
+      },
+      status: "Submit"
     },
     methods:{
       hide: function(){
@@ -450,6 +461,17 @@ var app =  new Vue({
             setPaintSize(this.options["Brush Size"].val)
           default:
             break
+        }
+      },
+      runEval: function(){
+        switch (this.status) {
+          case "Submit":
+            do_eval()
+            break;
+          case "Next":
+            get_next()
+          default:
+            null
         }
       }
     }
