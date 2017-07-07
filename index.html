@@ -292,11 +292,17 @@
             </div> <!-- End Dropdown menu for user -->
 
             <div class="statusBar">
-              <h4 v-if="status == 'Submit'">{{instruction}}</h4>
-              <h4 v-if="status == 'Next'">
-                <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
-                <i class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
-              </h4>
+              <div v-if="loading" style="color:white;">
+                <h4><i class="fa fa-cog fa-spin fa-fw"></i></h4>
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div v-else>
+                <h4 v-if="status == 'Submit'">{{instruction}}</h4>
+                <h4 v-if="status == 'Next'">
+                  <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
+                  <i class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
+                </h4>
+              </div>
             </div>
 
             <!-- Start submit button -->
@@ -339,7 +345,7 @@
                   <div class="imageDiv" v-on:click="show_opt = 'Brightness'">
                     <span></span>
                     <i class="fa fa-sun-o fa-5x" aria-hidden="true"></i>
-                    <div style="position: relative; bottom: 25px; color:white; width:150px">Brighness</div>
+                    <div style="position: relative; bottom: 25px; color:white; width:150px">Brightness</div>
 
                   </div>
                   <!-- Contrast -->
@@ -464,6 +470,7 @@ var app =  new Vue({
         "Brush Color": {val: 1, min:0, max:1, step:1, icon: "fa fa-tint fa-3x"}
       },
       overlay: true,
+      loading: true,
       login: {
         username: null,
         avatar: null,

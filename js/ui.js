@@ -17,13 +17,15 @@ $("#contrast_slider").on("mouseup",function(e){
 
 
 function startProgress(){
-  var spot = $("#pbar")
-  spot.show()
+  //var spot = $("#pbar")
+  //spot.show()
+  app.loading = true
 }
 
 function stopProgress(){
-  var spot = $("#pbar")
-  spot.hide()
+  //var spot = $("#pbar")
+  //spot.hide()
+  app.loading = false
 }
 
 function setMenuIcon(mode){
