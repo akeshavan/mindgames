@@ -4,9 +4,14 @@ config = {
   player_url: 'https://glacial-garden-24920.herokuapp.com/player'
 }
 
+config = {
+  mask_url: 'http://54.211.41.50/api/v1/mask?mode=truth&max_results=1&page=',
+  image_url: 'http://54.211.41.50/api/v1/image/',
+  player_url: ''
+}
 
 get_url = function(random){
-  return config.image_url + random
+  return config.mask_url + random
 }
 
 do_eval = function(){
@@ -14,7 +19,8 @@ do_eval = function(){
   startProgress()
   $('#submit_button').prop('disabled',true);
   var data = window.currentData
-  $.getJSON(data._items[0].truth_data, function(truth){
+  var truth = window.truthData
+  //$.getJSON(data._items[0].truth_data, function(truth){
     var cscore_and_diff = roi.diff(truth)
     var cscore = cscore_and_diff[0]
     var diffvals = cscore_and_diff[1]
@@ -26,7 +32,7 @@ do_eval = function(){
     console.log('score is', score)
     stopProgress()
     do_save(score, JSON.stringify(diffvals))
-  })
+  //})
 }
 
 function create_request(data, url){

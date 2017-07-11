@@ -915,12 +915,18 @@ Login(function(){
   var url = get_url(random)
   $.get(url, function(data, status, jqXhr){
     window.currentData = data
-    var base_url = data._items[0].pic
-    var truth_data_url = data._items[0].truth_data
+    //var base_url = data._items[0].pic
+    var truth_data = data._items[0].pic
+    window.truthData = truth_data;
     window.collection_size = data._meta.total
     //Load the base image
     console.log("going to start")
-    start(base_url)
+    $.get(config.image_url + data._items[0].image_id, function(data, status, jqXhr){
+      console.log(data)
+      var base_url = data.pic
+      start(base_url)
+    })
+
 
   });
 })
