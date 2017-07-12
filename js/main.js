@@ -675,8 +675,16 @@ doPan = function(e){
 
 }
 
-window.brightCirclePos = new Point(view.viewSize.width/2, view.viewSize.height/2);
-window.brightCircle = null
+window.brightness = 50;
+window.contrast = 50;
+
+setBrightness = function(val){
+  window.brightness = val
+}
+
+setContrast = function(val){
+  window.contrast = val
+}
 
 doBright = function(e){
   /*
@@ -703,21 +711,11 @@ doCont = function(e){
 }
 
 doBrightCont = function(){
-  var bright = doBright($("#brightness_slider")[0].value)
-  var cont = doCont($("#contrast_slider")[0].value)
+  var bright = doBright(window.brightness)
+  var cont = doCont(window.contrast)
   base.brightness_contrast(bright, cont)
 }
 
-startBright = function(){
-  window.brightCircle = new Path.Circle(window.brightCirclePos, 10);
-  window.brightCircle.fillColor = 'steelblue';
-  window.brightCircle.onMouseDrag = doBright
-}
-
-endBright = function(){
-  window.brightCircle.remove()
-  window.brightCircle = null
-}
 
 hide = function(){
   all_rasters[1].visible = !all_rasters[1].visible

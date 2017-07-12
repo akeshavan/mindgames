@@ -282,14 +282,17 @@ var app =  new Vue({
         draw.revert(roi)
       },
       adjustBrightCont: function(){
-        base.brightness_contrast(doBright(this.options["Brightness"].val), doCont(this.options["Contrast"].val))
+        //base.brightness_contrast(doBright(this.options["Brightness"].val), doCont(this.options["Contrast"].val))
+        doBrightCont()
       },
       applySetting: function(){
         switch (this.show_opt) {
           case "Brightness":
+            setBrightness(this.options["Brightness"].val)
             this.adjustBrightCont()
             break;
           case "Contrast":
+            setContrast(this.options["Contrast"].val)
             this.adjustBrightCont()
             break
           case "Brush Color":
