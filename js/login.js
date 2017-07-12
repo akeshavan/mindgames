@@ -1,3 +1,49 @@
+function postToDB(profile, callback){
+  var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
+  var data = {username: profile.login,
+              avatar: profile.avatar_url,
+              oa_id: profile.github_id}
+  var settings = create_json_request(data, "http://54.211.41.50/api/v1/user/", token)
+  settings.success = function(data, status, jqxhr){
+    console.log("success in POST!", data, status)
+    callback()
+  }
+  $.ajax(settings)
+}
+
+function getUserInfo(profile, callback){
+
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://54.211.41.50/api/v1/user?where=username%3D%3D%22"+profile.login+"%22",
+    "method": "GET",
+    "headers": {
+    },
+    "processData": false,
+    "contentType": false,
+  }
+
+  $.get(settings).done(function(data){
+    if (data._meta.total){
+      console.log("found user in db", data)
+      var score_info = data._items[0]
+      app.login.ave_score = score_info.ave_score;
+      app.login.n_subs = score_info.n_subs;
+      app.login.n_test = score_info.n_test;
+      app.login.n_try = score_info.n_try;
+      app.login.total_score = score_info.total_score;
+      callback()
+
+    } else {
+      console.log("did not find data", data)
+      postToDB(profile, callback)
+
+    }
+    stopProgress();
+  });
+}
+
 function Login(callback) {
   //startProgress()
 
@@ -6,7 +52,11 @@ function Login(callback) {
     app.login.username = profile.login;
     app.login.avatar = profile.avatar_url;
     app.login.github_id = profile.id;
-    callback();
+
+    getUserInfo(profile, callback)
+
+
+    //callback();
   } else {
     try {
       startProgress();
@@ -26,8 +76,9 @@ function Login(callback) {
           };
 
           store.set('github_profile', profile);
-          callback();
-          stopProgress();
+          //callback();
+          getUserInfo(profile, callback)
+
         });
       });
 

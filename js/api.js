@@ -7,7 +7,8 @@ config = {
 config = {
   mask_url: 'http://54.211.41.50/api/v1/mask?mode=truth&max_results=1&page=',
   image_url: 'http://54.211.41.50/api/v1/image/',
-  player_url: ''
+  player_url: 'http://54.211.41.50/api/v1/user/',
+  edit_url: 'http://54.211.41.50/api/v1/mask'
 }
 
 get_url = function(random){
@@ -57,7 +58,7 @@ function create_request(data, url){
   return settings
 }
 
-function create_json_request(data, url){
+function create_json_request(data, url, auth){
 
   var settings = {
     'async': true,
@@ -65,11 +66,13 @@ function create_json_request(data, url){
     'url': url,
     'method': 'POST',
     'headers': {
-      'content-type': 'application/json',
-      'cache-control': 'no-cache',
     },
     'processData': false,
     'data': JSON.stringify(data)
+  }
+
+  if (auth){
+    settings.headers["authorization"] = auth
   }
 
   return settings
@@ -79,21 +82,18 @@ function create_json_request(data, url){
 do_save = function(score, edits){
   startProgress()
   var imgbody = {
-    'image_id': [window.currentData._items[0]._id],
-    'edit_data': edits,
-    'player_id': score['name']
+    'image_id': [window.currentData._items[0].image_id],
+    'pic': edits,
+    'mode': 'try',
+    'score': score.accuracy,
+    'user_id': app.id //score['name']
   }
+  var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
+  var settings = create_json_request(imgbody, config.edit_url, token)
+  console.log("settings are", settings)
+  $.ajax(settings).done(function(response){console.log("POSTed", response)})
 
-  var settings = create_request(imgbody, config.edit_url)
-
-  $.ajax(settings).done(function(response){console.log(response)})
-
-  var scoresettings = create_json_request(score, config.player_url)
-  $.ajax(scoresettings).done(function(response){
-    console.log(response)
-    stopProgress()
-    show_save(score)
-  })
+  //TODO: send a GET to /user/{userID}
 
 }
 
