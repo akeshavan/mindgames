@@ -124,7 +124,7 @@ Raster.prototype.diff = function(data){
            //false negative
            ++score.fn
            //turn red
-           this.setPixel(ii,jj,"tomato")
+           this.setPixel(ii,jj,"#FF595E")
            difflog[ii][jj] = current //.push([ii,jj,current])
          }
          else if(!truth && current == 1){
@@ -132,7 +132,7 @@ Raster.prototype.diff = function(data){
            ++score.fp
 
            //turn blue
-           this.setPixel(ii,jj,"steelblue")
+           this.setPixel(ii,jj,"#87BCDE")
            //difflog.push([ii,jj,current])
            difflog[ii][jj] = current
          };
@@ -142,7 +142,7 @@ Raster.prototype.diff = function(data){
         if (current){
           ++score.fp
           //turn blue
-          this.setPixel(ii,jj,"steelblue")
+          this.setPixel(ii,jj,"#87BCDE")
           //difflog.push([ii,jj,current])
           difflog[ii][jj] = current
         }

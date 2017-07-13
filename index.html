@@ -69,7 +69,7 @@
                 </div>
               </a>
 
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-menu colorNeutralBackground colorOutline" aria-labelledby="dropdownMenuLink">
                 <h6 class="dropdown-header">{{login.username}}</h6>
                 <!--
                 total_score: 0,
@@ -94,8 +94,16 @@
                 <span class="sr-only">Loading...</span>
               </div>
               <div v-else>
-                <h4 v-if="status == 'Submit'">{{instruction}}</h4>
+                <h4 v-if="status == 'Submit'">
+                  <a class="btn btn-outline-info btn-xs">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                  </a>
+                  {{instruction}}
+                </h4>
                 <h4 v-if="status == 'Next'">
+                  <a class="btn btn-outline-info btn-xs">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                  </a>
                   <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
                   <i class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
                 </h4>
@@ -286,7 +294,7 @@ var app =  new Vue({
         image: 'images/Octocat1.jpg',
       },
       status: 'Submit',
-      instruction: 'Color the Lesions',
+      instruction: 'Color Lesions',
       score: {
         dice: 0,
         points: 0,
