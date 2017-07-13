@@ -2,19 +2,21 @@
                               RASTER FUNCTIONS
 ============================================================================= */
 
-var all_rasters = []
-window.all_rasters = all_rasters
-window.onresize = function(){
+var allRasters = [];
+window.allRasters = allRasters;
+window.onresize = function () {
   /*
     When the window size changes, change the bounds of all rasters
   */
-  //all_rasters.map(function(r){r.fitBounds(view.bounds)})
+
+  //allRasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
-  view.setZoom(1)
-  base.fitBounds(view.bounds)
-  roi.fitBounds(view.bounds)
-  window.zoomFactor = 1
-}
+
+  view.setZoom(1);
+  base.fitBounds(view.bounds);
+  roi.fitBounds(view.bounds);
+  window.zoomFactor = 1;
+};
 
 /*$( window ).resize(function() {
   $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
@@ -22,12 +24,12 @@ window.onresize = function(){
 
 function copyImageData(ctx, src)
 {
-    var dst = ctx.createImageData(src.width, src.height);
-    dst.data.set(src.data);
-    return dst;
+  var dst = ctx.createImageData(src.width, src.height);
+  dst.data.set(src.data);
+  return dst;
 }
 
-var initialize_base_raster = function(raster){
+var initializeBaseRaster = function (raster) {
   /*
     Initialize the base image raster so that its visible, centered, and takes up
     the width of the window.
@@ -47,12 +49,12 @@ var initialize_base_raster = function(raster){
   raster.origImg = copyImageData(tmpCtx,
   raster.canvas.getContext("2d").getImageData(0,0,raster.width, raster.height))
 
-  //all_rasters[0] = raster
-  if (!all_rasters.length){
-    all_rasters.push(raster)
+  //allRasters[0] = raster
+  if (!allRasters.length){
+    allRasters.push(raster)
   }
   else{
-    all_rasters[0] = raster
+    allRasters[0] = raster
   }
 }
 
@@ -65,14 +67,14 @@ var initialize_roi_raster = function(base_raster, roi_raster, alpha){
   */
   alpha = alpha || 0.25
   roi_raster.setSize(base_raster.size)
-  initialize_base_raster(roi_raster)
+  initializeBaseRaster(roi_raster)
   roi_raster.opacity = alpha //0.25
   roi_raster.initPixelLog()
-  if (all_rasters.length == 1){
-    all_rasters.push(roi_raster)
+  if (allRasters.length == 1){
+    allRasters.push(roi_raster)
   }
   else{
-    all_rasters[1] = roi_raster
+    allRasters[1] = roi_raster
   }
 
 }
@@ -105,8 +107,9 @@ Raster.prototype.clear = function(){
 
 Raster.prototype.diff = function(data){
   var score = {tp:0, fn:0, fp: 0}
-  var difflog = []
+  var difflog = {}
   for (ii=0;ii<this.width;ii++){
+    difflog[ii] = {}
     for (jj=0;jj<this.height;jj++){
       var current = this.pixelLog[ii][jj]
       if (data[ii]){
@@ -122,7 +125,7 @@ Raster.prototype.diff = function(data){
            ++score.fn
            //turn red
            this.setPixel(ii,jj,"tomato")
-           difflog.push([ii,jj,current])
+           difflog[ii][jj] = current //.push([ii,jj,current])
          }
          else if(!truth && current == 1){
            //false positive
@@ -130,7 +133,8 @@ Raster.prototype.diff = function(data){
 
            //turn blue
            this.setPixel(ii,jj,"steelblue")
-           difflog.push([ii,jj,current])
+           //difflog.push([ii,jj,current])
+           difflog[ii][jj] = current
          };
       }
       else{
@@ -139,7 +143,8 @@ Raster.prototype.diff = function(data){
           ++score.fp
           //turn blue
           this.setPixel(ii,jj,"steelblue")
-          difflog.push([ii,jj,current])
+          //difflog.push([ii,jj,current])
+          difflog[ii][jj] = current
         }
       }
 
@@ -708,20 +713,9 @@ doBrightCont = function(){
   base.brightness_contrast(bright, cont)
 }
 
-startBright = function(){
-  window.brightCircle = new Path.Circle(window.brightCirclePos, 10);
-  window.brightCircle.fillColor = 'steelblue';
-  window.brightCircle.onMouseDrag = doBright
-}
-
-endBright = function(){
-  window.brightCircle.remove()
-  window.brightCircle = null
-}
-
 hide = function(){
-  all_rasters[1].visible = !all_rasters[1].visible
-  /*if (all_rasters[1].visible){
+  allRasters[1].visible = !allRasters[1].visible
+  /*if (allRasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
   }
@@ -846,7 +840,6 @@ mousedownHandler = function(e){
 }
 
 function mousewheel( event ) {
-  console.log("scrolling")
   event.preventDefault();
   event.stopPropagation();
   event.delta = {}
@@ -867,17 +860,17 @@ function start(base_url){
 
   var base = new Raster({
    crossOrigin: 'anonymous',
-   source: base_url,
+   source: 'data:image/jpeg;base64,' + base_url,
    position: view.center
   });
 
   base.onLoad = function() {
     //THIS ALWAYS RUNS -- will this break things??
-    initialize_base_raster(base)
+    initializeBaseRaster(base)
 
     //Load the (blank) ROI image
     var roi = new Raster({});
-    initialize_roi_raster(base, roi)
+    initialize_roi_raster(base, roi, 0.35)
 
     // ROI events
     roi.onMouseDrag = dragHandler
@@ -902,7 +895,6 @@ function start(base_url){
     window.roi = roi
     window.view = view
     //("#currentTool").html(window.mode)
-    $(".mdl-layout__drawer-button").addClass("mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored")
     stopProgress()
 
   };
@@ -912,14 +904,21 @@ startProgress()
 Login(function(){
   var random = getRandomInt(1,20)
   console.log("random int is", random)
-  $.get("https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page="+random, function(data, status, jqXhr){
+  var url = get_url(random)
+  $.get(url, function(data, status, jqXhr){
     window.currentData = data
-    var base_url = data._items[0].base_image_url
-    var truth_data_url = data._items[0].truth_data
+    //var base_url = data._items[0].pic
+    var truth_data = data._items[0].pic
+    window.truthData = truth_data;
     window.collection_size = data._meta.total
     //Load the base image
     console.log("going to start")
-    start(base_url)
+    $.get(config.image_url + data._items[0].image_id, function(data, status, jqXhr){
+      console.log(data)
+      var base_url = data.pic
+      start(base_url)
+    })
+
 
   });
 })

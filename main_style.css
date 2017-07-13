@@ -1,0 +1,236 @@
+html,
+body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0;
+    color: rgba(0, 0, 0, .87);
+}
+
+#myCanvas {
+  color: rgba(0, 0, 0, 0.87);
+  display: block;
+  height: 617.016px;
+  min-height: 100%;
+  min-width: 100%;
+  text-decoration: none solid rgba(0, 0, 0, 0.87);
+  touch-action: none;
+  vertical-align: middle;
+  width: 375px;
+  column-rule-color: rgba(0, 0, 0, 0.87);
+  align-self: center;
+  perspective-origin: 187.5px 308.5px;
+  transform-origin: 187.5px 308.5px;
+  user-select: none;
+  caret-color: rgba(0, 0, 0, 0.87);
+  border: 0px none rgba(0, 0, 0, 0.87);
+  font: normal normal normal normal 14px / 20px Roboto, Helvetica, sans-serif;
+  outline: rgba(0, 0, 0, 0.87) none 0px;
+  z-index: 0;
+}
+
+.main {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    position: absolute;
+    min-height: 100% !important;
+    min-width: 100% !important;
+    background-color: #000 !important
+}
+
+
+.img-container {
+  align-items: center;
+  width: 100%;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .75s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+
+.menu {
+  background-color:rgba(255,255,255,0);
+  height:194px;
+  width: 100%;
+  z-index:999;
+  position:fixed;
+  bottom:20px;
+  left: 0;
+}
+
+.bottomMenu {
+  background-color:rgba(255,255,255,0);
+  height:35.56px;
+  width: 100%;
+  left: 0;
+  z-index:999;
+  position:fixed;
+  bottom:20px;
+}
+
+button{
+  margin: 5px;
+  box-shadow: 0 0 0 0px;
+  border-width: thin;
+  border-color: #dfdfe0;
+  background-color: white;
+  border-radius: 5px;
+  padding:5px;
+}
+
+.wrapper {
+    margin: auto;
+    background-color: rgba(255,255,255,0);
+    text-align: center;
+    position: relative;
+
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+.scrolls {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space:nowrap
+}
+.imageDiv {
+    border-style: solid;
+    background-color: rgba(0,0,0,1);
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #6B6D76;
+    color: #CCC9A1;
+    margin: 2px;
+    width: 150px;
+    height: 150px;
+
+    /*max-height: 50px;*/
+    cursor: pointer;
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+}
+
+.imageDivPart {
+    border-style: solid;
+    background-color: rgba(0,0,0,1);
+    border-width: 0px;
+    border-radius: 5px;
+    border-color: #dfdfe0;
+    color: white;
+    margin: 2px;
+    width: 3em;
+    height: 3em;
+
+    /*max-height: 50px;*/
+    cursor: pointer;
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:middle;
+}
+
+.imageDiv span{
+line-height:150px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 9999;
+}
+
+.avatar img {
+  border-style: solid;
+  border-width: thin;
+  border-color: #5bc0de;
+}
+
+.dropdown {
+  position: fixed;
+}
+
+.dropdown-menu{
+  top: 40px;
+  left: 5px;
+  border-style: solid;
+  border-width: thin;
+  border-color: #5bc0de;
+  background-color: black;
+}
+
+.dropdown-menu a{
+  color: white;
+}
+
+.dropdown-header{
+  color: #5bc0de;
+}
+
+nav {
+  display: inline-block;
+  position: fixed;
+  width: 100%;
+  color: white;
+  text-align:center;
+}
+
+nav h4 {
+  margin-top: 0.5em;
+  margin-left: 45px;
+  margin-right: 82.58px;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 5px;
+  padding: 4px;
+  margin-top: 5px;
+  border-color: #5bc0de;
+}
+
+.submitButton{
+  display: inline-block;
+}
+
+#submit_button {
+  width: 73.58px;
+}
+
+.left {
+  position:fixed;
+  left:0;
+}
+
+.right{
+  position:fixed;
+  right:0;
+}
+
+.optLabel {
+  position: relative;
+  bottom: 25%;
+  color:#fff;
+  width:150px;
+  font-size: 1.5em;
+}
