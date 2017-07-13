@@ -71,6 +71,19 @@
 
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <h6 class="dropdown-header">{{login.username}}</h6>
+                <!--
+                total_score: 0,
+                ave_score: 0,
+                n_subs: 0,
+                n_test:0,
+                n_try: 0,
+              -->
+                <h6 class="dropdown-header">Total score: {{login.total_score}}</h6>
+                <h6 class="dropdown-header">Average score: {{login.ave_score}}</h6>
+                <h6 class="dropdown-header">Number of tiles: {{login.n_subs}}</h6>
+                <h6 class="dropdown-header">Number of test cases: {{login.n_test}}</h6>
+                <h6 class="dropdown-header">Number of train cases: {{login.n_try}}</h6>
+
                 <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
               </div>
             </div> <!-- End Dropdown menu for user -->

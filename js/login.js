@@ -33,6 +33,7 @@ function getUserInfo(profile, callback){
       app.login.n_test = score_info.n_test;
       app.login.n_try = score_info.n_try;
       app.login.total_score = score_info.total_score;
+      app.login.id = score_info._id
       callback()
 
     } else {

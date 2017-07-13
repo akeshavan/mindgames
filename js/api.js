@@ -82,16 +82,23 @@ function create_json_request(data, url, auth){
 do_save = function(score, edits){
   startProgress()
   var imgbody = {
-    'image_id': [window.currentData._items[0].image_id],
+    'image_id': window.currentData._items[0].image_id,
     'pic': edits,
     'mode': 'try',
     'score': score.accuracy,
-    'user_id': app.id //score['name']
+    'user_id': app.login.id //score['name']
   }
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var settings = create_json_request(imgbody, config.edit_url, token)
+  settings.headers['content-type'] = 'application/json'
   console.log("settings are", settings)
-  $.ajax(settings).done(function(response){console.log("POSTed", response)})
+  $.ajax(settings).done(function(response){
+    var profile = store.get('github_profile');
+    getUserInfo(profile, function(){
+      stopProgress()
+      show_save(score)
+    })
+  })
 
   //TODO: send a GET to /user/{userID}
 
@@ -104,16 +111,24 @@ get_next = function(){
   startProgress()
   $.get(get_url(page), function(data, status, jqXhr){
     view.setZoom(1)
-
-    base.setSource('data:image/jpeg;base64,'+data._items[0].pic)
-    var answer = data._items[0].truth_data
-    roi.clear()
-    draw.history = [[]]
-    window.zoomFactor = 1
-    window.panFactor = {x:0, y:0}
+    console.log("data now is", data)
+    var truth_data = data._items[0].pic
+    window.truthData = truth_data;
     window.currentData = data
 
-    show_eval()
+    $.get(config.image_url + data._items[0].image_id, function(data, status, jqXhr){
+      console.log(data)
+      var base_url = data.pic
+      base.setSource('data:image/jpeg;base64,'+base_url)
+
+      roi.clear()
+      draw.history = [[]]
+      //window.zoomFactor = 1
+      //window.panFactor = {x:0, y:0}
+
+      show_eval()
+    })
+
 
   })
 }
