@@ -66,11 +66,11 @@ body {
 
 .menu {
   background-color:rgba(255,255,255,0);
-  height:194px;
+  height:90px;
   width: 100%;
   z-index:999;
   position:fixed;
-  bottom:20px;
+  bottom:56px;
   left: 0;
 }
 
@@ -113,14 +113,14 @@ button{
 }
 .imageDiv {
     border-style: solid;
-    background-color: rgba(0,0,0,1);
+    /*background-color: rgba(0,0,0,1);*/
     border-width: 1px;
     border-radius: 5px;
-    border-color: #6B6D76;
-    color: #CCC9A1;
+    /*border-color: #6B6D76;
+    color: #CCC9A1;*/
     margin: 2px;
-    width: 150px;
-    height: 150px;
+    width: 75px;
+    height: 75px;
 
     /*max-height: 50px;*/
     cursor: pointer;
@@ -132,6 +132,7 @@ button{
 
 .imageDivPart {
     border-style: solid;
+    position: fixed;
     background-color: rgba(0,0,0,1);
     border-width: 0px;
     border-radius: 5px;
@@ -150,7 +151,12 @@ button{
 }
 
 .imageDiv span{
-line-height:150px;
+line-height:91px;
+}
+
+.optTitle p {
+  font-size: small;
+  margin-bottom: 0px;
 }
 
 .avatar {
@@ -165,7 +171,6 @@ line-height:150px;
 .avatar img {
   border-style: solid;
   border-width: thin;
-  border-color: #5bc0de;
 }
 
 .dropdown {
@@ -201,13 +206,15 @@ nav h4 {
   margin-top: 0.5em;
   margin-left: 45px;
   margin-right: 82.58px;
-  border-style: solid;
+  border-style: none;
   border-width: thin;
   border-radius: 5px;
   padding: 4px;
   margin-top: 5px;
   border-color: #5bc0de;
 }
+
+
 
 .submitButton{
   display: inline-block;
@@ -231,6 +238,67 @@ nav h4 {
   position: relative;
   bottom: 25%;
   color:#fff;
-  width:150px;
+  width:75px;
   font-size: 1.5em;
+}
+
+.colorDarkBackground {
+    background-color: #613F75;
+}
+
+.colorNeutralBackground {
+  background-color: #313E50;
+}
+
+.colorOutline {
+  color: #87BCDE;
+  border-color: #87BCDE;
+}
+
+.btn-outline-info:hover {
+  color: #fff;
+  background-color: #87BCDE;
+  border-color: #87BCDE;
+
+}
+
+.btn-outline-info {
+  color:  #87BCDE;;
+  background-color: transparent;
+  border-color: #87BCDE;
+
+}
+
+
+.colorBold {
+  background-color: #FF595E;
+  border-color: #FF595E;
+  color: white;
+}
+
+.colorBold:hover {
+  background-color: #FF595E;
+  border-color: #8a3033;
+  color: white;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.statusBar {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.showOption {
+  height:75px;
+  width:100%;
+  max-width: 323px;
+  /*background-color:rgba(0,0,0,1); */
+  border-radius:5px;
+  color: white;
+  border-width: 1px;
+  /*border-color: white; */
+  border-style: solid;
 }
