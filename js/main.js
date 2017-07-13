@@ -870,7 +870,7 @@ function start(base_url){
 
     //Load the (blank) ROI image
     var roi = new Raster({});
-    initialize_roi_raster(base, roi)
+    initialize_roi_raster(base, roi, 0.35)
 
     // ROI events
     roi.onMouseDrag = dragHandler

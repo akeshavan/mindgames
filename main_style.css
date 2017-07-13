@@ -116,8 +116,8 @@ button{
     background-color: rgba(0,0,0,1);
     border-width: 1px;
     border-radius: 5px;
-    border-color: #dfdfe0;
-    color: white;
+    border-color: #6B6D76;
+    color: #CCC9A1;
     margin: 2px;
     width: 150px;
     height: 150px;
@@ -225,4 +225,12 @@ nav h4 {
 .right{
   position:fixed;
   right:0;
+}
+
+.optLabel {
+  position: relative;
+  bottom: 25%;
+  color:#fff;
+  width:150px;
+  font-size: 1.5em;
 }
