@@ -2,13 +2,34 @@ function postToDB(profile, callback){
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var data = {username: profile.login,
               avatar: profile.avatar_url,
-              oa_id: profile.github_id}
-  var settings = create_json_request(data, "http://54.211.41.50/api/v1/user/", token)
+              oa_id: profile.id}
+
+  var form = new FormData();
+  form.append("oa_id", profile.id);
+  form.append("avatar", profile.avatar_url);
+  form.append("username", profile.login);
+
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://54.211.41.50/api/v1/user/",
+    "method": "POST",
+    "headers": {
+      "authorization": token,
+    },
+    "processData": false,
+    "contentType": false,
+    "mimeType": "multipart/form-data",
+    "data": form
+  }
+
+  console.log("sending settings...", settings)
   settings.success = function(data, status, jqxhr){
     console.log("success in POST!", data, status)
     callback()
   }
-  $.ajax(settings)
+  var output = $.ajax(settings)
+  console.log(output)
 }
 
 function getUserInfo(profile, callback){
