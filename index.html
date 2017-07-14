@@ -173,12 +173,12 @@
                   <p>{{show_opt}}: {{options[show_opt].val}}</p>
                 </div>
 
-                <div class="imageDivPart colorNeutralBackground colorOutline colorWhite" style="display: inline-block; ">
+                <div class="imageDivPart colorNeutralBackground colorOutline colorWhite" style="display: inline-block; position: relative; float: left; left: 0px;">
 
                   <i v-bind:class="options[show_opt].icon" aria-hidden="true"></i>
                 </div>
 
-                <div style="display: inline-block; width: calc(100% - 150px); margin-left: 50px;">
+                <div style="display: inline-block; width: calc(100% - 150px); margin-left: 0px;">
                   <input type="range"
                   v-bind:min="options[show_opt].min"
                   v-bind:max="options[show_opt].max"
