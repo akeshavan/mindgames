@@ -93,7 +93,12 @@
 
             <div class="statusBar colorNeutralBackground">
               <div v-if="loading" style="color:white;">
-                <h4><i class="fa fa-cog fa-spin fa-fw"></i></h4>
+                <h4>
+                  <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                  </a>
+                  <i class="fa fa-cog fa-spin fa-fw"></i>
+                </h4>
                 <span class="sr-only">Loading...</span>
               </div>
               <div v-else>
