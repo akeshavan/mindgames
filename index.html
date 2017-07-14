@@ -50,6 +50,9 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="main_style.css">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-default.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
 
     <style>
 
@@ -95,13 +98,13 @@
               </div>
               <div v-else>
                 <h4 v-if="status == 'Submit'">
-                  <a class="btn btn-outline-info btn-xs">
+                  <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
                     <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
                   {{instruction}}
                 </h4>
                 <h4 v-if="status == 'Next'">
-                  <a class="btn btn-outline-info btn-xs">
+                  <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
                     <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
                   <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
@@ -133,28 +136,28 @@
               <div class="scrolls" v-if="!show_opt">
                   <!-- Brush size -->
 
-                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brush Size'">
+                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brush Size'" id="brushSize">
                     <span></span>
                     <i class="fa fa-paint-brush fa-3x" aria-hidden="true"></i>
 
 
                   </div>
                   <!-- Brush color -->
-                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brush Color'">
+                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brush Color'" id="brushColor">
                     <span></span>
                     <i class="fa fa-tint fa-3x" aria-hidden="true"></i>
 
 
                   </div>
                   <!-- Brightness -->
-                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brightness'">
+                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Brightness'" id="brightness">
                     <span></span>
                     <i class="fa fa-sun-o fa-3x" aria-hidden="true"></i>
 
 
                   </div>
                   <!-- Contrast -->
-                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Contrast'">
+                  <div class="imageDiv colorNeutralBackground colorOutline colorWhite" v-on:click="show_opt = 'Contrast'" id="contrast">
                     <span></span>
                     <i class="fa fa-adjust fa-3x" aria-hidden="true"></i>
 
@@ -198,7 +201,7 @@
         </transition>
 
         <div class="bottomMenu colorNeutralBackground">
-          <div class="colorNeutralBackground" style="text-align:center; padding-bottom: 2px;">
+          <div class="colorNeutralBackground" style="text-align:center; padding-bottom: 2px;" id="toggleButton">
             <button class="btn btn-lg btn-outline-info left" v-on:click="hide">
               <i class="fa fa-eye" v-if="overlay"aria-hidden="true"></i>
               <i class="fa fa-eye-slash" v-if="!overlay"aria-hidden="true"></i>
@@ -207,7 +210,7 @@
               <i class="fa fa-chevron-down" v-if="show"aria-hidden="true"></i>
               <i class="fa fa-chevron-up" v-if="!show"aria-hidden="true"></i>
             </button>
-            <button class="btn btn-lg btn-outline-info right" v-on:click="undo">
+            <button class="btn btn-lg btn-outline-info right" v-on:click="undo" id="undoButton">
               <i class="fa fa-undo" aria-hidden="true"></i>
             </button>
           </div>
@@ -231,9 +234,12 @@
   <script src="js/login.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
-  <script src="js/dialog-polyfill.js"></script>
+
+  <!--<script src="js/dialog-polyfill.js"></script>-->
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://cdn.rawgit.com/HubSpot/shepherd/3bff2f1c/dist/js/shepherd.min.js"></script>
+  <script src="js/tour.js"></script>
   <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
   <script type="text/paperscript" canvas="myCanvas" src="js/main.js"></script>
 
@@ -276,6 +282,7 @@ var app =  new Vue({
         'Brush Size': { val: 1, min: 1, max: 3, step: 1, icon: 'fa fa-paint-brush fa-2x', },
         'Brush Color': { val: 1, min: 0, max: 1, step: 1, icon: 'fa fa-tint fa-2x', },
       },
+      tutorial: false,
       overlay: true,
       loading: true,
       login: {
@@ -342,6 +349,12 @@ var app =  new Vue({
           default:
             null;
         }
+      },
+
+      startTour: function () {
+        this.show = true;
+        this.tutorial = true;
+        tour.start()
       },
     },
   });

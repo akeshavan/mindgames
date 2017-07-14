@@ -302,3 +302,16 @@ nav h4 {
   /*border-color: white; */
   border-style: solid;
 }
+
+.tourStyle {
+  z-index: 999;
+}
+
+.tourStyle header {
+  background-color: #313E50 !important;
+  color: white !important;
+}
+
+.tourStyle header a {
+  color: white !important;
+}
