@@ -123,8 +123,8 @@ get_next = function(){
 
       roi.clear()
       draw.history = [[]]
-      //window.zoomFactor = 1
-      //window.panFactor = {x:0, y:0}
+      window.zoomFactor = 1
+      window.panFactor = {x:0, y:0}
 
       show_eval()
     })
