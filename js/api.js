@@ -5,14 +5,14 @@ config = {
 }
 
 config = {
-  mask_url: 'http://54.211.41.50/api/v1/mask?mode=truth&max_results=1&page=',
+  mask_url: 'http://54.211.41.50//api/v1/mask?where={"image_id":"596e21532c1b9f000792d066"}&max_results=1&page=',
   image_url: 'http://54.211.41.50/api/v1/image/',
   player_url: 'http://54.211.41.50/api/v1/user/',
   edit_url: 'http://54.211.41.50/api/v1/mask'
 }
 
 get_url = function(random){
-  return config.mask_url + random
+  return config.mask_url + 1
 }
 
 do_eval = function(){
