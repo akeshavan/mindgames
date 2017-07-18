@@ -58,6 +58,7 @@ do_eval = function(){
     console.log('score is', score)
   } else {
     var diffvals = roi.pixelLog
+    console.log("test: these are the vals", diffvals)
   }
   stopProgress()
   do_save(score, JSON.stringify(diffvals))
@@ -122,6 +123,13 @@ do_save = function(score, edits){
   var settings = create_json_request(imgbody, config.edit_url, token)
   settings.headers['content-type'] = 'application/json'
   console.log("settings are", settings)
+  settings["error"] = function(){
+    alert("there has been an error")
+    stopProgress()
+    window.appMode = "error"
+    show_save({"accuracy": "Err"})
+  }
+
   $.ajax(settings).done(function(response){
     var profile = store.get('github_profile');
     getUserInfo(profile, function(){
@@ -129,6 +137,8 @@ do_save = function(score, edits){
       show_save(score)
     })
   })
+
+
 
   //TODO: send a GET to /user/{userID}
 
