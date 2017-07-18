@@ -920,8 +920,14 @@ get_images = function(url, callback){
     console.log("mask url is", mask_url)
     $.get(mask_url, function(data, status, jqXhr){
       console.log("mask data is", data)
-      var truth_data = data._items[0].pic
-      window.truthData = data;
+      if (data._items.length){
+        var truth_data = data._items[0].pic
+        window.truthData = data;
+        window.appMode = "train"
+      }
+      else{
+        window.appMode = "test"
+      }
       callback(base_url)
     })
   })

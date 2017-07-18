@@ -5,13 +5,13 @@ config = {
 }
 
 config = {
-  mask_url: 'http://54.211.41.50/api/v1/mask/',
+  mask_url: 'http://54.211.41.50/api/v1/mask',
   image_url: 'http://54.211.41.50/api/v1/image/',
   player_url: 'http://54.211.41.50/api/v1/user/',
   edit_url: 'http://54.211.41.50/api/v1/mask',
-  use_random: false,
-  task: "hipp",
-  num: 0,
+  use_random: true,
+  task: "hipp", //"ms_lesion_t2",
+  num: 15,
   total_num_images: 50,
 }
 
@@ -33,7 +33,8 @@ get_image_url = function(){
 }
 
 get_mask_url = function(image_info){
-  var url = config.mask_url + '?where={"image_id":"' + image_info._id + '"}&max_results=1&page=1'
+  var url = config.mask_url + '?where={"mode":"truth","image_id":"' + image_info._id + '"}'
+  console.log('Mask URL is', url)
   return url
 }
 
@@ -41,20 +42,27 @@ do_eval = function(){
   console.log('DOING EVAL\n\n')
   startProgress()
   $('#submit_button').prop('disabled',true);
-  var data = window.currentData
-  var truth = window.truthData
-  //$.getJSON(data._items[0].truth_data, function(truth){
+  var data = window.currentData._items[0]
+
+  var profile = store.get('github_profile')
+  var score = {'name': profile.login, 'edit_data_id': data._id}
+
+  if (window.appMode == "train"){
+    var truth = window.truthData._items[0].pic
     var cscore_and_diff = roi.diff(truth)
     var cscore = cscore_and_diff[0]
     var diffvals = cscore_and_diff[1]
     window.diffvals = diffvals
-    var profile = store.get('github_profile')
-    var score = {'name': profile.login, 'edit_data_id': data._items[0]._id}
     score['xp'] = cscore.tp - cscore.fn - cscore.fp
     score['accuracy'] = 2* cscore.tp/(2* cscore.tp + cscore.fn + cscore.fp) //this is the dice coefficient
     console.log('score is', score)
-    stopProgress()
-    do_save(score, JSON.stringify(diffvals))
+  } else {
+    var diffvals = roi.pixelLog
+  }
+  stopProgress()
+  do_save(score, JSON.stringify(diffvals))
+
+
   //})
 }
 
@@ -104,7 +112,7 @@ function create_json_request(data, url, auth){
 do_save = function(score, edits){
   startProgress()
   var imgbody = {
-    'image_id': window.currentData._items[0].image_id,
+    'image_id': window.currentData._items[0]._id,
     'pic': edits,
     'mode': 'try',
     'score': score.accuracy,
@@ -127,11 +135,10 @@ do_save = function(score, edits){
 }
 
 get_next = function(){
-  var page = getRandomInt(1,collection_size)
-  console.log('next page is', page)
+
   $('#submit_button').prop('disabled',true);
   startProgress()
-  $.get(get_url(page), function(data, status, jqXhr){
+  /*$.get(get_url(page), function(data, status, jqXhr){
     view.setZoom(1)
     console.log("data now is", data)
     var truth_data = data._items[0].pic
@@ -152,7 +159,20 @@ get_next = function(){
     })
 
 
+  })*/
+  var url = get_image_url()
+  get_images(url, function(base_url){
+    base.setSource('data:image/jpeg;base64,'+base_url)
+
+    roi.clear()
+    draw.history = [[]]
+    window.zoomFactor = 1
+    window.panFactor = {x:0, y:0}
+
+    show_eval()
   })
+
+
 }
 
 function getRandomInt(min, max) {

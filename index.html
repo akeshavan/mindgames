@@ -112,8 +112,14 @@
                   <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
                     <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
-                  <i class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
-                  <i class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
+
+                    <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
+                    <i v-if="appMode=='train'" class="fa fa-diamond" aria-hidden="true"></i> {{score.points}}
+
+                  <i v-if="appMode=='test'">
+                    Congrats, that was a new one!
+                  </i>
+
                 </h4>
               </div>
             </div>
@@ -311,6 +317,11 @@ var app =  new Vue({
         dice: 0,
         points: 0,
       },
+    },
+    computed: {
+      appMode: function(){
+        return window.appMode
+      }
     },
     methods: {
       hide: function () {
