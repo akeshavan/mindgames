@@ -5,14 +5,36 @@ config = {
 }
 
 config = {
-  mask_url: 'http://54.211.41.50/api/v1/mask?mode=truth&max_results=1&page=',
+  mask_url: 'http://54.211.41.50/api/v1/mask/',
   image_url: 'http://54.211.41.50/api/v1/image/',
   player_url: 'http://54.211.41.50/api/v1/user/',
-  edit_url: 'http://54.211.41.50/api/v1/mask'
+  edit_url: 'http://54.211.41.50/api/v1/mask',
+  use_random: false,
+  task: "hipp",
+  num: 0,
+  total_num_images: 50,
 }
 
 get_url = function(random){
   return config.mask_url + random
+}
+
+get_image_url = function(){
+  var url = config.image_url + "?where=task==" + config.task
+  url = url + "&max_results=1"+"&"+"page="
+  if (config.use_random){
+    var random = getRandomInt(1,config.total_num_images)
+    url=url + random
+  } else {
+    url = url + config.num;
+    ++config.num
+  }
+  return url
+}
+
+get_mask_url = function(image_info){
+  var url = config.mask_url + '?where={"image_id":"' + image_info._id + '"}&max_results=1&page=1'
+  return url
 }
 
 do_eval = function(){
@@ -120,7 +142,7 @@ get_next = function(){
       console.log(data)
       var base_url = data.pic
       base.setSource('data:image/jpeg;base64,'+base_url)
-    
+
       roi.clear()
       draw.history = [[]]
       window.zoomFactor = 1

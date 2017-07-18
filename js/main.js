@@ -909,27 +909,30 @@ function start(base_url){
   };
 }
 
-startProgress()
-Login(function(){
-  var random = getRandomInt(1,20)
-  console.log("random int is", random)
-  var url = get_url(random)
+get_images = function(url, callback){
   $.get(url, function(data, status, jqXhr){
     window.currentData = data
-    //var base_url = data._items[0].pic
-    var truth_data = data._items[0].pic
-    window.truthData = truth_data;
-    window.collection_size = data._meta.total
-    //Load the base image
+    var base_url = data._items[0].pic
+    config.total_num_images = data._meta.total;
     console.log("going to start")
-    $.get(config.image_url + data._items[0].image_id, function(data, status, jqXhr){
-      console.log(data)
-      var base_url = data.pic
-      start(base_url)
+
+    var mask_url = get_mask_url(data._items[0])
+    console.log("mask url is", mask_url)
+    $.get(mask_url, function(data, status, jqXhr){
+      console.log("mask data is", data)
+      var truth_data = data._items[0].pic
+      window.truthData = data;
+      callback(base_url)
     })
+  })
+}
 
+startProgress()
+Login(function(){
+  var url = get_image_url()
+  console.log('url is', url);
+  get_images(url, start);
 
-  });
 })
 
 
