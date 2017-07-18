@@ -188,7 +188,7 @@
                   v-bind:min="options[show_opt].min"
                   v-bind:max="options[show_opt].max"
                   v-bind:step="options[show_opt].step"
-                  v-on:change="applySetting"
+                  v-on:input="applySetting"
                   v-model="options[show_opt].val" >
                 </div>
 
@@ -321,24 +321,25 @@ var app =  new Vue({
       undo: function () {
         draw.revert(roi);
       },
-
-      adjustBrightCont: function () {
-        base.brightness_contrast(doBright(this.options.Brightness.val),
-                                 doCont(this.options.Contrast.val));
+      adjustBrightCont: function(){
+        //base.brightness_contrast(doBright(this.options["Brightness"].val), doCont(this.options["Contrast"].val))
+        doBrightCont()
       },
 
       applySetting: function () {
         switch (this.show_opt) {
-          case 'Brightness':
-            this.adjustBrightCont();
+          case "Brightness":
+            setBrightness(this.options["Brightness"].val)
+            this.adjustBrightCont()
             break;
-          case 'Contrast':
-            this.adjustBrightCont();
-            break;
-          case 'Brush Color':
-            setPaintbrush(this.options['Brush Color'].val);
-          case 'Brush Size':
-            setPaintSize(this.options['Brush Size'].val);
+          case "Contrast":
+            setContrast(this.options["Contrast"].val)
+            this.adjustBrightCont()
+            break
+          case "Brush Color":
+            setPaintbrush(this.options["Brush Color"].val)
+          case "Brush Size":
+            setPaintSize(this.options["Brush Size"].val)
           default:
             break;
         }

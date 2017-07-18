@@ -120,7 +120,7 @@ get_next = function(){
       console.log(data)
       var base_url = data.pic
       base.setSource('data:image/jpeg;base64,'+base_url)
-
+    
       roi.clear()
       draw.history = [[]]
       window.zoomFactor = 1
