@@ -5,10 +5,10 @@ config = {
 }
 
 config = {
-  mask_url: 'http://54.211.41.50/api/v1/mask?mode=truth&max_results=1&page=',
-  image_url: 'http://54.211.41.50/api/v1/image/',
-  player_url: 'http://54.211.41.50/api/v1/user/',
-  edit_url: 'http://54.211.41.50/api/v1/mask'
+  mask_url: 'http://api.medulina.com/api/v1/mask?mode=truth&max_results=1&page=',
+  image_url: 'http://api.medulina.com/api/v1/image/',
+  player_url: 'http://api.medulina.com/api/v1/user/',
+  edit_url: 'http://api.medulina.com/api/v1/mask'
 }
 
 get_url = function(random){

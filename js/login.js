@@ -12,7 +12,7 @@ function postToDB(profile, callback){
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://54.211.41.50/api/v1/user/",
+    "url": "http://api.medulina.com/api/v1/user/",
     "method": "POST",
     "headers": {
       "authorization": token,
@@ -37,7 +37,7 @@ function getUserInfo(profile, callback){
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://54.211.41.50/api/v1/user?where=username%3D%3D%22"+profile.login+"%22",
+    "url": "http://api.medulina.com/api/v1/user?where=username%3D%3D%22"+profile.login+"%22",
     "method": "GET",
     "headers": {
     },
