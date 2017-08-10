@@ -5,10 +5,10 @@ config = {
 }
 
 config = {
-  mask_url: 'http://54.211.41.50/api/v1/mask',
-  image_url: 'http://54.211.41.50/api/v1/image/',
-  player_url: 'http://54.211.41.50/api/v1/user/',
-  edit_url: 'http://54.211.41.50/api/v1/mask',
+  mask_url: 'http://api.medulina.com/api/v1/mask',
+  image_url: 'http://api.medulina.com/api/v1/image/',
+  player_url: 'http://api.medulina.com/api/v1/user/',
+  edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: true,
   task: "hipp", //"ms_lesion_t2",
   num: 15,
