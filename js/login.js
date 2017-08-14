@@ -26,6 +26,7 @@ function postToDB(profile, callback){
   console.log("sending settings...", settings)
   settings.success = function(data, status, jqxhr){
     console.log("success in POST!", data, status)
+    app.login.id = data._id
     callback()
   }
   var output = $.ajax(settings)
