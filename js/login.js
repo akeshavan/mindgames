@@ -26,7 +26,7 @@ function postToDB(profile, callback){
   console.log("sending settings...", settings)
   settings.success = function(data, status, jqxhr){
     console.log("success in POST!", data, status, data._id)
-    app.login.id = data._id
+    app.login.id = JSON.parse(data)._id
     console.log("app login id", app.login.id)
     callback()
   }
