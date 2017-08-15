@@ -231,14 +231,19 @@
 
         <modal v-bind:content="login" id="loginModal"></modal>
 
+        <div id="legend" style="z-index:99999; background:rgba(1,1,1,1); position: fixed; right:5%; top:8%; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px;" v-if="status=='Next'">
+
+          <div style="display:inline-flex;text-align:center;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: #FF595E; border-color: black; border-style: solid; border-radius: 10px;"></div> <span style="line-height:50px;">Missed</span></div>
+          <br>
+          <div style="display:inline-flex;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: #87BCDE; border-color: black; border-style: solid; border-radius: 10px;"></div>  <span style="line-height:50px;">Incorrect</span></div>
+          <br>
+          <div style="display:inline-flex;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: darkviolet; border-color: black; border-style: solid; border-radius: 10px;"></div>  <span style="line-height:50px;">Correct</span></div>
+
         </div>
 
-        <div id="legend" style="z-index:99999; background:rgba(1,1,1,1); position: fixed; right:25%; top:25%; color:white; display: block" hidden>
-          Legend
-          <div style="display:inline-block;"><div id="falsePos" style="width:50px; height:50px; background-color: red;"></div> Missed</div>
-          <div style="display:inline-block;"><div id="falsePos" style="width:50px; height:50px; background-color: blue;"></div> Incorrectly marked</div>
-
         </div>
+
+
 
 
   </body>
