@@ -203,7 +203,8 @@
             to_plot.y.push(d.score)
           })
           Plotly.newPlot('tester', [to_plot], {
-        	  margin: { t: 0 } }
+        	  margin: { t: 10 } ,
+            yaxis: {range: [0, 1]}}
           )
 
           TESTER.on('plotly_hover', function(data){
