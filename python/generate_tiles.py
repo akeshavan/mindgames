@@ -103,7 +103,7 @@ def create_tiles(base_file, mask_file, slice_direction, outdir,
     for slice_num in range(num_slices):
         all_data_slicer[slicer[slice_direction]] = slice_num
         mask_tile = mask_IPL[all_data_slicer] > 0
-        if sum(mask_tile) >= vox_thresh:
+        if np.sum(mask_tile) >= vox_thresh:
             #then we want to create the tile
             base_tile = data_IPL[all_data_slicer]
             imshow(base_tile)
@@ -154,24 +154,25 @@ def create_tiles(base_file, mask_file, slice_direction, outdir,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-b", "--base", dest="base")
+    parser.add_argument("-b", "--base", dest="base", required=True)
     parser.add_argument("-m", "--mask", dest="mask")
     parser.add_argument("-d", "--dir", dest="slice_dir")
     parser.add_argument("-o", "--output", dest="output")
     parser.add_argument("-u", "--use_mpl", dest="use_mp", default=1)
     parser.add_argument("-v", "--vox_thresh", dest="vox_thresh", default=100)
-    parser.add_argument("-h", "--name_by_hash", dest="name_by_hash", default=0)
-    parser.add_argument("-f", "--fov", dest="fov, default=None)
+    parser.add_argument("-n", "--name_by_hash", dest="name_by_hash", default=False)
+    parser.add_argument("-f", "--fov", dest="fov", default=None)
 
     def Xfov(base_tile):
         X = np.nonzero(base_tile.sum(1) > 0)
         return [X[0],slice(None)]
 
-    fovs = {x: Xfov}
+    fovs = {"x": Xfov}
 
     args = parser.parse_args()
     if args.fov:
         args.fov = fovs[args.fov]
+    print(args)
 
     create_tiles(os.path.abspath(args.base),
                  os.path.abspath(args.mask),
@@ -179,5 +180,5 @@ if __name__ == "__main__":
                  os.path.abspath(args.output),
                  int(args.vox_thresh),
                  args.use_mp,
-                 args.name_by_hash,
+                 bool(args.name_by_hash),
                  args.fov)
