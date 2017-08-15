@@ -55,14 +55,16 @@
     <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
 
     <style>
-
+    [v-cloak] {
+        display: none;
+      }
     </style>
 
   </head>
 
   <body oncontextmenu="return false;">
 
-        <div class="main" id="main">
+        <div class="main" id="main" v-cloak>
 
           <nav>
             <div class="dropdown">

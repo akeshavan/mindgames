@@ -42,6 +42,10 @@
       margin: 25px;
     }
 
+    [v-cloak] {
+        display: none;
+      }
+
     .user_avatar_container {
       display: inline;
       margin-right: 25px;
@@ -89,7 +93,7 @@
   </head>
 
   <body>
-    <div id="main">
+    <div id="main" v-cloak>
       <div class="row">
         <div class="col-md-2">
           <h3>Players:</h3>
@@ -142,7 +146,6 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script type="text/paperscript" canvas="currentImg" src="js/paper_stuff.js"></script>
 
   <script>
@@ -163,6 +166,9 @@
         current_image: null,
       },
       methods: {
+        query: function(){
+          return 'mask?where={"mode":"try","user_id":"' +this.current_user + '"}&max_results=100 '
+        },
         plotter: function(){
           var TESTER = document.getElementById('tester');
           var to_plot = {x:[], y:[], type:"scatter", mode:'markers', marker:{size:10}}
@@ -216,9 +222,9 @@
     })
 
   var url = 'http://api.medulina.com/api/v1/'
-  var user = '5991b1bdf441bd00082835a3'
-  app.current_user = user;
-  var query = 'mask?where={"mode":"try","user_id":"' +user + '"}&max_results=100 '
+  var init_user = '5991b1bdf441bd00082835a3'
+  app.current_user = init_user;
+  //var query = 'mask?where={"mode":"try","user_id":"' +app.current_user + '"}&max_results=100 '
   var size = null
 
 
@@ -230,7 +236,7 @@
         //console.log(updater)
         updater(data)
         if (data._links.next){
-          console.log("getting next")
+          console.log("getting next", url+query)
           get_data(url, data._links.next.href, updater, callback)
         }
         else{
@@ -250,10 +256,7 @@
            })
 
   function set_user(user){
-    get_data(url,
-             query,
-             function(data){app.user_data = app.user_data.concat(data._items);},
-             function(){app.plotter()})
+    app.current_user = user;
 
     get_data(url, 'user/'+ user, function(data){
       console.log(data)
@@ -261,11 +264,28 @@
     },
     function(){
       console.log("done getting user")
+      app.user_data = []
+      get_data(url,
+               app.query(),
+               function(data){
+                 app.user_data = app.user_data.concat(data._items);
+                 console.log("appending...", data._items, app.user_data.length)
+               },
+               function(){
+                 console.log("done getting all user tries", user, app.query(), app.user_data.length)
+                 try {
+                   Plotly.deleteTraces('tester', 0);
+                 } catch (e) {
+                   console.log(e)
+                 }
+
+                 app.plotter()
+               })
     })
   }
 
-  app.current_user = user
-  set_user(user)
+  app.current_user = init_user
+  set_user(app.current_user)
 
 
 
