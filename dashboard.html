@@ -85,7 +85,19 @@
   }
 
   li {
-    margin-top: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+  }
+
+  a {
+      cursor: pointer;
+  }
+
+
+  .selected {
+    background: #FF595E;
+    color: white;
   }
 
     </style>
@@ -98,8 +110,12 @@
         <div class="col-md-2">
           <h3>Players:</h3>
           <ul>
-            <li v-for="user in all_users">
-              <a v-on:click="setPlayer(user._id)">{{user.username}}</a>
+            <li v-for="user in all_users" v-bind:class="{ selected: user._id == current_user }">
+
+                <a v-on:click="setPlayer(user._id)">
+                  {{user.username}}
+                </a>
+
             </li>
           </ul>
         </div>
