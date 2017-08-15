@@ -34,12 +34,12 @@ function postToDB(profile, callback){
   console.log(output)
 }
 
-function getUserInfo(profile, callback){
+function getUserInfo(user_token, callback){
 
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://api.medulina.com/api/v1/user?where=username%3D%3D%22"+profile.login+"%22",
+    "url": "http://api.medulina.com/api/v1/user?where=token%3D%3D%22"+user_token+"%22",
     "method": "GET",
     "headers": {
     },
@@ -56,12 +56,15 @@ function getUserInfo(profile, callback){
       app.login.n_test = score_info.n_test;
       app.login.n_try = score_info.n_try;
       app.login.total_score = score_info.total_score;
-      app.login.id = score_info._id
+      app.login.id = score_info._id;
+      app.login.avatar = score_info.avatar_url;
+      app.login.github_id = score_info.id;
+      app.login.username = score_info.login;
       callback()
 
     } else {
       console.log("did not find data", data)
-      postToDB(profile, callback)
+      //postToDB(profile, callback)
 
     }
     stopProgress();
@@ -71,11 +74,11 @@ function getUserInfo(profile, callback){
 function Login(callback) {
   //startProgress()
 
-  var profile = store.get('github_profile');
+  var profile = store.get('user_token');
   if (profile) {
-    app.login.username = profile.login;
+    /*app.login.username = profile.login;
     app.login.avatar = profile.avatar_url;
-    app.login.github_id = profile.id;
+    app.login.github_id = profile.id;*/
 
     getUserInfo(profile, callback)
 
@@ -85,13 +88,13 @@ function Login(callback) {
     try {
       startProgress();
       var code = window.location.href.match(/\?code=(.*)/)[1];
-      $.getJSON('https://aqueous-reef-70776.herokuapp.com/authenticate/' + code, function (data) {
+      $.getJSON('http://api.medulina.com/api/authenticate/github/' + code, function (data) {
         console.log('data token is', data.token);
-        getProfile(data.token, function (profile) {
+        getUserInfo(data.token, function (profile) {
           console.log(profile);
-          app.login.username = profile.login;
+          /*app.login.username = profile.login;
           app.login.avatar = profile.avatar_url;
-          app.login.github_id = profile.id;
+          app.login.github_id = profile.id;*/
 
           if (history.pushState) {
             var newurl = window.location.protocol + '//' + window.location.host +
@@ -99,7 +102,7 @@ function Login(callback) {
             window.history.pushState({ path: newurl }, '', newurl);
           };
 
-          store.set('github_profile', profile);
+          store.set('user_token', profile);
           //callback();
           getUserInfo(profile, callback)
 
@@ -116,7 +119,7 @@ function Login(callback) {
 
   function getProfile(token, callback) {
     var options = {
-      url: 'https://api.github.com/user',
+      url: 'https://api.medulina.com/v1/user',
       json: true,
       headers: {
         authorization: 'token ' + token,
