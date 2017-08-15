@@ -46,20 +46,22 @@ function getUserInfo(user_token, callback){
     "processData": false,
     "contentType": false,
   }
+  console.log("settings is", settings)
 
   $.get(settings).done(function(data){
     if (data._meta.total){
       console.log("found user in db", data)
       var score_info = data._items[0]
+      console.log("score_info is", score_info)
       app.login.ave_score = score_info.ave_score;
       app.login.n_subs = score_info.n_subs;
       app.login.n_test = score_info.n_test;
       app.login.n_try = score_info.n_try;
       app.login.total_score = score_info.total_score;
       app.login.id = score_info._id;
-      app.login.avatar = score_info.avatar_url;
+      app.login.avatar = score_info.avatar;
       app.login.github_id = score_info.id;
-      app.login.username = score_info.login;
+      app.login.username = score_info.username;
       callback()
 
     } else {
@@ -79,7 +81,7 @@ function Login(callback) {
     /*app.login.username = profile.login;
     app.login.avatar = profile.avatar_url;
     app.login.github_id = profile.id;*/
-
+    console.log("profile exists")
     getUserInfo(profile, callback)
 
 
@@ -91,7 +93,7 @@ function Login(callback) {
       $.getJSON('http://api.medulina.com/api/authenticate/github/' + code, function (data) {
         console.log('data token is', data.token);
         getUserInfo(data.token, function (profile) {
-          console.log(profile);
+          console.log("", profile);
           /*app.login.username = profile.login;
           app.login.avatar = profile.avatar_url;
           app.login.github_id = profile.id;*/
@@ -102,9 +104,10 @@ function Login(callback) {
             window.history.pushState({ path: newurl }, '', newurl);
           };
 
-          store.set('user_token', profile);
-          //callback();
-          getUserInfo(profile, callback)
+          store.set('user_token', data.token);
+          callback();
+          //getUserInfo(profile, callback)
+
 
         });
       });

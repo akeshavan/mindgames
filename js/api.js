@@ -45,7 +45,7 @@ do_eval = function(){
   var data = window.currentData._items[0]
 
   var profile = store.get('github_profile')
-  var score = {'name': profile.login, 'edit_data_id': data._id}
+  var score = {'name': app.login.username, 'edit_data_id': data._id}
 
   if (window.appMode == "train"){
     var truth = window.truthData._items[0].pic
@@ -131,7 +131,8 @@ do_save = function(score, edits){
   }
 
   $.ajax(settings).done(function(response){
-    var profile = store.get('github_profile');
+    show_save(score)
+    var profile = store.get('user_token');
     getUserInfo(profile, function(){
       stopProgress()
       show_save(score)
