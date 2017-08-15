@@ -35,7 +35,7 @@ function postToDB(profile, callback){
 }
 
 function getUserInfo(user_token, callback){
-
+  console.log("user token is", user_token)
   var settings = {
     "async": true,
     "crossDomain": true,

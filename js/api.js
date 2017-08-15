@@ -124,9 +124,15 @@ do_save = function(score, edits){
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var settings = create_json_request(imgbody, config.edit_url, token)
   settings.headers['content-type'] = 'application/json'
+  settings["beforeSend"] = function (xhr) {
+    xhr.setRequestHeader ("Authorization", "Basic " + btoa(app.login.id+ ":" + store.get("user_token")));
+},
+  //settings.headers['username'] = app.login.id
+  //settings.headers['password'] = store.get("user_token")
+  //settings.url = "http://" + app.login.id + ":" + store.get("user_token") + "@" + settings.url.replace("http://", "")
   console.log("settings are", settings)
-  settings["error"] = function(){
-    alert("there has been an error")
+  settings["error"] = function(e){
+    alert("there has been an error", e)
     stopProgress()
     window.appMode = "error"
     show_save({"accuracy": "Err"})
