@@ -117,7 +117,7 @@
     <div id="main" v-cloak>
       <div class="row">
         <div class="col-md-2">
-          <h3>Players:</h3>
+          <h3>{{all_users.length}} Players:</h3>
           <ul>
             <li v-for="user in all_users" v-bind:class="{ selected: user._id == current_user }">
 
@@ -272,7 +272,7 @@
     }
   }
 
-  var user_query = "user"
+  var user_query = "user?sort=-total_score"
   get_data(url,
            user_query,
            function(data){app.all_users = app.all_users.concat(data._items);},
