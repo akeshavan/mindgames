@@ -10,7 +10,7 @@ config = {
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: true,
-  task: "hipp", //"ms_lesion_t2",
+  task: "db_try01", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
 }
@@ -117,7 +117,9 @@ do_save = function(score, edits){
     'pic': edits,
     'mode': 'try',
     'score': score.accuracy,
-    'user_id': app.login.id //score['name']
+    'user_id': app.login.id, //score['name']
+    'user_agent': navigator.userAgent,
+    'resolution': [window.innerWidth, window.innerHeight]
   }
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var settings = create_json_request(imgbody, config.edit_url, token)
