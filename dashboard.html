@@ -1,0 +1,274 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A game to segment the brain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>Dashboard</title>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+    <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Mindgames">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.png">
+
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+    <!--<link rel="stylesheet" href="css/blue.css">-->
+    <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main_style.css">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-default.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
+    <script src="js/vue.min.js"></script>
+    <style>
+    #main {
+      margin: 25px;
+    }
+
+    .user_avatar_container {
+      display: inline;
+      margin-right: 25px;
+    }
+
+    .user_avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    h1 {
+      display: inline
+    }
+
+    .plotlyplot {
+      width: 100%; /*600px;*/
+      height:250px;
+    }
+
+    #metrics {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    #currentImg {
+      max-width: 500px;
+      width: 100%;
+    }
+
+  .score {
+      font-size: 4em;
+    }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-top: 25px;
+  }
+
+    </style>
+
+  </head>
+
+  <body>
+    <div id="main">
+      <div class="row">
+        <div class="col-md-2">
+          <h3>Players:</h3>
+          <ul>
+            <li v-for="user in all_users">
+              <a v-on:click="setPlayer(user._id)">{{user.username}}</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10">
+          <h1>
+            {{user_info.username}}
+            <img v-bind:src="user_info.avatar" v-bind:alt="user_info.username" class="rounded-circle colorOutline user_avatar">
+          </h1>
+
+
+          <div id="metrics" class="row">
+            <div class="col-md-4">
+              <h2 class="score">{{user_info.ave_score | formatNumber}}</h2>
+              Average Score
+            </div>
+            <div class="col-md-4">
+              <h2 class="score">{{user_info.roll_ave_score | formatNumber}}</h2>
+              Rolling Average
+            </div>
+            <div class="col-md-4">
+              <h2 class="score">{{user_info.total_score | formatNumber}}</h2>
+              Total Score
+            </div>
+          </div>
+          <div id="tester" class="plotlyplot"></div>
+
+          <div id="imageLoad">
+            <canvas id="currentImg" class="mx-auto d-block">
+          </div>
+        </div><!-- End col md 10 -->
+    </div> <!-- End main row -->
+
+    </div>
+  </body>
+
+
+  <script src="js/store.everything.min.js"></script>
+  <script src="js/mustache.min.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="js/paper.full.min.js"></script>
+  <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script type="text/paperscript" canvas="currentImg" src="js/paper_stuff.js"></script>
+
+  <script>
+
+  paper.install(window)
+
+  Vue.filter("formatNumber", function (value) {
+    return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
+  });
+
+  var app =  new Vue({
+      el: '#main',
+      data: {
+        user_data: [],
+        user_info: {},
+        all_users: [],
+        current_user: null,
+        current_image: null,
+      },
+      methods: {
+        plotter: function(){
+          var TESTER = document.getElementById('tester');
+          var to_plot = {x:[], y:[], type:"scatter", mode:'markers', marker:{size:10}}
+          var me = this
+          this.user_data.forEach(function(d, idx, arr){
+            to_plot.x.push(idx)
+            to_plot.y.push(d.score)
+          })
+          Plotly.newPlot('tester', [to_plot], {
+        	  margin: { t: 0 } }
+          )
+
+          TESTER.on('plotly_hover', function(data){
+              var pts = '';
+              var idx = null
+              for(var i=0; i < data.points.length; i++){
+                  idx = data.points[i].x
+              }
+              try_data = me.user_data[idx];
+
+              $.get(url+"image/"+try_data.image_id, function(data){
+                //app.current_image = "data:image/png;base64," + data.pic
+                console.log("starting a base raster")
+                base = new Raster({
+                 crossOrigin: 'anonymous',
+                 source: 'data:image/jpeg;base64,' + data.pic
+                });
+                base.onLoad = function(){
+                  initializeBaseRaster(base)
+                  roi = new Raster({})
+                  initialize_roi_raster(base,roi)
+                  console.log("initialized rasters")
+                  $.get(url+'mask?where={"mode":"truth","image_id":"' + try_data.image_id + '"}', function(data){
+                    console.log("got truth", data)
+                    roi.fillPixelLog(data._items[0].pic, draw.LUT)
+                    roi.fillPixelLog(try_data.pic, draw.LUT)
+                    roi.diff(data._items[0].pic)
+                  });
+                }
+
+              })
+          });
+
+        },
+
+        setPlayer: function(player){
+          set_user(player)
+        }
+
+      }
+    })
+
+  var url = 'http://api.medulina.com/api/v1/'
+  var user = '5991b1bdf441bd00082835a3'
+  app.current_user = user;
+  var query = 'mask?where={"mode":"try","user_id":"' +user + '"}&max_results=100 '
+  var size = null
+
+
+  function get_data(url,query, updater, callback){
+
+    if (query != null){
+      $.get(url+query, function(data){
+        //app.user_data = app.user_data.concat(data._items);
+        //console.log(updater)
+        updater(data)
+        if (data._links.next){
+          console.log("getting next")
+          get_data(url, data._links.next.href, updater, callback)
+        }
+        else{
+          callback()
+        }
+      });
+    }
+  }
+
+  var user_query = "user"
+  get_data(url,
+           user_query,
+           function(data){app.all_users = app.all_users.concat(data._items);},
+           function(){
+             console.log("done getting all users")
+
+           })
+
+  function set_user(user){
+    get_data(url,
+             query,
+             function(data){app.user_data = app.user_data.concat(data._items);},
+             function(){app.plotter()})
+
+    get_data(url, 'user/'+ user, function(data){
+      console.log(data)
+      app.user_info = data
+    },
+    function(){
+      console.log("done getting user")
+    })
+  }
+
+  app.current_user = user
+  set_user(user)
+
+
+
+  </script>
+
+</html>
