@@ -317,3 +317,18 @@ nav h4 {
 .tourStyle header a {
   color: white !important;
 }
+
+.modal-content {
+  background-color: #313E50;
+  color: white;
+}
+
+.modal-body {
+  background: white;
+  color: black;
+}
+
+.modal-footer {
+  background: white;
+  color: black;
+}

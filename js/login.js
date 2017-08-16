@@ -1,41 +1,20 @@
-function postToDB(profile, callback){
-  var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
-  var data = {username: profile.login,
-              avatar: profile.avatar_url,
-              oa_id: profile.id}
-
-  var form = new FormData();
-  form.append("oa_id", profile.id);
-  form.append("avatar", profile.avatar_url);
-  form.append("username", profile.login);
-
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://api.medulina.com/api/v1/user/",
-    "method": "POST",
-    "headers": {
-      "authorization": token,
-    },
-    "processData": false,
-    "contentType": false,
-    "mimeType": "multipart/form-data",
-    "data": form
-  }
-
-  console.log("sending settings...", settings)
-  settings.success = function(data, status, jqxhr){
-    console.log("success in POST!", data, status, data._id)
-    app.login.id = JSON.parse(data)._id
-    console.log("app login id", app.login.id)
-    callback()
-  }
-  var output = $.ajax(settings)
-  console.log(output)
-}
-
 function getUserInfo(user_token, callback){
+  /*
+
+  Asks the server for user information based on a token from /authenticate/
+  Inputs: user_token (string)
+  callback: function to run after getting info. Takes 0 args
+
+  This function updates the `app` variable, which is the main vue controller.
+  (TODO: Maybe this should be passed in? or set in another callback?)
+
+  */
+
+  // for debugging:
   console.log("user token is", user_token)
+
+  // AJAX settings for the call
+  // TODO: removed hardcoded URL
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -46,8 +25,11 @@ function getUserInfo(user_token, callback){
     "processData": false,
     "contentType": false,
   }
+
+  // for debugging, log the settings
   console.log("settings is", settings)
 
+  // when the GET is done. set the app variables and run the callback
   $.get(settings).done(function(data){
     if (data._meta.total){
       console.log("found user in db", data)
@@ -65,12 +47,13 @@ function getUserInfo(user_token, callback){
       callback()
 
     } else {
+      // if data is empty, pop up the login modal
+      // TODO: for some reason this does not work.
       console.log("did not find data", data)
       $('#loginModal').modal({
         backdrop: 'static',
         keyboard: false,
       });
-      //postToDB(profile, callback)
 
     }
     stopProgress();
@@ -78,7 +61,10 @@ function getUserInfo(user_token, callback){
 }
 
 function Login(callback) {
-  //startProgress()
+  /*
+Starts the whole process
+
+  */
 
   var profile = store.get('user_token');
   if (profile) {
@@ -124,26 +110,6 @@ function Login(callback) {
     }
   }
 
-  function getProfile(token, callback) {
-    var options = {
-      url: 'https://api.medulina.com/v1/user',
-      json: true,
-      headers: {
-        authorization: 'token ' + token,
-      },
-    };
-
-    $.ajax({
-      url: 'https://api.github.com/user',
-      headers: {
-        authorization: 'token ' + token,
-      },
-      success: function (data, status, jqxhr) {
-        callback(data);
-      },
-    });
-
-  }
 }
 
 function logout() {
