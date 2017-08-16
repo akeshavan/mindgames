@@ -66,6 +66,10 @@ function getUserInfo(user_token, callback){
 
     } else {
       console.log("did not find data", data)
+      $('#loginModal').modal({
+        backdrop: 'static',
+        keyboard: false,
+      });
       //postToDB(profile, callback)
 
     }
