@@ -738,7 +738,7 @@ dragHandler = function(e){
     What to do when the user drags based on the window.mode
   */
 
-  if (e.event.button == 2){
+  if (e.event.buttons == 2){
     //right click and drag
     doPan(e)
     window.prevMode = "view"
@@ -825,7 +825,7 @@ mousedownHandler = function(e){
 
   var me = this
   var mode = window.mode
-  //console.log(e.event.button)
+
   if (e.event.button == 2){
     //right click and drag
     window.panMouseDown = e
@@ -913,6 +913,14 @@ get_images = function(url, callback){
   $.get(url, function(data, status, jqXhr){
     window.currentData = data
     var base_url = data._items[0].pic
+    var sliceNo = data._items[0].slice.toString()
+    for (i=0;i<3-sliceNo.length;i++){
+      sliceNo = "0"+sliceNo
+    }
+    console.log(sliceNo)
+    context_url = "https://cdn.rawgit.com/medulina/context/f48d59e5/slice"+sliceNo+".jpg"
+    app.context = context_url;
+
     config.total_num_images = data._meta.total;
     console.log("going to start")
 
