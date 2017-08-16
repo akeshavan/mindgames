@@ -50,6 +50,7 @@ function getUserInfo(user_token, callback){
       // if data is empty, pop up the login modal
       // TODO: for some reason this does not work.
       console.log("did not find data", data)
+      store.clearAll()
       $('#loginModal').modal({
         backdrop: 'static',
         keyboard: false,
