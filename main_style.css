@@ -331,4 +331,6 @@ nav h4 {
 .modal-footer {
   background: white;
   color: black;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }

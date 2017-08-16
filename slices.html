@@ -1,0 +1,206 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A game to segment the brain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>Slices Dashboard</title>
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+    <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Mindgames">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.png">
+
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+    <!--<link rel="stylesheet" href="css/blue.css">-->
+    <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main_style.css">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-default.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
+    <script src="js/vue.min.js"></script>
+
+    <style>
+
+    #main {
+      margin: 25px;
+      padding-top: 25px;
+    }
+
+    [v-cloak] {
+        display: none;
+      }
+
+    .dash nav {
+      background: #313E50;
+      top: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 5px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    .selected {
+      background: #FF595E;
+      color: white;
+    }
+
+    canvas {
+      width: 100%;
+    }
+
+    </style>
+
+  </head>
+
+  <body>
+    <nav style="background:#313E50; top:0; z-index:999;" class="dash">
+      <h2 style="padding-top:5px;">Medulina Images</h2>
+    </nav>
+
+    <div id="main" v-cloak>
+
+
+      <div class="row">
+        <div class="col-md-2">
+          <ul>
+            <li v-for="image in image_entries" v-bind:class="{ selected: image._id == current_image._id }">
+              <a v-on:click="setImage(image)"> <img v-bind:src="'data:image/jpeg;base64,' + image.pic" width="50px"> {{image.slice}} </a>
+
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10">
+          {{current_image._id}}
+
+          <div>
+            <canvas id="currentImg" class="mx-auto d-block">
+          </div>
+
+
+        </div>
+    </div>
+  </body>
+
+  <script src="js/store.everything.min.js"></script>
+  <script src="js/mustache.min.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="js/paper.full.min.js"></script>
+  <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.js"></script>
+  <script type="text/paperscript" canvas="currentImg" src="js/paper_stuff.js"></script>
+  <script>
+
+
+  function get_data_recursive(url,query, updater, callback){
+
+    if (query != null){
+      $.get(url+query, function(data){
+        //app.user_data = app.user_data.concat(data._items);
+        //console.log(updater)
+        updater(data)
+        if (data._links.next){
+          console.log("getting next", url+query)
+          get_data(url, data._links.next.href, updater, callback)
+        }
+        else{
+          callback()
+        }
+      });
+    }
+  }
+
+  Vue.filter("formatNumber", function (value) {
+    return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
+  });
+
+  paper.install(window)
+
+  var app =  new Vue({
+      el: '#main',
+      data: {
+        task: "db_try01",
+        image_entries: [],
+        next: null,
+        current_image: {},
+        all_tries: []
+      },
+      methods: {
+        query: function(){
+          if (!app.next){
+            return 'image/?where={"task":"' + this.task + '"}'
+          }
+          else {
+            return app.next.href
+          }
+
+        },
+        setImage: function(image){
+          this.current_image = image
+          base = new Raster({
+           crossOrigin: 'anonymous',
+           source: 'data:image/jpeg;base64,' + image.pic
+          });
+          base.onLoad = function(){
+            initializeBaseRaster(base)
+            roi = new Raster({})
+            initialize_roi_raster(base,roi)
+            console.log("initialized rasters")
+
+          }
+        }
+      }
+    })
+
+  var url = 'http://api.medulina.com/api/v1/'
+
+  function getData(){
+    $.get(url + app.query(), function(data){
+      console.log("data from /image is", data)
+      app.image_entries = app.image_entries.concat(data._items)
+      app.next = data._links.next
+    })
+  }
+
+  getData()
+
+  function getTries(image_id){
+    $.get(url + "image/")
+  }
+
+
+  </script>
+
+  </html>
