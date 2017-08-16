@@ -10,7 +10,7 @@ config = {
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: true,
-  task: "db_try05_sag", //"hipp", //"ms_lesion_t2",
+  task: "db_try01", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
 }
