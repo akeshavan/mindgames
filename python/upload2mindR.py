@@ -6,6 +6,7 @@ from pathlib import Path
 import simplejson as json
 from simplejson import JSONDecodeError
 import os
+from requests.auth import HTTPBasicAuth
 
 def load_json(filename):
     """Load data from a json file
@@ -23,7 +24,7 @@ def load_json(filename):
     return data
 
 
-def upload_to_mindR(imgPath, task, subject):
+def upload_to_mindR(imgPath, task, subject, username, password):
     api_token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr"
     # this code assumes that the jpg, the json describing it,
     # and the mask file have the same name with different extenstions
@@ -54,8 +55,13 @@ def upload_to_mindR(imgPath, task, subject):
 
         with open(str(m),'rb') as h:
             mask_dat['pic'] = json.dumps(load_json(str(m)))
-            print("uploading", str(m))
-            rm = requests.post(url+'mask',data=mask_dat, headers={'Authorization':api_token})
+            print("uploading truth", str(m))
+            rm = requests.post(url+'mask',
+                data=mask_dat,
+                headers={'Authorization':api_token},
+                #auth=(username, password)
+                )
+            print(rm.request.headers, rm.text)
             return rm
 
 
@@ -65,12 +71,14 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--directory", dest="directory", required=True)
     parser.add_argument("-t", "--task", dest="task")
     parser.add_argument("-s", "--subject", dest="subject")
+    parser.add_argument("-u", "--username", dest="username")
+    parser.add_argument("-p", "--password", dest="password")
 
     args = parser.parse_args()
 
     all_images = glob(os.path.join(args.directory, "*.jpg"))
     print("found {} images".format(len(all_images)))
     for im in all_images:
-        rm = upload_to_mindR(im, args.task, args.subject)
+        rm = upload_to_mindR(im, args.task, args.subject, args.username, args.password)
         if rm == None:
             print("error with", im)

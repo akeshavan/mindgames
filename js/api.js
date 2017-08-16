@@ -10,7 +10,7 @@ config = {
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: true,
-  task: "db_try01_sag", //"hipp", //"ms_lesion_t2",
+  task: "db_try01", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
 }
@@ -121,12 +121,13 @@ do_save = function(score, edits){
     'user_agent': navigator.userAgent,
     'resolution': [window.innerWidth, window.innerHeight]
   }
+
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var settings = create_json_request(imgbody, config.edit_url, token)
   settings.headers['content-type'] = 'application/json'
-  settings["beforeSend"] = function (xhr) {
+  /*settings["beforeSend"] = function (xhr) {
     xhr.setRequestHeader ("Authorization", "Basic " + btoa(app.login.id+ ":" + store.get("user_token")));
-},
+  }*/
   //settings.headers['username'] = app.login.id
   //settings.headers['password'] = store.get("user_token")
   //settings.url = "http://" + app.login.id + ":" + store.get("user_token") + "@" + settings.url.replace("http://", "")
