@@ -111,12 +111,12 @@
   </head>
 
   <body>
-    <nav style="background:#313E50; top:0;">
+    <nav style="background:#313E50; top:0; z-index: 9">
       <h2 style="padding-top:5px;">Medulina</h2>
     </nav>
-    <div id="main" v-cloak>
+    <div id="main" class="container" v-cloak>
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-sm-2">
           <h3>{{all_users.length}} Players:</h3>
           <ul>
             <li v-for="user in all_users" v-bind:class="{ selected: user._id == current_user }">
@@ -128,7 +128,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-md-10">
+        <div class="col-sm-10">
           <div v-if="current_user">
             <h1>
               {{user_info.username}}
@@ -152,7 +152,11 @@
             </div>
             <div id="tester" class="plotlyplot"></div>
           </div>
-
+          <div style="text-align: center;">
+            <h3 v-if="hover_idx">
+              Score: {{user_data[hover_idx].score | formatNumber}}
+            </h3>
+          </div>
           <div id="imageLoad">
             <canvas id="currentImg" class="mx-auto d-block">
           </div>
@@ -193,6 +197,7 @@
         all_users: [],
         current_user: null,
         current_image: null,
+        hover_idx: null,
       },
       methods: {
         query: function(){
@@ -214,10 +219,12 @@
           TESTER.on('plotly_hover', function(data){
               var pts = '';
               var idx = null
+
               for(var i=0; i < data.points.length; i++){
                   idx = data.points[i].x
               }
               try_data = me.user_data[idx];
+              app.hover_idx = idx
               if (window.base){
                 console.log("clearing base..")
                 //window.base.clear()
