@@ -913,7 +913,8 @@ get_images = function(url, callback){
   $.get(url, function(data, status, jqXhr){
     window.currentData = data
     var base_url = data._items[0].pic
-    var sliceNo = data._items[0].slice.toString()
+    var sliceNo = parseInt(data._items[0].slice).toString()
+    console.log(sliceNo, sliceNo.length)
     for (i=0;i<3-sliceNo.length;i++){
       sliceNo = "0"+sliceNo
     }

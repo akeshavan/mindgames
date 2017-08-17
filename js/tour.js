@@ -42,6 +42,30 @@ var tour_config = [
     attachTo: "nav top"
   },
 
+  {
+    title: "Find the Dentate",
+    text: `On this slice, the dentate is shown in red
+    <br>
+    <br>
+    <img src="/images/example02_context.png" width="200px;" class="mx-auto d-block" style="border-radius: 5px; border-style: solid; border-color:black;">
+
+    `,
+    showCancelLink: true,
+    attachTo: "nav top"
+  },
+
+  {
+    title: "Find the Dentate",
+    text: `But the cross section of the dentate looks different at different sections.
+    <br>
+    <br>
+    <img src="/images/example02.png" width="200px;" class="mx-auto d-block" style="border-radius: 5px; border-style: solid; border-color:black;">
+
+    `,
+    showCancelLink: true,
+    attachTo: "legend right"
+  },
+
 ]
 
 tour_config.forEach(function(val, idx, arr){

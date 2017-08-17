@@ -73,8 +73,27 @@
       color: white;
     }
 
+    #metrics {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
     canvas {
       width: 100%;
+    }
+
+    .scroller {
+      overflow: scroll;
+      height: 100%;
+    }
+
+    .other_scroll {
+      overflow: none;
+      height: 100%;
+    }
+
+    #content, html, body {
+    height: 98%;
     }
 
     </style>
@@ -89,17 +108,30 @@
     <div id="main" v-cloak>
 
 
-      <div class="row">
-        <div class="col-md-2">
+      <div class="row content">
+        <div class="col-md-2 scroller">
           <ul>
             <li v-for="image in image_entries" v-bind:class="{ selected: image._id == current_image._id }">
               <a v-on:click="setImage(image)"> <img v-bind:src="'data:image/jpeg;base64,' + image.pic" width="50px"> {{image.slice}} </a>
 
             </li>
+            <li>
+              <button class="btn btn-primary" v-on:click="getData()" v-if="next">Next</button>
+            </li>
           </ul>
         </div>
-        <div class="col-md-10">
-          {{current_image._id}}
+        <div class="col-md-10 other_scroll">
+          <div id="metrics" class="row">
+            <div class="col-md-6">
+              <h2 class="score">{{current_image_score | formatNumber}}</h2>
+              Average Score
+            </div>
+            <div class="col-md-6">
+              <h2 class="score">{{current_image_tries.length | formatInt}}</h2>
+              Num users
+            </div>
+
+          </div>
 
           <div>
             <canvas id="currentImg" class="mx-auto d-block">
@@ -146,6 +178,10 @@
     return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
   });
 
+  Vue.filter("formatInt", function (value) {
+    return numeral(value).format("0"); // displaying other groupings/separators is possible, look at the docs
+  });
+
   paper.install(window)
 
   var app =  new Vue({
@@ -155,7 +191,9 @@
         image_entries: [],
         next: null,
         current_image: {},
-        all_tries: []
+        current_image_tries: [],
+        current_image_score: null,
+        current_truth: {},
       },
       methods: {
         query: function(){
@@ -169,17 +207,86 @@
         },
         setImage: function(image){
           this.current_image = image
+          this.current_image_tries = []
+          this.current_truth = {}
           base = new Raster({
            crossOrigin: 'anonymous',
            source: 'data:image/jpeg;base64,' + image.pic
           });
+          roi = new Raster({})
+          roi2 = new Raster({})
+
+
           base.onLoad = function(){
             initializeBaseRaster(base)
-            roi = new Raster({})
-            initialize_roi_raster(base,roi)
+            initialize_roi_raster(base,roi, 1)
+            initialize_roi_raster(base,roi2, 0.5)
             console.log("initialized rasters")
 
           }
+          var me = this
+          var vote = {}
+          var max_vote = 0
+
+          getTries(this.current_image._id, function(data){
+            me.current_image_tries = me.current_image_tries.concat(data._items)
+            var ave_score = 0
+
+            me.current_image_tries.forEach(function(val, idx, arr){
+              ave_score += val.score
+            });
+            console.log("averaging", ave_score, data._items.length)
+            me.current_image_score = ave_score/data._items.length
+
+            /*collapse across user scores*/
+            me.current_image_tries.forEach(function(val, idx, arr){
+              var roi_temp = new Raster({})
+              initialize_roi_raster(base,roi_temp, 0)
+              roi_temp.visible = false
+
+              roi_temp.fillPixelLog(me.current_truth.pic, {0: "black", 1: "red"})
+              roi_temp.fillPixelLog(val.pic, {0: "black", 1: "blue"})
+
+              for (ii in roi_temp.pixelLog){
+                if (vote[ii] == undefined){
+                  vote[ii] = {}
+                }
+                for (jj in roi_temp.pixelLog[ii]){
+                  if (vote[ii][jj] == undefined && roi_temp.pixelLog[ii][jj] != undefined && roi_temp.pixelLog[ii][jj] != NaN){
+                    vote[ii][jj] = roi_temp.pixelLog[ii][jj]
+                    //console.log("vote", ii, jj, vote[ii][jj])
+                  } else if (roi_temp.pixelLog[ii][jj] != undefined) {
+                    vote[ii][jj] = vote[ii][jj] + roi_temp.pixelLog[ii][jj]
+                    if (vote[ii][jj] == NaN){
+                      consolelog("vote is nan", ii, jj)
+                    }
+                  }
+
+                  if (vote[ii][jj] > max_vote){
+                    max_vote = vote[ii][jj]
+                  }
+                }
+              }
+            });
+            console.log("vote max is", max_vote, "vote is", vote)
+            roi2.fillPixelLog(vote, draw.LUT);
+
+
+          });
+
+          getTruth(this.current_image._id, function(data){
+            me.current_truth = data._items[0]
+            roi.fillPixelLog(me.current_truth.pic, {0: "black", 1: "yellow"})
+          });
+
+
+
+
+
+
+        },
+        getData: function(){
+          getData()
         }
       }
     })
@@ -196,9 +303,21 @@
 
   getData()
 
-  function getTries(image_id){
-    $.get(url + "image/")
+  function getTries(image_id, callback){
+    console.log(url + 'mask/?where={"mode":"try","image_id":"' +image_id + '"}')
+    $.get(url + 'mask/?where={"mode":"try","image_id":"' +image_id + '"}', callback)
   }
+
+  function getTruth(image_id, callback){
+      console.log(url + 'mask/?where={"mode":"try","image_id":"' +image_id + '"}')
+      $.get(url + 'mask/?where={"mode":"truth","image_id":"' +image_id + '"}', callback)
+
+  }
+
+
+
+
+
 
 
   </script>
