@@ -258,10 +258,13 @@
 
         setPlayer: function(player){
           //set_user(player)
-          //app.current_user = player;
+          app.current_user = player;
           a.remove("user_id")
           a.set("user_id", player)
-          a.go()
+          //a.go()
+          console.log("not refreshing?")
+          window.history.pushState({path:a.url},'',a.url);
+          set_user(player)
         }
 
       }
