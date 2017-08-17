@@ -136,6 +136,10 @@
           <div>
             <canvas id="currentImg" class="mx-auto d-block">
           </div>
+          <div class="row">
+            <button class="btn btn-success mx-auto d-block" v-on:click="toggleTruth()">Toggle Truth</button>
+            <button class="btn btn-warning mx-auto d-block" v-on:click="toggleTries()">Toggle Average Tries</button>
+          </div>
 
 
         </div>
@@ -205,6 +209,12 @@
           }
 
         },
+        toggleTruth: function(){
+          roi.visible = !roi.visible
+        },
+        toggleTries: function(){
+          roi2.visible = !roi2.visible
+        },
         setImage: function(image){
           this.current_image = image
           this.current_image_tries = []
@@ -228,55 +238,55 @@
           var vote = {}
           var max_vote = 0
 
-          getTries(this.current_image._id, function(data){
-            me.current_image_tries = me.current_image_tries.concat(data._items)
-            var ave_score = 0
-
-            me.current_image_tries.forEach(function(val, idx, arr){
-              ave_score += val.score
-            });
-            console.log("averaging", ave_score, data._items.length)
-            me.current_image_score = ave_score/data._items.length
-
-            /*collapse across user scores*/
-            me.current_image_tries.forEach(function(val, idx, arr){
-              var roi_temp = new Raster({})
-              initialize_roi_raster(base,roi_temp, 0)
-              roi_temp.visible = false
-
-              roi_temp.fillPixelLog(me.current_truth.pic, {0: "black", 1: "red"})
-              roi_temp.fillPixelLog(val.pic, {0: "black", 1: "blue"})
-
-              for (ii in roi_temp.pixelLog){
-                if (vote[ii] == undefined){
-                  vote[ii] = {}
-                }
-                for (jj in roi_temp.pixelLog[ii]){
-                  if (vote[ii][jj] == undefined && roi_temp.pixelLog[ii][jj] != undefined && roi_temp.pixelLog[ii][jj] != NaN){
-                    vote[ii][jj] = roi_temp.pixelLog[ii][jj]
-                    //console.log("vote", ii, jj, vote[ii][jj])
-                  } else if (roi_temp.pixelLog[ii][jj] != undefined) {
-                    vote[ii][jj] = vote[ii][jj] + roi_temp.pixelLog[ii][jj]
-                    if (vote[ii][jj] == NaN){
-                      consolelog("vote is nan", ii, jj)
-                    }
-                  }
-
-                  if (vote[ii][jj] > max_vote){
-                    max_vote = vote[ii][jj]
-                  }
-                }
-              }
-            });
-            console.log("vote max is", max_vote, "vote is", vote)
-            roi2.fillPixelLog(vote, draw.LUT);
-
-
-          });
-
           getTruth(this.current_image._id, function(data){
             me.current_truth = data._items[0]
             roi.fillPixelLog(me.current_truth.pic, {0: "black", 1: "yellow"})
+
+            getTries(me.current_image._id, function(data){
+              me.current_image_tries = me.current_image_tries.concat(data._items)
+              var ave_score = 0
+
+              me.current_image_tries.forEach(function(val, idx, arr){
+                ave_score += val.score
+              });
+              console.log("averaging", ave_score, data._items.length)
+              me.current_image_score = ave_score/data._items.length
+
+              /*collapse across user scores*/
+              me.current_image_tries.forEach(function(val, idx, arr){
+                var roi_temp = new Raster({})
+                initialize_roi_raster(base,roi_temp, 0)
+                roi_temp.visible = false
+
+                roi_temp.fillPixelLog(me.current_truth.pic, {0: "black", 1: "red"})
+                roi_temp.fillPixelLog(val.pic, {0: "black", 1: "red"})
+
+                for (ii in roi_temp.pixelLog){
+                  if (vote[ii] == undefined){
+                    vote[ii] = {}
+                  }
+                  for (jj in roi_temp.pixelLog[ii]){
+                    if (vote[ii][jj] == undefined && roi_temp.pixelLog[ii][jj] != undefined && roi_temp.pixelLog[ii][jj] != NaN){
+                      vote[ii][jj] = roi_temp.pixelLog[ii][jj]
+                      //console.log("vote", ii, jj, vote[ii][jj])
+                    } else if (roi_temp.pixelLog[ii][jj] != undefined) {
+                      vote[ii][jj] = vote[ii][jj] + roi_temp.pixelLog[ii][jj]
+                      if (vote[ii][jj] == NaN){
+                        consolelog("vote is nan", ii, jj)
+                      }
+                    }
+
+                    if (vote[ii][jj] > max_vote){
+                      max_vote = vote[ii][jj]
+                    }
+                  }
+                }
+              });
+              console.log("vote max is", max_vote, "vote is", vote)
+              roi2.fillPixelLog(vote, draw.LUT);
+
+
+            });
           });
 
 
