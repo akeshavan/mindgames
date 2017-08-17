@@ -214,24 +214,36 @@
                   idx = data.points[i].x
               }
               try_data = me.user_data[idx];
+              if (window.base){
+                console.log("clearing base..")
+                //window.base.clear()
+
+              }
 
               $.get(url+"image/"+try_data.image_id, function(data){
                 //app.current_image = "data:image/png;base64," + data.pic
                 console.log("starting a base raster")
-                base = new Raster({
-                 crossOrigin: 'anonymous',
-                 source: 'data:image/jpeg;base64,' + data.pic
-                });
-                base.onLoad = function(){
-                  initializeBaseRaster(base)
-                  roi = new Raster({})
-                  initialize_roi_raster(base,roi)
+                if (!window.base){
+                  window.base = new Raster({
+                   crossOrigin: 'anonymous',
+                   source: 'data:image/jpeg;base64,' + data.pic
+                  });
+                  window.roi = new Raster({})
+                } else{
+                  window.base.setSource('data:image/jpeg;base64,' + data.pic)
+                  window.roi.clear()
+                }
+
+
+                window.base.onLoad = function(){
+                  initializeBaseRaster(window.base)
+                  initialize_roi_raster(window.base,window.roi)
                   console.log("initialized rasters")
                   $.get(url+'mask?where={"mode":"truth","image_id":"' + try_data.image_id + '"}', function(data){
                     console.log("got truth", data)
-                    roi.fillPixelLog(data._items[0].pic, draw.LUT)
-                    roi.fillPixelLog(try_data.pic, draw.LUT)
-                    roi.diff(data._items[0].pic)
+                    window.roi.fillPixelLog(data._items[0].pic, draw.LUT)
+                    window.roi.fillPixelLog(try_data.pic, draw.LUT)
+                    window.roi.diff(data._items[0].pic)
                   });
                 }
 
