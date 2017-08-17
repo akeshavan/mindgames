@@ -129,31 +129,34 @@
           </ul>
         </div>
         <div class="col-md-10">
-          <h1>
-            {{user_info.username}}
-            <img v-bind:src="user_info.avatar" v-bind:alt="user_info.username" class="rounded-circle colorOutline user_avatar">
-          </h1>
+          <div v-if="current_user">
+            <h1>
+              {{user_info.username}}
+              <img v-bind:src="user_info.avatar" v-bind:alt="user_info.username" class="rounded-circle colorOutline user_avatar">
+            </h1>
 
 
-          <div id="metrics" class="row">
-            <div class="col-md-4">
-              <h2 class="score">{{user_info.ave_score | formatNumber}}</h2>
-              Average Score
+            <div id="metrics" class="row">
+              <div class="col-md-4">
+                <h2 class="score">{{user_info.ave_score | formatNumber}}</h2>
+                Average Score
+              </div>
+              <div class="col-md-4">
+                <h2 class="score">{{user_info.roll_ave_score | formatNumber}}</h2>
+                Rolling Average
+              </div>
+              <div class="col-md-4">
+                <h2 class="score">{{user_info.total_score | formatNumber}}</h2>
+                Total Score
+              </div>
             </div>
-            <div class="col-md-4">
-              <h2 class="score">{{user_info.roll_ave_score | formatNumber}}</h2>
-              Rolling Average
-            </div>
-            <div class="col-md-4">
-              <h2 class="score">{{user_info.total_score | formatNumber}}</h2>
-              Total Score
-            </div>
+            <div id="tester" class="plotlyplot"></div>
           </div>
-          <div id="tester" class="plotlyplot"></div>
 
           <div id="imageLoad">
             <canvas id="currentImg" class="mx-auto d-block">
           </div>
+
         </div><!-- End col md 10 -->
     </div> <!-- End main row -->
 
@@ -164,6 +167,7 @@
   <script src="js/store.everything.min.js"></script>
   <script src="js/mustache.min.js"></script>
   <script src="js/jquery.min.js"></script>
+  <script src="js/qs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
   <script src="js/paper.full.min.js"></script>
   <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
@@ -253,15 +257,19 @@
         },
 
         setPlayer: function(player){
-          set_user(player)
+          //set_user(player)
+          //app.current_user = player;
+          a.remove("user_id")
+          a.set("user_id", player)
+          a.go()
         }
 
       }
     })
 
   var url = 'http://api.medulina.com/api/v1/'
-  var init_user = '5991b1bdf441bd00082835a3'
-  app.current_user = init_user;
+  //var init_user = '5991b1bdf441bd00082835a3'
+  //app.current_user = init_user;
   //var query = 'mask?where={"mode":"try","user_id":"' +app.current_user + '"}&max_results=100 '
   var size = null
 
@@ -294,6 +302,7 @@
            })
 
   function set_user(user){
+
     app.current_user = user;
 
     get_data(url, 'user/'+ user, function(data){
@@ -322,8 +331,13 @@
     })
   }
 
-  app.current_user = init_user
-  set_user(app.current_user)
+  //app.current_user = init_user
+  //set_user(app.current_user)
+
+  var a = new QS()
+  var params = a.getAll()
+
+  Object.keys(params).indexOf("user_id") >= 0 ? set_user(params["user_id"]) : null
 
 
 

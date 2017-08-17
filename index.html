@@ -86,7 +86,7 @@
                 <h6 class="dropdown-header">Number of tiles: {{login.n_subs}}</h6>
                 <h6 class="dropdown-header">Number of test cases: {{login.n_test}}</h6>
                 <h6 class="dropdown-header">Number of train cases: {{login.n_try}}</h6>
-
+                <a class="dropdown-item" v-bind:href="'/dashboard.html?id=' + login.id">Leaderboard</a>
                 <a class="dropdown-item" href="#" onclick="logout()">Log Out</a>
               </div>
             </div> <!-- End Dropdown menu for user -->
@@ -239,7 +239,7 @@
 
         </div>
 
-        <div id="legend" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:3px; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
+        <div id="legend" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:45%; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
 
           <img v-bind:src="context" width="100%">
 
