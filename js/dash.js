@@ -25,7 +25,6 @@ var app =  new Vue({
             HEIGHT_IN_PERCENT_OF_PARENT = 50;
 
         var gd3 = d3.select('#tester')
-            .append('div')
             .style({
                 width: WIDTH_IN_PERCENT_OF_PARENT + '%',
                 'margin-left': (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + '%',
