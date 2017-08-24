@@ -1,157 +1,413 @@
+
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="A game to segment the brain">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <title>Dashboard</title>
+    <title>Medulina Dashboard</title>
 
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
-    <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Mindgames">
-    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-    <meta name="msapplication-TileColor" content="#3372DF">
-
-    <link rel="shortcut icon" href="images/favicon.png">
-
-    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
-    <!--<link rel="stylesheet" href="css/blue.css">-->
-    <!--<link rel="stylesheet" href="css/dialog-polyfill.css">-->
-
-    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="main_style.css">
-    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-default.css" rel="stylesheet">
-    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
-    <link href="https://cdn.rawgit.com/HubSpot/shepherd/master/dist/css/shepherd-theme-arrows.css" rel="stylesheet">
-    <script src="js/vue.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
     <style>
-    #main {
-      margin: 25px;
-      padding-top: 25px;
-    }
-
     [v-cloak] {
         display: none;
       }
 
-    .user_avatar_container {
-      display: inline;
-      margin-right: 25px;
-    }
+      .score {
+        position: relative;
+        top: -150px;
+        color: white;
+        font-size: 3em;
+      }
 
-    .user_avatar {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
+      .scoreName {
+        position: relative;
+        top: -50px;
+      }
 
-    h1 {
-      display: inline
-    }
+      .scoreLabel {
+        position: relative;
+        top: -50px;
+      }
 
-    .plotlyplot {
-      width: 100%; /*600px;*/
-      height:250px;
-    }
+      .user_avatar {
+        width: 45px;
+        height: 45px;
+      }
 
-    #metrics {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+      .bg-blue {
+        background-color: #313E50 !important;
+      }
 
-    #currentImg {
-      max-width: 500px;
-      width: 100%;
-    }
+      #currentImg {
+        width: 100%;
+      }
 
-  .score {
-      font-size: 4em;
-    }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 5px;
-  }
-
-  a {
-      cursor: pointer;
-  }
+      /**
+       * Demo Styles
+       */
 
 
-  .selected {
-    background: #FF595E;
-    color: white;
-  }
 
-  .dash nav {
-    background: #313E50;
-    top: 0;
-  }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+
+
+      /**
+       * Circle Styles
+       */
+
+      .circle {
+        position: relative;
+        display: block;
+        margin: 2em 0;
+        background-color: transparent;
+        color: #222;
+        text-align: center;
+      }
+
+      .circle:after {
+        display: block;
+        padding-bottom: 100%;
+        width: 100%;
+        height: 0;
+        border-radius: 50%;
+        background-color: #ddd;
+        content: "";
+      }
+
+
+      .circle__inner {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        height: 100%;
+
+      }
+
+      .circle__wrapper {
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+
+      .circle__content {
+        display: table-cell;
+        /*padding: 1em;*/
+        color: white;
+        font-size: 2em;
+        vertical-align: middle;
+      }
+
+      @media (min-width: 480px) {
+          .circle__content {
+            font-size: 3em;
+        }
+      }
+
+      @media (min-width: 576px) {
+          .circle__content {
+            font-size: 2em;
+        }
+      }
+
+      @media (min-width: 768px) {
+          .circle__content {
+            font-size: 2.5em;
+        }
+      }
+
+      .bright:after {
+        background-color: #FF595E;
+      }
+
+      .purple:after{
+        background-color: #33032F
+      }
+
+      .light:after{
+        background-color: #87BCDE;
+      }
+
+      .dark:after{
+        background-color: #313E50;
+      }
+
+      a {
+        color: #313E50;
+        cursor: pointer;
+      }
+
+      a:hover {
+        color: #87BCDE;
+      }
+
+      .nav-link.active {
+        background-color: #FF595E !important;
+      }
 
     </style>
-
   </head>
 
   <body>
-    <nav style="background:#313E50; top:0; z-index: 9">
-      <h2 style="padding-top:5px;">Medulina</h2>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-blue">
+      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Medulina</a>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Users <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://www.medulina.com">Play</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://www.medulina.com/slices.html">Images</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Help</a>
+          </li>
+        </ul>
+        <form class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
     </nav>
-    <div id="main" class="container" v-cloak>
+
+    <div class="container-fluid" id="main" v-cloak>
       <div class="row">
-        <div class="col-sm-2">
-          <h3>{{all_users.length}} Players:</h3>
-          <ul>
-            <li v-for="user in all_users" v-bind:class="{ selected: user._id == current_user }">
-
-                <a v-on:click="setPlayer(user._id)">
-                  {{user.username}}
-                </a>
-
+        <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item" v-for="user in all_users">
+              <a v-bind:class="{ 'nav-link active': user._id == current_user, 'nav-link': user._id != current_user }" v-on:click="setPlayer(user._id)">{{user.username}} <span class="sr-only">(current)</span> </a>
             </li>
+
           </ul>
-        </div>
-        <div class="col-sm-10">
+
+
+        </nav>
+
+        <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+
           <div v-if="current_user">
-            <h1>
-              {{user_info.username}}
-              <img v-bind:src="user_info.avatar" v-bind:alt="user_info.username" class="rounded-circle colorOutline user_avatar">
-            </h1>
+          <h1>
+            <img v-bind:src="user_info.avatar" v-bind:alt="user_info.username" class="rounded-circle colorOutline user_avatar">
+            {{user_info.username}}
+          </h1>
 
 
-            <div id="metrics" class="row">
-              <div class="col-md-4">
-                <h2 class="score">{{user_info.ave_score | formatNumber}}</h2>
-                Average Score
+          <section class="row text-center placeholders" >
+            <div class="col-6 col-sm-3 placeholder">
+
+              <div class="circle light">
+                <div class="circle__inner">
+                  <div class="circle__wrapper">
+                    <div class="circle__content">{{user_info.ave_score | formatNumber}}</div>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-4">
-                <h2 class="score">{{user_info.roll_ave_score | formatNumber}}</h2>
-                Rolling Average
-              </div>
-              <div class="col-md-4">
-                <h2 class="score">{{user_info.total_score | formatNumber}}</h2>
-                Total Score
-              </div>
+
+              <!--<img src="data:image/gif;base64,R0lGODlhAQABAIABAAJ12AAAACwAAAAAAQABAAACAkQBADs=" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
+
+              <h2 class="score">{{user_info.ave_score | formatNumber}}</h2>-->
+
+              <h4 >Average Score</h4>
+              <div class="text-muted">Overall average score</div>
+
+
+
+
             </div>
-            <div id="tester" class="plotlyplot"></div>
-          </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <div class="circle purple">
+                <div class="circle__inner">
+                  <div class="circle__wrapper">
+                    <div class="circle__content">{{user_info.roll_ave_score | formatNumber}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <h4 class="">Rolling Average</h4>
+              <span class="text-muted ">Average of the past 10 runs</span>
+            </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <div class="circle bright">
+                <div class="circle__inner">
+                  <div class="circle__wrapper">
+                    <div class="circle__content">{{user_info.total_score | formatNumber}}</div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <h4 class="">Total Score</h4>
+              <span class="text-muted">Sum of all scores</span>
+            </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <div class="circle dark">
+                <div class="circle__inner">
+                  <div class="circle__wrapper">
+                    <div class="circle__content">{{user_info.total_score | formatNumber}}</div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <h4 class="">Rank</h4>
+              <span class="text-muted">Rank based on total score</span>
+            </div>
+
+          </section>
+
+          <h2>Scores</h2>
+          <!--<div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1,001</td>
+                  <td>Lorem</td>
+                  <td>ipsum</td>
+                  <td>dolor</td>
+                  <td>sit</td>
+                </tr>
+                <tr>
+                  <td>1,002</td>
+                  <td>amet</td>
+                  <td>consectetur</td>
+                  <td>adipiscing</td>
+                  <td>elit</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>Integer</td>
+                  <td>nec</td>
+                  <td>odio</td>
+                  <td>Praesent</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>libero</td>
+                  <td>Sed</td>
+                  <td>cursus</td>
+                  <td>ante</td>
+                </tr>
+                <tr>
+                  <td>1,004</td>
+                  <td>dapibus</td>
+                  <td>diam</td>
+                  <td>Sed</td>
+                  <td>nisi</td>
+                </tr>
+                <tr>
+                  <td>1,005</td>
+                  <td>Nulla</td>
+                  <td>quis</td>
+                  <td>sem</td>
+                  <td>at</td>
+                </tr>
+                <tr>
+                  <td>1,006</td>
+                  <td>nibh</td>
+                  <td>elementum</td>
+                  <td>imperdiet</td>
+                  <td>Duis</td>
+                </tr>
+                <tr>
+                  <td>1,007</td>
+                  <td>sagittis</td>
+                  <td>ipsum</td>
+                  <td>Praesent</td>
+                  <td>mauris</td>
+                </tr>
+                <tr>
+                  <td>1,008</td>
+                  <td>Fusce</td>
+                  <td>nec</td>
+                  <td>tellus</td>
+                  <td>sed</td>
+                </tr>
+                <tr>
+                  <td>1,009</td>
+                  <td>augue</td>
+                  <td>semper</td>
+                  <td>porta</td>
+                  <td>Mauris</td>
+                </tr>
+                <tr>
+                  <td>1,010</td>
+                  <td>massa</td>
+                  <td>Vestibulum</td>
+                  <td>lacinia</td>
+                  <td>arcu</td>
+                </tr>
+                <tr>
+                  <td>1,011</td>
+                  <td>eget</td>
+                  <td>nulla</td>
+                  <td>Class</td>
+                  <td>aptent</td>
+                </tr>
+                <tr>
+                  <td>1,012</td>
+                  <td>taciti</td>
+                  <td>sociosqu</td>
+                  <td>ad</td>
+                  <td>litora</td>
+                </tr>
+                <tr>
+                  <td>1,013</td>
+                  <td>torquent</td>
+                  <td>per</td>
+                  <td>conubia</td>
+                  <td>nostra</td>
+                </tr>
+                <tr>
+                  <td>1,014</td>
+                  <td>per</td>
+                  <td>inceptos</td>
+                  <td>himenaeos</td>
+                  <td>Curabitur</td>
+                </tr>
+                <tr>
+                  <td>1,015</td>
+                  <td>sodales</td>
+                  <td>ligula</td>
+                  <td>in</td>
+                  <td>libero</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>-->
+          <div id="tester" class="plotlyplot"></div>
           <div style="text-align: center;">
             <h3 v-if="hover_idx">
               Score: {{user_data[hover_idx].score | formatNumber}}
@@ -160,197 +416,35 @@
           <div id="imageLoad">
             <canvas id="currentImg" class="mx-auto d-block">
           </div>
-
-        </div><!-- End col md 10 -->
-    </div> <!-- End main row -->
-
+        </div>
+        <div id="test"></div>
+        </main>
+      </div>
     </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
+    <script src="js/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
+
+    <script src="js/vue.min.js"></script>
+    <script src="js/store.everything.min.js"></script>
+    <script src="js/mustache.min.js"></script>
+    <script src="js/qs.min.js"></script>
+    <script src="js/paper.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.js"></script>
+    <script type="text/paperscript" canvas="currentImg" src="js/paper_stuff.js"></script>
+    <script src="js/dash.js"></script>
+
+
   </body>
-
-
-  <script src="js/store.everything.min.js"></script>
-  <script src="js/mustache.min.js"></script>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/qs.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="js/paper.full.min.js"></script>
-  <script src="js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.js"></script>
-  <script type="text/paperscript" canvas="currentImg" src="js/paper_stuff.js"></script>
-
-  <script>
-
-  paper.install(window)
-
-  Vue.filter("formatNumber", function (value) {
-    return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
-  });
-
-  var app =  new Vue({
-      el: '#main',
-      data: {
-        user_data: [],
-        user_info: {},
-        all_users: [],
-        current_user: null,
-        current_image: null,
-        hover_idx: null,
-      },
-      methods: {
-        query: function(){
-          return 'mask?where={"mode":"try","user_id":"' +this.current_user + '"}&max_results=100 '
-        },
-        plotter: function(){
-          var TESTER = document.getElementById('tester');
-          var to_plot = {x:[], y:[], type:"scatter", mode:'markers', marker:{size:10}}
-          var me = this
-          this.user_data.forEach(function(d, idx, arr){
-            to_plot.x.push(idx)
-            to_plot.y.push(d.score)
-          })
-          Plotly.newPlot('tester', [to_plot], {
-        	  margin: { t: 10 } ,
-            yaxis: {range: [0, 1]}}
-          )
-
-          TESTER.on('plotly_hover', function(data){
-              var pts = '';
-              var idx = null
-
-              for(var i=0; i < data.points.length; i++){
-                  idx = data.points[i].x
-              }
-              try_data = me.user_data[idx];
-              app.hover_idx = idx
-              if (window.base){
-                console.log("clearing base..")
-                //window.base.clear()
-
-              }
-
-              $.get(url+"image/"+try_data.image_id, function(data){
-                //app.current_image = "data:image/png;base64," + data.pic
-                console.log("starting a base raster")
-                if (!window.base){
-                  window.base = new Raster({
-                   crossOrigin: 'anonymous',
-                   source: 'data:image/jpeg;base64,' + data.pic
-                  });
-                  window.roi = new Raster({})
-                } else{
-                  window.base.setSource('data:image/jpeg;base64,' + data.pic)
-                  window.roi.clear()
-                }
-
-
-                window.base.onLoad = function(){
-                  initializeBaseRaster(window.base)
-                  initialize_roi_raster(window.base,window.roi)
-                  console.log("initialized rasters")
-                  $.get(url+'mask?where={"mode":"truth","image_id":"' + try_data.image_id + '"}', function(data){
-                    console.log("got truth", data)
-                    window.roi.fillPixelLog(data._items[0].pic, draw.LUT)
-                    window.roi.fillPixelLog(try_data.pic, draw.LUT)
-                    window.roi.diff(data._items[0].pic)
-                  });
-                }
-
-              })
-          });
-
-        },
-
-        setPlayer: function(player){
-          //set_user(player)
-          app.current_user = player;
-          a.remove("user_id")
-          a.set("user_id", player)
-          //a.go()
-          console.log("not refreshing?")
-          window.history.pushState({path:a.url},'',a.url);
-          set_user(player)
-        }
-
-      }
-    })
-
-  var url = 'http://api.medulina.com/api/v1/'
-  //var init_user = '5991b1bdf441bd00082835a3'
-  //app.current_user = init_user;
-  //var query = 'mask?where={"mode":"try","user_id":"' +app.current_user + '"}&max_results=100 '
-  var size = null
-
-
-  function get_data(url,query, updater, callback){
-
-    if (query != null){
-      $.get(url+query, function(data){
-        //app.user_data = app.user_data.concat(data._items);
-        //console.log(updater)
-        updater(data)
-        if (data._links.next){
-          console.log("getting next", url+query)
-          get_data(url, data._links.next.href, updater, callback)
-        }
-        else{
-          callback()
-        }
-      });
-    }
-  }
-
-  var user_query = "user?sort=-total_score"
-  get_data(url,
-           user_query,
-           function(data){app.all_users = app.all_users.concat(data._items);},
-           function(){
-             console.log("done getting all users")
-
-           })
-
-  function set_user(user){
-
-    app.current_user = user;
-
-    get_data(url, 'user/'+ user, function(data){
-      console.log(data)
-      app.user_info = data
-    },
-    function(){
-      console.log("done getting user")
-      app.user_data = []
-      get_data(url,
-               app.query(),
-               function(data){
-                 app.user_data = app.user_data.concat(data._items);
-                 console.log("appending...", data._items, app.user_data.length)
-               },
-               function(){
-                 console.log("done getting all user tries", user, app.query(), app.user_data.length)
-                 try {
-                   Plotly.deleteTraces('tester', 0);
-                 } catch (e) {
-                   console.log(e)
-                 }
-
-                 app.plotter()
-               })
-    })
-  }
-
-  //app.current_user = init_user
-  //set_user(app.current_user)
-
-  var a = new QS()
-  var params = a.getAll()
-
-  Object.keys(params).indexOf("user_id") >= 0 ? set_user(params["user_id"]) : null
-
-
-
-  </script>
-
 </html>
