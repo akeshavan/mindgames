@@ -20,18 +20,34 @@ var app =  new Vue({
       },
       plotter: function(){
         var TESTER = document.getElementById('tester');
+        var d3 = Plotly.d3;
+        var WIDTH_IN_PERCENT_OF_PARENT = 100,
+            HEIGHT_IN_PERCENT_OF_PARENT = 50;
+
+        var gd3 = d3.select('#tester')
+            .append('div')
+            .style({
+                width: WIDTH_IN_PERCENT_OF_PARENT + '%',
+                'margin-left': (100 - WIDTH_IN_PERCENT_OF_PARENT) / 2 + '%',
+
+                height: HEIGHT_IN_PERCENT_OF_PARENT + 'vh',
+                'margin-top': 0
+            });
+
+        window.gd = gd3.node();
+
         var to_plot = {x:[], y:[], type:"scatter", mode:'markers', marker:{size:10}}
         var me = this
         this.user_data.forEach(function(d, idx, arr){
           to_plot.x.push(idx)
           to_plot.y.push(d.score)
         })
-        Plotly.newPlot('tester', [to_plot], {
+        Plotly.plot(window.gd, [to_plot], {
           margin: { t: 10 } ,
           yaxis: {range: [0, 1]}}
         )
 
-        TESTER.on('plotly_hover', function(data){
+        gd.on('plotly_hover', function(data){
             var pts = '';
             var idx = null
 
@@ -148,7 +164,7 @@ function set_user(user){
                try {
                  Plotly.deleteTraces('tester', 0);
                } catch (e) {
-                 console.log(e)
+                 console.log("the error is", e)
                }
 
                app.plotter()
@@ -163,3 +179,8 @@ var a = new QS()
 var params = a.getAll()
 
 Object.keys(params).indexOf("user_id") >= 0 ? set_user(params["user_id"]) : null
+
+window.onresize = function() {
+    console.log("gu")
+    Plotly.Plots.resize(window.gd);
+};

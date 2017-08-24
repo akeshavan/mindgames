@@ -8,10 +8,21 @@ window.onresize = function () {
   //allRasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
 
-  view.setZoom(1);
-  base.fitBounds(view.bounds);
-  roi.fitBounds(view.bounds);
-  window.zoomFactor = 1;
+
+  try  {
+    view.setZoom(1);
+    base.fitBounds(view.bounds);
+    roi.fitBounds(view.bounds);
+    window.zoomFactor = 1;
+
+  }
+
+  catch (e){
+    console.log("the error is", e)
+  }
+
+Plotly.Plots.resize(window.gd);
+
 };
 
 /*$( window ).resize(function() {
