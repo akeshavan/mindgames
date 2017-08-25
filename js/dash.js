@@ -54,6 +54,23 @@ function plotD3(selector, selectorParent, data, axisLabels){
   xScale.domain([0, d3.max(data, xValue)]);
   yScale.domain([0, 1]);
 
+  var highlighterOn = function(d){
+    return function(dat) {
+      return dat == d ? colors.teal : dat == window.currentClicked ? colors.bright : colors.light 
+    }
+  }
+
+  var highlighterOff = function(d){
+    return function(dat) { return dat == window.currentClicked ? colors.bright: colors.light;}
+  }
+
+  var colors = {
+    "bright": "#FF595E",
+    "light": "#87BCDE",
+    "dark": "#313E50",
+    "teal": "#0E7C7B"
+  }
+
   if (window.plotted){
     console.log("already plotted...")
 
@@ -69,6 +86,11 @@ function plotD3(selector, selectorParent, data, axisLabels){
       .call(yAxis);*/
 
     // draw dots
+
+
+
+
+
     svg.selectAll(".dot")
         .data(data)
         .attr("cx", xMap)
@@ -84,10 +106,10 @@ function plotD3(selector, selectorParent, data, axisLabels){
         .attr("cy", yMap)
         .style("fill", function(d) { return "#87BCDE";})
         .on("mouseover", function(d) {
-            svg.selectAll(".dot").style("fill", function(dat) { return dat == d ? "#0E7C7B": "#87BCDE";})
+            svg.selectAll(".dot").style("fill", highlighterOn(d))
         })
         .on("mouseout", function(d) {
-            svg.selectAll(".dot").style("fill", function(dat) { return "#87BCDE";})
+            svg.selectAll(".dot").style("fill", highlighterOff(d))
         })
         .on("click", onClick);
 
@@ -133,11 +155,11 @@ function plotD3(selector, selectorParent, data, axisLabels){
         .attr("cy", yMap)
         .style("fill", function(d) { return "#87BCDE";})
         .on("mouseover", function(d) {
-          svg.selectAll(".dot").style("fill", function(dat) { return dat == d ? "#0E7C7B": "#87BCDE";})
+          svg.selectAll(".dot").style("fill", highlighterOn(d))
 
         })
         .on("mouseout", function(d) {
-          svg.selectAll(".dot").style("fill", function(dat) { return "#87BCDE";})
+          svg.selectAll(".dot").style("fill", highlighterOff(d))
         })
         .on("click", onClick);
   }
@@ -245,6 +267,7 @@ var size = null
 
 onClick = function(data){
     var svg = d3.select("#svg")
+    window.currentClicked = data;
     svg.selectAll(".dot").style("fill", function(dat) { return dat == data ? "#FF595E": "#87BCDE";})
 
     app.hover_idx = data.x - 1;
@@ -324,7 +347,7 @@ function set_user(user){
   function(){
     console.log("done getting user")
     app.user_data = []
-    
+
     $.get(url+app.query(), function(data){
       app.user_data = data._items;
       app.user_data_meta = data._meta;
