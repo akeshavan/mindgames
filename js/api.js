@@ -10,24 +10,27 @@ config = {
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: false,
-  task: "db_cor_context01", //"hipp", //"ms_lesion_t2",
+  task: "db_cor_context02", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
 }
+
+$.ajaxSetup({ cache: false });
 
 get_url = function(random){
   return config.mask_url + random
 }
 
 get_image_url = function(){
-  var url = config.image_url + "?where=task==" + config.task
-  url = url + "&max_results=1"+"&"+"page="
+  var url = config.image_url + '?where={"task":"' + config.task + '"}'
+  url = url + "&max_results=1"
   if (config.use_random){
     var random = getRandomInt(1,config.total_num_images)
-    url=url + random
+    url="&page=" +url + random
   } else {
-    url = url + "&user_id="+app.login.id
+    url = url + "&user_id="+app.login.id+"&token="+app.login.token
   }
+  console.log("URL FOR GET IS", url)
   return url
 }
 
@@ -115,6 +118,7 @@ do_save = function(score, edits){
     'image_id': window.currentData._items[0]._id,
     'pic': edits,
     'mode': 'try',
+    'task': config.task,
     'score': score.accuracy,
     'user_id': app.login.id, //score['name']
     'user_agent': navigator.userAgent,
@@ -132,7 +136,7 @@ do_save = function(score, edits){
   //settings.url = "http://" + app.login.id + ":" + store.get("user_token") + "@" + settings.url.replace("http://", "")
   console.log("settings are", settings)
   settings["error"] = function(e){
-    alert("there has been an error", e)
+    alert("there has been an error", e, "settings were", settings)
     stopProgress()
     window.appMode = "error"
     show_save({"accuracy": "Err"})

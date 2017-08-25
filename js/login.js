@@ -44,6 +44,7 @@ function getUserInfo(user_token, callback){
       app.login.avatar = score_info.avatar;
       app.login.github_id = score_info.id;
       app.login.username = score_info.username;
+      app.login.token = user_token;
       callback()
 
     } else {
@@ -79,6 +80,7 @@ Starts the whole process
     app.login.avatar = profile.avatar_url;
     app.login.github_id = profile.id;*/
     console.log("profile exists")
+
     getUserInfo(profile, callback)
 
 

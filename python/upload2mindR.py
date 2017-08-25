@@ -50,7 +50,8 @@ def upload_to_mindR(imgPath, task, subject, username, password):
         print(r.text)
     if m.exists():
         mask_dat = {'image_id':image_id,
-                    'mode':'truth'
+                    'mode':'truth',
+                    'task': task
                     }
 
         with open(str(m),'rb') as h:

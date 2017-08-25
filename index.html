@@ -39,7 +39,7 @@
     <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#3372DF">
 
-    <link rel="shortcut icon" href="images/favicon.png">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
@@ -337,6 +337,7 @@ var app =  new Vue({
         title: 'Log in with GitHub',
         url: 'https://github.com/login/oauth/authorize?client_id='+auth_id[window.location.host],
         image: 'images/Octocat1.jpg',
+        token: null
       },
       status: 'Submit',
       instruction: 'Hippocampus',
