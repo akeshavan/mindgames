@@ -258,7 +258,7 @@ var size = null
 
 onClick = function(data){
 
-    app.hover_idx = data.x
+    app.hover_idx = data.x - 1;
     if (window.base){
       console.log("clearing base..")
       //window.base.clear()
