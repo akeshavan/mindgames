@@ -56,7 +56,7 @@ function plotD3(selector, selectorParent, data, axisLabels){
 
   var highlighterOn = function(d){
     return function(dat) {
-      return dat == d ? colors.teal : dat == window.currentClicked ? colors.bright : colors.light 
+      return dat == d ? colors.teal : dat == window.currentClicked ? colors.bright : colors.light
     }
   }
 
@@ -210,6 +210,14 @@ var app =  new Vue({
       current_image: null,
       hover_idx: null,
     },
+    computed: {
+      rank: function(){
+        var tmp = _.find(this.all_users, {"username": this.user_info.username})
+        if (tmp){
+          return tmp["rank"] + 1
+        }
+      },
+    },
     methods: {
       query: function(){
         return 'mask?where={"mode":"try","user_id":"' +this.current_user + '"}&max_results=100&sort=-_created'
@@ -332,6 +340,9 @@ get_data(url,
          function(data){app.all_users = app.all_users.concat(data._items);},
          function(){
            console.log("done getting all users")
+           app.all_users.forEach(function(val, idx, arr){
+             val["rank"] = idx
+           })
 
          })
 
@@ -340,9 +351,8 @@ function set_user(user){
   app.current_user = user;
 
   get_data(url, 'user/'+ user, function(data){
-    console.log(data)
+    console.log("setting rank...")
     app.user_info = data
-
   },
   function(){
     console.log("done getting user")
