@@ -264,7 +264,7 @@ onClick = function(data){
       //window.base.clear()
 
     }
-    try_data = app.user_data[data.x];
+    try_data = app.user_data[data.x - 1];
 
     $.get(url+"image/"+try_data.image_id, function(data){
       //app.current_image = "data:image/png;base64," + data.pic
