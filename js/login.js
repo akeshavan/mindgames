@@ -61,6 +61,12 @@ function getUserInfo(user_token, callback){
   });
 }
 
+
+var auth_url = {
+  "medulina.com": "http://api.medulina.com/api/authenticate/github/",
+  "localhost:8000": "http://api.medulina.com/api/authenticate/githublocal/"
+}
+
 function Login(callback) {
   /*
 Starts the whole process
@@ -81,7 +87,8 @@ Starts the whole process
     try {
       startProgress();
       var code = window.location.href.match(/\?code=(.*)/)[1];
-      $.getJSON('http://api.medulina.com/api/authenticate/github/' + code, function (data) {
+      console.log("auth url is", auth_url[window.location.host]+ code)
+      $.getJSON(auth_url[window.location.host]+ code, function (data) {
         console.log('data token is', data.token);
         getUserInfo(data.token, function (profile) {
           console.log("", profile);
@@ -104,6 +111,7 @@ Starts the whole process
       });
 
     } catch (e) {
+      console.log("there was an error", e)
       $('#loginModal').modal({
         backdrop: 'static',
         keyboard: false,

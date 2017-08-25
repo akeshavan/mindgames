@@ -302,6 +302,12 @@ Vue.component('modal', {
     props: ['content', 'id'],
   });
 
+
+var auth_id = {
+  "medulina.com": "d0dee0089411bc5134ae",
+  "localhost:8000": "f586bf4498f82125fc48"
+}
+
 var app =  new Vue({
     el: '#main',
     data: {
@@ -329,7 +335,7 @@ var app =  new Vue({
         id: null,
         footer: 'click the icon to log in with GitHub',
         title: 'Log in with GitHub',
-        url: 'https://github.com/login/oauth/authorize?client_id=d0dee0089411bc5134ae',
+        url: 'https://github.com/login/oauth/authorize?client_id='+auth_id[window.location.host],
         image: 'images/Octocat1.jpg',
       },
       status: 'Submit',

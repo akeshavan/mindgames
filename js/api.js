@@ -9,7 +9,7 @@ config = {
   image_url: 'http://api.medulina.com/api/v1/image/',
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
-  use_random: true,
+  use_random: false,
   task: "db_cor_context01", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
@@ -26,8 +26,7 @@ get_image_url = function(){
     var random = getRandomInt(1,config.total_num_images)
     url=url + random
   } else {
-    url = url + config.num;
-    ++config.num
+    url = url + "&user_id="+app.login.id
   }
   return url
 }
