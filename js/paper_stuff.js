@@ -7,7 +7,7 @@ window.onresize = function () {
 
   //allRasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
-
+  window.resizeGraph()
 
   try  {
     view.setZoom(1);
@@ -21,7 +21,8 @@ window.onresize = function () {
     console.log("the error is", e)
   }
 
-Plotly.Plots.resize(window.gd);
+//Plotly.Plots.resize(window.gd);
+
 
 };
 
