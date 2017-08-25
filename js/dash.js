@@ -10,6 +10,7 @@ function plotD3(selector, selectorParent, data, axisLabels){
   // http://bl.ocks.org/weiglemc/6185069
 
   console.log("data is", data)
+
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = $(selectorParent).width() - margin.left - margin.right,
     height = $(selectorParent).height() - margin.top - margin.bottom;
@@ -81,20 +82,12 @@ function plotD3(selector, selectorParent, data, axisLabels){
         .attr("r", 7)
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return "steelblue";})
+        .style("fill", function(d) { return "#87BCDE";})
         .on("mouseover", function(d) {
-            tooltip.transition()
-                 .duration(200)
-                 .style("opacity", .9);
-            tooltip.html("<br/> (" + xValue(d)
-            + ", " + yValue(d) + ")")
-                 .style("left", (d3.event.pageX + 5) + "px")
-                 .style("top", (d3.event.pageY - 28) + "px");
+            svg.selectAll(".dot").style("fill", function(dat) { return dat == d ? "#0E7C7B": "#87BCDE";})
         })
         .on("mouseout", function(d) {
-            tooltip.transition()
-                 .duration(500)
-                 .style("opacity", 0);
+            svg.selectAll(".dot").style("fill", function(dat) { return "#87BCDE";})
         })
         .on("click", onClick);
 
@@ -116,7 +109,7 @@ function plotD3(selector, selectorParent, data, axisLabels){
         .attr("x", width)
         .attr("y", -6)
         .style("text-anchor", "end")
-        .text(axisLabels.x);
+        .text("HELLO???");
 
     // y-axis
     svg.append("g")
@@ -138,20 +131,13 @@ function plotD3(selector, selectorParent, data, axisLabels){
         .attr("r", 7)
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return "steelblue";})
+        .style("fill", function(d) { return "#87BCDE";})
         .on("mouseover", function(d) {
-            tooltip.transition()
-                 .duration(200)
-                 .style("opacity", .9);
-            tooltip.html("<br/> (" + xValue(d)
-  	        + ", " + yValue(d) + ")")
-                 .style("left", (d3.event.pageX + 5) + "px")
-                 .style("top", (d3.event.pageY - 28) + "px");
+          svg.selectAll(".dot").style("fill", function(dat) { return dat == d ? "#0E7C7B": "#87BCDE";})
+
         })
         .on("mouseout", function(d) {
-            tooltip.transition()
-                 .duration(500)
-                 .style("opacity", 0);
+          svg.selectAll(".dot").style("fill", function(dat) { return "#87BCDE";})
         })
         .on("click", onClick);
   }
@@ -195,6 +181,7 @@ var app =  new Vue({
     el: '#main',
     data: {
       user_data: [],
+      user_data_meta: null,
       user_info: {},
       all_users: [],
       current_user: null,
@@ -203,7 +190,7 @@ var app =  new Vue({
     },
     methods: {
       query: function(){
-        return 'mask?where={"mode":"try","user_id":"' +this.current_user + '"}&max_results=100 '
+        return 'mask?where={"mode":"try","user_id":"' +this.current_user + '"}&max_results=100&sort=-_created'
       },
       plotter: function(){
 
@@ -257,6 +244,8 @@ var size = null
 
 
 onClick = function(data){
+    var svg = d3.select("#svg")
+    svg.selectAll(".dot").style("fill", function(dat) { return dat == data ? "#FF595E": "#87BCDE";})
 
     app.hover_idx = data.x - 1;
     if (window.base){
@@ -330,11 +319,19 @@ function set_user(user){
   get_data(url, 'user/'+ user, function(data){
     console.log(data)
     app.user_info = data
+
   },
   function(){
     console.log("done getting user")
     app.user_data = []
-    get_data(url,
+    
+    $.get(url+app.query(), function(data){
+      app.user_data = data._items;
+      app.user_data_meta = data._meta;
+      console.log("some user tries are:", data)
+      app.plotter();
+    })
+    /*get_data(url,
              app.query(),
              function(data){
                app.user_data = app.user_data.concat(data._items);
@@ -349,7 +346,7 @@ function set_user(user){
                }
 
                app.plotter()
-             })
+             })*/
   })
 }
 
