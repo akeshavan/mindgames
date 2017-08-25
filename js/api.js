@@ -62,8 +62,9 @@ do_eval = function(){
     var diffvals = roi.pixelLog
     console.log("test: these are the vals", diffvals)
   }
+  var segmentation = roi.getNonZeroPixels()
   stopProgress()
-  do_save(score, JSON.stringify(diffvals))
+  do_save(score, JSON.stringify(segmentation))
 
 
   //})

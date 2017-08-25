@@ -79,7 +79,20 @@ var initialize_roi_raster = function(base_raster, roi_raster, alpha){
 
 }
 
-
+Raster.prototype.getNonZeroPixels = function(){
+  var output = {}
+  for (ii=0;ii<this.width;ii++){
+    for (jj=0;jj<this.height;jj++){
+      if (this.pixelLog[ii][jj]){
+        if (output[ii] == undefined){
+          output[ii] = {}
+        }
+        output[ii][jj] = this.pixelLog[ii][jj];
+      }
+    }
+  }
+  return output
+}
 
 Raster.prototype.initPixelLog = function(){
   /*
