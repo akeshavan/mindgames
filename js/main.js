@@ -888,6 +888,7 @@ function start(base_url){
   base.onLoad = function() {
     //THIS ALWAYS RUNS -- will this break things??
     initializeBaseRaster(base)
+    app.startTime = new Date()
 
     //Load the (blank) ROI image
     var roi = new Raster({});
