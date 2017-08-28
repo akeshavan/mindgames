@@ -7,7 +7,13 @@ window.onresize = function () {
 
   //allRasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
-  window.resizeGraph("#svg","#tester", window.prep)
+  try {
+    window.resizeGraph("#svg","#tester", window.prep)
+  } catch (e) {
+    console.log("coulnd't resize graph", e)
+  } finally {
+
+  }
 
   try  {
     view.setZoom(1);
