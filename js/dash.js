@@ -125,7 +125,7 @@ function populate(data, prep){
   //Use the same variables of the data in the .x and .y as used in the cx and cy of the circle call
   //The clip extent will make the boundaries end nicely along the chart area instead of splitting up the entire SVG
   //(if you do not do this it would mean that you already see a tooltip when your mouse is still in the axis area, which is confusing)
-  var wrapper = prep.svg.append("g").attr("class", "chordWrapper")
+  /*var wrapper = prep.svg.append("g").attr("class", "chordWrapper")
   			.attr("transform", "translate(" + prep.margin.left + "," + prep.margin.top + ")");
 
   var voronoi = d3.voronoi()
@@ -146,7 +146,7 @@ function populate(data, prep){
     }
     console.log("p is", p, site)
 
-  })
+  })*/
 
   /*voronoiGroup.selectAll("path")
   	.data(voronoi(data)) //Use vononoi() with your dataset inside
