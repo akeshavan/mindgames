@@ -126,7 +126,7 @@ do_save = function(score, edits){
     'resolution': [window.innerWidth, window.innerHeight]
   }
   var timeDiff = new Date() - app.startTime // in miliseconds
-  //imgbody["time_spent"] = timeDiff
+  imgbody["time"] = timeDiff
 
   var token = "NnrP65CXaSnZ0aLPZ8Ox64d0pDlSKS0R8wpymwLr";
   var settings = create_json_request(imgbody, config.edit_url, token)

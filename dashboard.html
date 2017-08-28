@@ -308,13 +308,13 @@
           </section>
 
           <h2>Scores</h2>
-          
+
           <div id="tester" class="plotlyplot" style="width:100%; height:200px;">
             <svg id="svg"></svg>
           </div>
 
           <div style="text-align: center;">
-            <h3 v-if="hover_idx">
+            <h3 v-if="hover_idx != null && user_data[hover_idx]">
               Score: {{user_data[hover_idx].score | formatNumber}}
             </h3>
           </div>

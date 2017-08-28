@@ -7,7 +7,7 @@ window.onresize = function () {
 
   //allRasters.map(function(r){r.fitBounds(view.bounds)})
   //console.log("resizing")
-  window.resizeGraph()
+  window.resizeGraph("#svg","#tester", window.prep)
 
   try  {
     view.setZoom(1);
@@ -21,14 +21,11 @@ window.onresize = function () {
     console.log("the error is", e)
   }
 
-//Plotly.Plots.resize(window.gd);
 
 
 };
 
-/*$( window ).resize(function() {
-  $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
-})*/
+
 
 function copyImageData(ctx, src)
 {

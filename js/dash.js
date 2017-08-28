@@ -1,16 +1,39 @@
 paper.install(window)
+
 window.plotted = false
+
 Vue.filter("formatNumber", function (value) {
   return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
 });
 
+/*
+  Some D3 highlight options
+*/
 
-function plotD3(selector, selectorParent, data, axisLabels){
-  //based on
-  // http://bl.ocks.org/weiglemc/6185069
+var highlighterOn = function(d){
+  return function(dat) {
+    return dat == d ? colors.teal : dat == window.currentClicked ? colors.bright : colors.light
+  }
+}
 
-  console.log("data is", data)
+var highlighterOff = function(d){
+  return function(dat) { return dat == window.currentClicked ? colors.bright: colors.light;}
+}
 
+var colors = {
+  "bright": "#FF595E",
+  "light": "#87BCDE",
+  "dark": "#313E50",
+  "teal": "#0E7C7B"
+}
+
+
+
+/*
+  Prepare the D3 SVG and axis
+*/
+
+function prepare(selectorParent, selector, axisLabels){
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = $(selectorParent).width() - margin.left - margin.right,
     height = $(selectorParent).height() - margin.top - margin.bottom;
@@ -30,7 +53,7 @@ function plotD3(selector, selectorParent, data, axisLabels){
 
   // setup y
   var yValue = function(d) { return d.y;}, // data -> value
-      yScale = d3.scaleLinear().range([height, 0]), // value -> display
+      yScale = d3.scaleLinear().range([height, 0]), // value -> display Note order swap (bottom is higher)
       yMap = function(d) { return yScale(yValue(d));}, // data -> display
       yAxis = d3.axisLeft(yScale);
 
@@ -45,158 +68,132 @@ function plotD3(selector, selectorParent, data, axisLabels){
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // add the tooltip area to the webpage
-  var tooltip = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")") //take X to bottom of SVG
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .style("fill", "black")
+      .text(axisLabels.x);
 
-  // don't want dots overlapping axis, so add in buffer to data domain
-  xScale.domain([0, d3.max(data, xValue)]);
-  yScale.domain([0, 1]);
+  // y-axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .style("fill", "black")
+      .text(axisLabels.y);
 
-  var highlighterOn = function(d){
-    return function(dat) {
-      return dat == d ? colors.teal : dat == window.currentClicked ? colors.bright : colors.light
-    }
+  return {xValue: xValue, yValue:yValue, xScale: xScale,
+          yScale: yScale, xMap: xMap, yMap, yMap,
+          xAxis: xAxis, yAxis: yAxis, svg: svg, margin:margin, width: width, height: height}
+}
+
+/*
+  Populate the prepared SVG with data
+*/
+
+function populate(data, prep){
+  prep.xScale.domain([0, d3.max(data, prep.xValue)]);
+  prep.yScale.domain([0, 1]);
+
+  // update dots (i.e add new ones)
+  prep.svg.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .style("fill", function(d) { return "#87BCDE";})
+      .attr("r", 7)
+      .attr("cx", prep.xMap)
+      .attr("cy", prep.yMap)
+
+
+  prep.svg.selectAll(".dot")
+      .on("mouseover", function(d) {
+          prep.svg.selectAll(".dot").style("fill", highlighterOn(d))
+      })
+      .on("mouseout", function(d) {
+          prep.svg.selectAll(".dot").style("fill", highlighterOff(d))
+      })
+      .on("click", onClick)
+
+
+
+  //remove dots
+  prep.svg.selectAll(".dot")
+     .data(data)
+     .exit()
+     .remove()
+}
+
+
+/*
+  Resize the graph appropriately
+*/
+
+window.resizeGraph = function(selector, selectorParent, prep) {
+  var width = $(selectorParent).width() - prep.margin.left - prep.margin.right,
+      height = $(selectorParent).height() - prep.margin.top - prep.margin.bottom;
+
+  var svg = d3.select(selector)
+      .attr("width", width + prep.margin.left + prep.margin.right)
+      .attr("height", height + prep.margin.top + prep.margin.bottom)
+
+  console.log("width is", width, "height is", height)
+
+  prep.xScale.range([0, width]).nice();
+  prep.yScale.range([height, 0]).nice();
+
+  prep.yAxis.ticks(Math.max(height/50, 2));
+  prep.xAxis.ticks(Math.max(width/50, 2));
+
+  svg.select('.x.axis')
+    .attr("transform", "translate(0," + height + ")")
+    .call(prep.xAxis);
+
+  svg.select('.x.axis')
+    .selectAll(".label")
+    .attr("x", width)
+
+  svg.select('.y.axis')
+    /*.attr("transform", "rotate(-90)")*/
+    .call(prep.yAxis);
+
+
+  svg.selectAll('.dot')
+  .attr("cx", prep.xMap)
+  .attr("cy", prep.yMap)
+}
+
+/*
+  Render the Plot
+*/
+
+
+function plotD3(selector, selectorParent, data, axisLabels){
+  //based on
+  // http://bl.ocks.org/weiglemc/6185069
+
+  console.log("data is", data)
+
+  if (!window.plotted){
+    window.prep = prepare(selectorParent, selector, axisLabels)
   }
 
-  var highlighterOff = function(d){
-    return function(dat) { return dat == window.currentClicked ? colors.bright: colors.light;}
-  }
+  populate(data, prep)
 
-  var colors = {
-    "bright": "#FF595E",
-    "light": "#87BCDE",
-    "dark": "#313E50",
-    "teal": "#0E7C7B"
-  }
+  window.plotted = true
+  resizeGraph(selector, selectorParent, prep)
 
-  if (window.plotted){
-    console.log("already plotted...")
-
-
-    var svg = d3.select(selector)
-    console.log("svg and selector are", svg, selector)
-
-    /*svg.select('.x.axis')
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-    svg.select('.y.axis')
-      .call(yAxis);*/
-
-    // draw dots
-
-
-
-
-
-    svg.selectAll(".dot")
-        .data(data)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-
-    // update dots (i.e add new ones)
-    svg.selectAll(".dot")
-        .data(data)
-      .enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 7)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-        .style("fill", function(d) { return "#87BCDE";})
-        .on("mouseover", function(d) {
-            svg.selectAll(".dot").style("fill", highlighterOn(d))
-        })
-        .on("mouseout", function(d) {
-            svg.selectAll(".dot").style("fill", highlighterOff(d))
-        })
-        .on("click", onClick);
-
-    //remove dots
-    svg.selectAll(".dot")
-       .data(data)
-       .exit()
-       .remove()
-
-  }
-  else{
-    // x-axis
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-      .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -6)
-        .style("text-anchor", "end")
-        .text("HELLO???");
-
-    // y-axis
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-      .append("text")
-        .attr("class", "label")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text(axisLabels.y);
-
-    // draw dots
-    svg.selectAll(".dot")
-        .data(data)
-      .enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 7)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-        .style("fill", function(d) { return "#87BCDE";})
-        .on("mouseover", function(d) {
-          svg.selectAll(".dot").style("fill", highlighterOn(d))
-
-        })
-        .on("mouseout", function(d) {
-          svg.selectAll(".dot").style("fill", highlighterOff(d))
-        })
-        .on("click", onClick);
-  }
-
-
-    window.resizeGraph = function() {
-      var width = $(selectorParent).width() - margin.left - margin.right,
-          height = $(selectorParent).height() - margin.top - margin.bottom;
-
-      var svg = d3.select(selector)
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-
-      console.log("width is", width, "height is", height)
-
-      xScale.range([0, width]).nice();
-      yScale.range([height, 0]).nice();
-
-      yAxis.ticks(Math.max(height/50, 2));
-      xAxis.ticks(Math.max(width/50, 2));
-
-      svg.select('.x.axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-      svg.select('.y.axis')
-        /*.attr("transform", "rotate(-90)")*/
-        .call(yAxis);
-
-
-      svg.selectAll('.dot')
-      .attr("cx", xMap)
-      .attr("cy", yMap)
-    }
-    window.plotted = true
-    resizeGraph()
-    //d3.select(window).on('resize', resizeGraph);
 }
 
 var app =  new Vue({
@@ -230,7 +227,7 @@ var app =  new Vue({
         this.user_data.forEach(function(d, idx, arr){
                   dataset.push({x: idx+1, y: d.score})
                 })
-        plotD3("#svg","#tester", dataset, {x:"Try", y:"Dice"})
+        plotD3("#svg","#tester", dataset, {x:"Try #", y:"Dice Coefficient"})
 
       },
 
