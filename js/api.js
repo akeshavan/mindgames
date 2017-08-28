@@ -147,6 +147,7 @@ do_save = function(score, edits){
 
   $.ajax(settings).done(function(response){
     show_save(score)
+    console.log("response is", response)
     var profile = store.get('user_token');
     getUserInfo(profile, function(){
       stopProgress()

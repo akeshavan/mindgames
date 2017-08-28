@@ -103,7 +103,7 @@ function prepare(selectorParent, selector, axisLabels){
 */
 
 function populate(data, prep){
-  prep.xScale.domain([0, d3.max(data, prep.xValue)]);
+  prep.xScale.domain([0, 50]);//d3.max(data, prep.xValue)]);
   prep.yScale.domain([0, 1]);
 
   // update dots (i.e add new ones)
@@ -112,53 +112,16 @@ function populate(data, prep){
 
     foo.enter().append("circle")
       .attr("class", "dot")
-      .attr("cx", prep.xMap)
-      .attr("cy", prep.yMap)
       .merge(foo)
       .style("fill", function(d) { return "#87BCDE";})
+       .attr("cx", prep.xMap)
        .attr("r", 1) // Change size
       .transition()
         .duration(1000)
         .attr("r", 7)
-
-  //Initiate the voronoi function
-  //Use the same variables of the data in the .x and .y as used in the cx and cy of the circle call
-  //The clip extent will make the boundaries end nicely along the chart area instead of splitting up the entire SVG
-  //(if you do not do this it would mean that you already see a tooltip when your mouse is still in the axis area, which is confusing)
-  /*var wrapper = prep.svg.append("g").attr("class", "chordWrapper")
-  			.attr("transform", "translate(" + prep.margin.left + "," + prep.margin.top + ")");
-
-  var voronoi = d3.voronoi()
-  	.x(function(d) { return prep.xScale(d.x); })
-  	.y(function(d) { return prep.yScale(d.y); })(data)
-  	.extent([[0, 0], [prep.width, prep.height]]);
-
-
-  prep.svg.on('mousemove', function() {
-
-    var p = d3.mouse(this)
-    p[0] -= prep.margin.left;
-    p[1] -= prep.margin.top;
-    var maxDistanceFromPoint = 500;
-    var site = voronoi.find(p[0], p[1], maxDistanceFromPoint);
-    if (site){
-      highlighterOn(site.data)
-    }
-    console.log("p is", p, site)
-
-  })*/
-
-  /*voronoiGroup.selectAll("path")
-  	.data(voronoi(data)) //Use vononoi() with your dataset inside
-  	.enter().append("path")
-  	.attr("d", function(d, i) { return "M" + d.join("L") + "Z"; })
-  	.datum(function(d, i) { return d.point; })
-  	.attr("class", function(d,i) { return "voronoi " + d.CountryCode; }) //Give each cell a unique class where the unique part corresponds to the circle classes
-  	//.style("stroke", "#2074A0") //I use this to look at how the cells are dispersed as a check
-  	.style("fill", "none")
-  	.style("pointer-events", "all")
-  	.on("mouseover", function(d){console.log("mouseover", d)})
-  	.on("mouseout",  function(d){console.log("mouseout", d)});*/
+        //.ease(d3.easeBounce)
+          .attr("cx", prep.xMap)
+          .attr("cy", prep.yMap)
 
 
   prep.svg.selectAll(".dot")
@@ -171,12 +134,15 @@ function populate(data, prep){
       .on("click", onClick)
 
 
-
   //remove dots
   prep.svg.selectAll(".dot")
      .data(data)
      .exit()
-     .remove()
+     .transition()
+     .duration(1000)
+      .style('opacity', 1e-6)
+      .remove();
+
 }
 
 
@@ -236,7 +202,7 @@ function plotD3(selector, selectorParent, data, axisLabels){
   populate(data, prep)
 
   window.plotted = true
-  resizeGraph(selector, selectorParent, prep)
+  //resizeGraph(selector, selectorParent, prep)
 
 }
 
