@@ -210,7 +210,7 @@ paper.install(window)
 var app =  new Vue({
     el: '#main',
     data: {
-      task: "db_cor_context02",
+      task: "db_cor_context03",
       image_entries: [],
       next: null,
       current_image: {},

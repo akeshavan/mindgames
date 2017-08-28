@@ -36,18 +36,33 @@ def upload_to_mindR(imgPath, task, subject, username, password):
                 'slice': str(i).split("_")[-1].split(".")[0],
                 'slice_direction': str(i).split("/")[-1].split("_")[0],
                 'subject': subject,
-                'task': task
+                'task': task,
+                'mode': "train",
+                "session": "first",
                 }
 
     with open(str(j),'r') as h:
         manifest = json.load(h)
+    import matplotlib.pyplot as pp
+    shape = list(pp.imread(i).shape)[:2]
+    img_dat["shape"]= str(shape)
+    print(img_dat)
+    print(type(img_dat["shape"]))
     with open(str(i),'rb') as img:
-        r = requests.post(url+'image',files={'pic':img},data=img_dat, headers={'Authorization':api_token})
+        context_pic = '/Users/akeshavan/Dropbox/software/mindgames/python/outputs/context/slice%03d.jpg' % int(img_dat["slice"])
+        print(context_pic)
+        with open(context_pic, 'rb') as c:
+            print(img_dat.keys())
+            r = requests.post(url+'image',files={'pic':img, 'context':c},
+            data=img_dat, headers={'Authorization':api_token})
+
     m = i.with_suffix('.json')
     try:
+        print(r.json())
         image_id = r.json()['_id']
     except JSONDecodeError:
         print(r.text)
+
     if m.exists():
         mask_dat = {'image_id':image_id,
                     'mode':'truth',

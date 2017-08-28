@@ -121,6 +121,44 @@ function populate(data, prep){
         .duration(1000)
         .attr("r", 7)
 
+  //Initiate the voronoi function
+  //Use the same variables of the data in the .x and .y as used in the cx and cy of the circle call
+  //The clip extent will make the boundaries end nicely along the chart area instead of splitting up the entire SVG
+  //(if you do not do this it would mean that you already see a tooltip when your mouse is still in the axis area, which is confusing)
+  var wrapper = prep.svg.append("g").attr("class", "chordWrapper")
+  			.attr("transform", "translate(" + prep.margin.left + "," + prep.margin.top + ")");
+
+  var voronoi = d3.voronoi()
+  	.x(function(d) { return prep.xScale(d.x); })
+  	.y(function(d) { return prep.yScale(d.y); })(data)
+  	.extent([[0, 0], [prep.width, prep.height]]);
+
+
+  prep.svg.on('mousemove', function() {
+
+    var p = d3.mouse(this)
+    p[0] -= prep.margin.left;
+    p[1] -= prep.margin.top;
+    var maxDistanceFromPoint = 500;
+    var site = voronoi.find(p[0], p[1], maxDistanceFromPoint);
+    if (site){
+      highlighterOn(site.data)
+    }
+    console.log("p is", p, site)
+
+  })
+
+  /*voronoiGroup.selectAll("path")
+  	.data(voronoi(data)) //Use vononoi() with your dataset inside
+  	.enter().append("path")
+  	.attr("d", function(d, i) { return "M" + d.join("L") + "Z"; })
+  	.datum(function(d, i) { return d.point; })
+  	.attr("class", function(d,i) { return "voronoi " + d.CountryCode; }) //Give each cell a unique class where the unique part corresponds to the circle classes
+  	//.style("stroke", "#2074A0") //I use this to look at how the cells are dispersed as a check
+  	.style("fill", "none")
+  	.style("pointer-events", "all")
+  	.on("mouseover", function(d){console.log("mouseover", d)})
+  	.on("mouseout",  function(d){console.log("mouseout", d)});*/
 
 
   prep.svg.selectAll(".dot")

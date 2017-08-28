@@ -934,7 +934,7 @@ get_images = function(url, callback){
       sliceNo = "0"+sliceNo
     }
     console.log(sliceNo)
-    context_url = "https://cdn.rawgit.com/medulina/context/f48d59e5/slice"+sliceNo+".jpg"
+    context_url = "data:image/jpeg;base64," + data._items[0].context //"https://cdn.rawgit.com/medulina/context/f48d59e5/slice"+sliceNo+".jpg"
     app.context = context_url;
 
     config.total_num_images = data._meta.total;
