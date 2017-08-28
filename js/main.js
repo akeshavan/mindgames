@@ -929,6 +929,7 @@ get_images = function(url, callback){
     var base_url = data._items[0].pic
     var sliceNo = parseInt(data._items[0].slice).toString()
     console.log(sliceNo, sliceNo.length)
+    app.current_slice = data._items[0]
     for (i=0;i<3-sliceNo.length;i++){
       sliceNo = "0"+sliceNo
     }

@@ -321,6 +321,15 @@
           <div id="imageLoad">
             <canvas id="currentImg" class="mx-auto d-block" resize>
           </div>
+          <br>
+          <div>
+            <a v-if="hover_idx != null && user_data[hover_idx]"
+             class="btn btn-primary mx-auto d-block"
+             role="button"
+             v-bind:href="'/slices.html?image_id=' + user_data[hover_idx].image_id"
+             style="width:120px;">Slice Stats</a>
+          </div>
+          <br>
         </div>
         <div id="test"></div>
         </main>
