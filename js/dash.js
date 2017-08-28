@@ -107,14 +107,20 @@ function populate(data, prep){
   prep.yScale.domain([0, 1]);
 
   // update dots (i.e add new ones)
-  prep.svg.selectAll(".dot")
+  var foo = prep.svg.selectAll(".dot")
       .data(data)
-    .enter().append("circle")
+
+    foo.enter().append("circle")
       .attr("class", "dot")
-      .style("fill", function(d) { return "#87BCDE";})
-      .attr("r", 7)
       .attr("cx", prep.xMap)
       .attr("cy", prep.yMap)
+      .merge(foo)
+      .style("fill", function(d) { return "#87BCDE";})
+       .attr("r", 1) // Change size
+      .transition()
+        .duration(1000)
+        .attr("r", 7)
+
 
 
   prep.svg.selectAll(".dot")
