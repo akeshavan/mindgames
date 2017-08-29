@@ -141,6 +141,7 @@ function populate(data, prep){
      .transition()
      .duration(1000)
       .style('opacity', 1e-6)
+      .attr("cy", function(d){return 0})
       .remove();
 
 }
