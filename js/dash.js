@@ -357,7 +357,7 @@ function set_user(user){
     app.user_data = []
 
     $.get(url+app.query(), function(data){
-      app.user_data = data._items;
+      app.user_data = data._items.reverse();
       app.user_data_meta = data._meta;
       console.log("some user tries are:", data)
       app.plotter();
