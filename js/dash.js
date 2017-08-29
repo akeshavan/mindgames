@@ -61,6 +61,15 @@ function prepare(selectorParent, selector, axisLabels){
   //var cValue = function(d) { return d.Manufacturer;},
   //    color = d3.scale.category10();
 
+  xScale.range([0, width]).nice();
+  yScale.range([height, 0]).nice();
+
+  yAxis.ticks(Math.max(height/50, 2));
+  xAxis.ticks(Math.max(width/50, 2));
+
+  xScale.domain([0, 50]);//d3.max(data, prep.xValue)]);
+  yScale.domain([0, 1]);
+
   // add the graph canvas to the body of the webpage
   var svg = d3.select(selector)
       .attr("width", width + margin.left + margin.right)
@@ -103,8 +112,7 @@ function prepare(selectorParent, selector, axisLabels){
 */
 
 function populate(data, prep){
-  prep.xScale.domain([0, 50]);//d3.max(data, prep.xValue)]);
-  prep.yScale.domain([0, 1]);
+
 
   // update dots (i.e add new ones)
   var foo = prep.svg.selectAll(".dot")
