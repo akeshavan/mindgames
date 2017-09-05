@@ -215,7 +215,7 @@
 
         <div id="legend" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:45%; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
 
-          <img v-bind:src="context" width="100%">
+          <img v-if="use_context" v-bind:src="context" width="100%">
 
         </div>
 
@@ -297,6 +297,7 @@ var app =  new Vue({
       overlay: true,
       loading: true,
       context: null,
+      use_context: false,
       startTime: null,
       current_slice: null,
       login: {
