@@ -311,7 +311,11 @@ var app =  new Vue({
               }
             });
             console.log("vote max is", max_vote, "vote is", vote)
-            roi2.fillPixelLog(vote, draw.LUT);
+            var LUT = {0:draw.LUT[0]}
+            for (i=1; i<max_vote+1; i++){
+              LUT[i] = d3.interpolateCool(i/max_vote)
+            }
+            roi2.fillPixelLog(vote, LUT);
 
 
           });
