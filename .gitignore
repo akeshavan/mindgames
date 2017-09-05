@@ -2,3 +2,5 @@ outputs/
 inputs/
 db/
 .DS_Store
+python/uploaded_files
+python/uploaded_files/*
