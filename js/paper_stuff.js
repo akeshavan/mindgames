@@ -19,6 +19,8 @@ window.onresize = function () {
     view.setZoom(1);
     base.fitBounds(view.bounds);
     roi.fitBounds(view.bounds);
+    roi2.fitBounds(view.bounds);
+
     window.zoomFactor = 1;
 
   }
