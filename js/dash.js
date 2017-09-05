@@ -305,7 +305,7 @@ onClick = function(data){
         console.log("initialized rasters")
         $.get(url+'mask?where={"mode":"truth","image_id":"' + try_data.image_id + '"}', function(data){
           console.log("got truth", data)
-          window.roi.fillPixelLog(data._items[0].pic, draw.LUT)
+          //window.roi.fillPixelLog(data._items[0].pic, draw.LUT)
           window.roi.fillPixelLog(try_data.pic, draw.LUT)
           window.roi.diff(data._items[0].pic)
         });

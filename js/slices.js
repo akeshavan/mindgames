@@ -286,7 +286,7 @@ var app =  new Vue({
               initialize_roi_raster(base,roi_temp, 0)
               roi_temp.visible = false
 
-              roi_temp.fillPixelLog(me.current_truth.pic, {0: "black", 1: "red"})
+              //roi_temp.fillPixelLog(me.current_truth.pic, {0: "black", 1: "red"})
               roi_temp.fillPixelLog(val.pic, {0: "black", 1: "red"})
 
               for (ii in roi_temp.pixelLog){
