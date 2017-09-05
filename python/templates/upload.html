@@ -3,7 +3,25 @@
 
       <form action = "http://localhost:5000/uploader" method = "POST"
          enctype = "multipart/form-data">
-         <input type = "file" name = "file" />
+         1) Select nifti image file
+         <input type = "file" name = "image_file" />
+         <br>
+         2) Select nifti mask file ("ground truth")
+         <input type = "file" name = "mask_file" />
+         <br>
+         3) Select slice orientation
+         <input type = "radio" name = "slice_direction" value = "Axial" checked> Axial
+         <input type = "radio" name = "slice_direction" value = "Coronal"> Coronal
+         <input type = "radio" name = "slice_direction" value = "Sagittal"> Sagittal
+         <br>
+         4) Select type of task
+         <input type = "radio" name = "task_type" value = "Tumor" checked> Tumor
+         <input type = "radio" name = "task_type" value = "Stroke"> Stroke
+         <input type = "radio" name = "task_type" value = "T1_anat"> T1 Anatomy
+         <br>
+         5) Select minimum # voxels to visualize
+         <input type = "number" name = "min_Nvox" min = 1 max = 1000 value = 5>
+         <br>
          <input type = "submit"/>
       </form>
 

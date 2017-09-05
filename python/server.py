@@ -13,10 +13,17 @@ def upload_file():
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_poo():
    if request.method == 'POST':
-      f = request.files['file']
+      f_image = request.files['image_file']
+      f_mask = request.files['mask_file']
       print("hello!!!")
-      fname = secure_filename(f.filename)
-      f.save(fname)
+      fname_image, ext_image = os.path.splitext(secure_filename(f_image.filename))
+      fname_mask, ext_mask = os.path.splitext(secure_filename(f_mask.filename))
+      f_image.save('uploaded_files/'+fname_image+'_image'+ext_image)
+      f_mask.save('uploaded_files/'+fname_mask+'_mask'+ext_mask)
+
+      #slice_direction = request.files['slice_direction']
+      #task_type = request.files['task_type']
+      #min_Nvox = request.files['min_Nvox']
       return 'file uploaded successfully'
 
 if __name__ == '__main__':
