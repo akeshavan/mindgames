@@ -279,7 +279,16 @@ Vue.component('modal', {
 
 var auth_id = {
   "medulina.com": "d0dee0089411bc5134ae",
-  "localhost:8000": "f586bf4498f82125fc48"
+  "localhost:8000": "f586bf4498f82125fc48",
+  "medulinatest": "7a33c7349ef2968b7480"
+}
+
+function get_oauth_id(){
+  var oauth_id = auth_id[window.location.host];
+  if (window.location.href.indexOf("testmedulina") >= 0){
+    oauth_id = auth_id["medulinatest"]
+  }
+  return oauth_id
 }
 
 var app =  new Vue({
@@ -312,7 +321,7 @@ var app =  new Vue({
         id: null,
         footer: 'click the icon to log in with GitHub',
         title: 'Log in with GitHub',
-        url: 'https://github.com/login/oauth/authorize?client_id='+auth_id[window.location.host],
+        url: 'https://github.com/login/oauth/authorize?client_id='+get_oauth_id(),
         image: 'images/Octocat1.jpg',
         token: null
       },
