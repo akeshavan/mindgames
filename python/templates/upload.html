@@ -1,11 +1,313 @@
-<html>
-   <body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-      <form action = "http://localhost:5000/uploader" method = "POST"
-         enctype = "multipart/form-data">
-         <input type = "file" name = "file" />
-         <input type = "submit"/>
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon" />
+
+    <title>Medulina Research Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/dashboard.css" rel="stylesheet">
+    <style>
+    [v-cloak] {
+        display: none;
+      }
+
+      .score {
+        position: relative;
+        top: -150px;
+        color: white;
+        font-size: 3em;
+      }
+
+      .scoreName {
+        position: relative;
+        top: -50px;
+      }
+
+      .scoreLabel {
+        position: relative;
+        top: -50px;
+      }
+
+      .user_avatar {
+        width: 45px;
+        height: 45px;
+      }
+
+      .bg-blue {
+        background-color: #313E50 !important;
+      }
+
+      #currentImg {
+        width: 100%;
+      }
+
+      /**
+       * Demo Styles
+       */
+
+
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+
+
+      /**
+       * Circle Styles
+       */
+
+      .circle {
+        position: relative;
+        display: block;
+        margin: 2em 0;
+        background-color: transparent;
+        color: #222;
+        text-align: center;
+      }
+
+      .circle:after {
+        display: block;
+        padding-bottom: 100%;
+        width: 100%;
+        height: 0;
+        border-radius: 50%;
+        background-color: #ddd;
+        content: "";
+      }
+
+
+      .circle__inner {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        height: 100%;
+
+      }
+
+      .circle__wrapper {
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+
+      .circle__content {
+        display: table-cell;
+        /*padding: 1em;*/
+        color: white;
+        font-size: 2em;
+        vertical-align: middle;
+      }
+
+      @media (min-width: 480px) {
+          .circle__content {
+            font-size: 3em;
+        }
+      }
+
+      @media (min-width: 576px) {
+          .circle__content {
+            font-size: 2em;
+        }
+      }
+
+      @media (min-width: 768px) {
+          .circle__content {
+            font-size: 2.5em;
+        }
+      }
+
+      .bright:after {
+        background-color: #FF595E;
+      }
+
+      .purple:after{
+        background-color: #33032F;
+      }
+
+      .light:after{
+        background-color: #87BCDE;
+      }
+
+      .dark:after{
+        background-color: #313E50;
+      }
+
+      a {
+        color: #313E50;
+        cursor: pointer;
+      }
+
+      a:hover {
+        color: #87BCDE;
+      }
+
+      .nav-link.active {
+        background-color: #FF595E !important;
+      }
+
+    </style>
+
+    <!-- D3 style stuff -->
+    <style>
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .dot {
+      stroke: #313E50;
+    }
+
+    .tooltip {
+      position: absolute;
+      width: 200px;
+      height: 28px;
+      pointer-events: none;
+    }
+
+    .main {
+      display: table;
+      margin: 0 auto;
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+
+    </style>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-blue">
+      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand" src="https://cdn.rawgit.com/Shotgunosine/medulina_icon/b26e8ab5/icon_white.png" width="25px">
+      </a>
+    </nav>
+
+    <div class="main">
+    <section class="row text-center placeholders" >
+      <div class="col-6 col-sm-3 placeholder">
+
+        <div class="circle light">
+          <div class="circle__inner">
+            <div class="circle__wrapper">
+              <div class="circle__content">Brie</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <h4 ># Exams</h4>
+        <div class="text-muted">Number of exams uploaded</div>
+
+
+
+
+      </div>
+      <div class="col-6 col-sm-3 placeholder">
+        <div class="circle purple">
+          <div class="circle__inner">
+            <div class="circle__wrapper">
+              <div class="circle__content">Camembert</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class=""># Players</h4>
+        <span class="text-muted ">How many people are playing?</span>
+      </div>
+      <div class="col-6 col-sm-3 placeholder">
+        <div class="circle bright">
+          <div class="circle__inner">
+            <div class="circle__wrapper">
+              <div class="circle__content">Manchego</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <h4 class="">Total Score</h4>
+        <span class="text-muted">Average of all player scores</span>
+      </div>
+      <div class="col-6 col-sm-3 placeholder">
+        <div class="circle dark">
+          <div class="circle__inner">
+            <div class="circle__wrapper">
+              <div class="circle__content">Goat</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <h4 class="">% Analyzed</h4>
+        <span class="text-muted">Percent of cases adequately segmented</span>
+      </div>
+
+    </section>
+
+      <form class="form-control" action = "/uploader" method = "POST"
+        enctype = "multipart/form-data">
+        1) Select nifti image file
+        <input class="form-control" type = "file" name = "image_file" />
+        <br>
+
+        2) Select nifti mask file ("ground truth")
+        <input class="form-control" type = "file" name = "mask_file" />
+        <br>
+        3) Select slice orientation
+        <div class="form-inline">
+
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "ax" checked> Axial
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "cor"> Coronal
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "sag"> Sagittal
+          </label>
+        </div>
+
+        </div>
+        <br>
+        4) Pick a name for your task
+        <input class="form-control" type = "text" name = "task_type" value = "sillyname.oops">
+        <br>
+        5) Select minimum # voxels to visualize
+        <input class="form-control" type = "number" name = "min_Nvox" min = 1 max = 1000 value = 100>
+        <br>
+        <button class="btn btn-primary form-control" type = "submit"/>Submit </button>
       </form>
+    </div>
+    </body>
 
-   </body>
 </html>

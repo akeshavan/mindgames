@@ -149,6 +149,8 @@ do_save = function(score, edits){
   console.log("settings are", settings)
   settings["error"] = function(e){
     alert("there has been an error", e, "settings were", settings)
+    console.log("there has been an error", e, "settings were", settings)
+
     stopProgress()
     window.appMode = "error"
     show_save({"accuracy": "Err"})
