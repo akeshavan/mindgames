@@ -16,6 +16,8 @@ def upload_file():
 def upload_function():
    if request.method == 'POST':
       upload_putpath = 'uploaded_files/'
+      if not os.path.exists(upload_putpath):
+          os.makedirs(upload_putpath)
       json_path = os.path.join(upload_putpath, 'myuploads.json')
 
       if os.path.exists(json_path):
@@ -63,5 +65,5 @@ if __name__ == '__main__':
    #if not os.path.exists(app.config['UPLOAD_FOLDER']):
    #    os.makedirs(app.config['UPLOAD_FOLDER'])
 
-   app.run(debug = True, port=7000)
+   app.run(port=7000)
    print("running now")

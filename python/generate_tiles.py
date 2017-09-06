@@ -8,6 +8,7 @@ import numpy as np
 from matplotlib.pyplot import *
 import matplotlib.pyplot as plt
 import hashlib
+from nipype.utils.filemanip import load_json
 
 def make_mask_dict(tile_data):
     tile_dict = {}
