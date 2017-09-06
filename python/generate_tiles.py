@@ -71,7 +71,8 @@ def create_image(image, mask, output_file, size=1):
     mask_arr = np.zeros((image_data.shape[0], image_data.shape[1]))
     for ikey, vald in mask_data.items():
         for jkey, val in vald.items():
-            mask_arr[jkey, ikey] = val
+            print("ikeyjkey", ikey, jkey, type(ikey), type(jkey))
+            mask_arr[int(jkey), int(ikey)] = val
 
     mask_arr[mask_arr==0] = np.nan
 
