@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from werkzeug import secure_filename
-from generate_tiles import create_tiles
 import os
 from generate_tiles import create_tiles, save_json_pretty
 from nipype.utils.filemanip import load_json
@@ -53,7 +52,7 @@ def upload_function():
           myuploads[task_type] = ['fname_image']
 
       save_json_pretty(os.path.join(upload_putpath,'myuploads.json'), myuploads)
-      create_tiles(image_savepath, mask_savepath, slice_direction, 'tile_files/', int(min_Nvox), 1, False, None)
+      create_tiles(image_savepath, mask_savepath, slice_direction, os.path.join('tile_files', ptid, slice_direction), int(min_Nvox), 1, False, None)
 
       if len(fname_image) > 0 and len(fname_mask) >0:
           return 'file uploaded successfully'
