@@ -66,7 +66,7 @@ function getUserInfo(user_token, callback){
 var auth_url = {
   "medulina.com": "http://api.medulina.com/api/authenticate/github/",
   "localhost:8000": "http://api.medulina.com/api/authenticate/githublocal/",
-  "medulinatest": "http://api.medulina.com/api/authenticate/githubtest/"
+  "medulinatest": "http://testapi.medulina.com/api/authenticate/githubtest/"
 }
 
 function Login(callback) {
