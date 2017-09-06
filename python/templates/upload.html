@@ -183,12 +183,29 @@
       pointer-events: none;
     }
 
+    .main {
+      display: table;
+      margin: 0 auto;
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+
     </style>
 
   </head>
 
   <body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-blue">
+      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand" src="https://cdn.rawgit.com/Shotgunosine/medulina_icon/b26e8ab5/icon_white.png" width="25px">
+      </a>
+    </nav>
 
+    <div class="main">
     <section class="row text-center placeholders" >
       <div class="col-6 col-sm-3 placeholder">
 
@@ -218,7 +235,7 @@
           </div>
         </div>
 
-        <h4 class=""># Minions</h4>
+        <h4 class=""># Players</h4>
         <span class="text-muted ">How many people are playing?</span>
       </div>
       <div class="col-6 col-sm-3 placeholder">
@@ -233,7 +250,7 @@
 
 
         <h4 class="">Total Score</h4>
-        <span class="text-muted">Average of all minion scores</span>
+        <span class="text-muted">Average of all player scores</span>
       </div>
       <div class="col-6 col-sm-3 placeholder">
         <div class="circle dark">
@@ -252,28 +269,45 @@
 
     </section>
 
-      <form action = "http://localhost:5000/uploader" method = "POST"
+      <form class="form-control" action = "/uploader" method = "POST"
         enctype = "multipart/form-data">
         1) Select nifti image file
-        <input type = "file" name = "image_file" />
+        <input class="form-control" type = "file" name = "image_file" />
         <br>
+
         2) Select nifti mask file ("ground truth")
-        <input type = "file" name = "mask_file" />
+        <input class="form-control" type = "file" name = "mask_file" />
         <br>
         3) Select slice orientation
-        <input type = "radio" name = "slice_direction" value = "ax" checked> Axial
-        <input type = "radio" name = "slice_direction" value = "cor"> Coronal
-        <input type = "radio" name = "slice_direction" value = "sag"> Sagittal
+        <div class="form-inline">
+
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "ax" checked> Axial
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "cor"> Coronal
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name = "slice_direction" value = "sag"> Sagittal
+          </label>
+        </div>
+
+        </div>
         <br>
         4) Pick a name for your task
-        <input type = "text" name = "task_type" value = "sillyname.oops">
+        <input class="form-control" type = "text" name = "task_type" value = "sillyname.oops">
         <br>
         5) Select minimum # voxels to visualize
-        <input type = "number" name = "min_Nvox" min = 1 max = 1000 value = 100>
+        <input class="form-control" type = "number" name = "min_Nvox" min = 1 max = 1000 value = 100>
         <br>
-        <input type = "submit"/>
+        <button class="btn btn-primary form-control" type = "submit"/>Submit </button>
       </form>
-
+    </div>
     </body>
 
 </html>
