@@ -14,7 +14,7 @@ if (window.location.href.indexOf("testmedulina") >= 0){
   config = {
     mask_url: 'http://testapi.medulina.com/api/v1/mask',
     image_url: 'http://testapi.medulina.com/api/v1/image/',
-    player_url: 'http://testapi.medulina.com/api/v1/user/',
+    player_url: 'http://testapi.medulina.com/api/v1/user',
     edit_url: 'http://testapi.medulina.com/api/v1/mask',
     use_random: false,
     task: "tumor001_fixed", //"hipp", //"ms_lesion_t2",
