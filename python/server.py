@@ -52,7 +52,9 @@ def upload_function():
           myuploads[task_type] = ['fname_image']
 
       save_json_pretty(os.path.join(upload_putpath,'myuploads.json'), myuploads)
-      create_tiles(image_savepath, mask_savepath, slice_direction, os.path.join('tile_files', ptid, slice_direction), int(min_Nvox), 1, False, None)
+      create_tiles(image_savepath, mask_savepath, slice_direction,
+                   os.path.join('tile_files', ptid, slice_direction),
+                   int(min_Nvox), 1, False, None)
 
       if len(fname_image) > 0 and len(fname_mask) >0:
           return 'file uploaded successfully'
