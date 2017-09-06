@@ -21,10 +21,8 @@ def upload_function():
 
       if os.path.exists(json_path):
           myuploads = load_json(json_path)
-          my_tasks = list(myuploads.keys())
       else:
           myuploads = {}
-          my_tasks = []
 
       f_image = request.files['image_file']
       f_mask = request.files['mask_file']
@@ -32,29 +30,29 @@ def upload_function():
       task_type = request.form['task_type']
       min_Nvox = request.form['min_Nvox']
       ptid = request.form['patient_id']
-      print(slice_direction, task_type, min_Nvox)
-      print("hello!!!")
-      #fname_image, ext_image = os.path.splitext(secure_filename(f_image.filename))
-      #fname_mask, ext_mask = os.path.splitext(secure_filename(f_mask.filename))
+
       fname_image = os.path.basename(secure_filename(f_image.filename))
       fname_mask = os.path.basename(secure_filename(f_mask.filename))
 
+      #Make the json entry
+      myuploads[ptid] = {'mask_filename':secure_filename(f_mask.filename), \
+      'image_filename':secure_filename(f_image.filename), \
+      'Nvox_threshold':min_Nvox, 'task_type':task_type, \
+      'slice_direction':slice_direction}
+
+      #Save images in upload directory
       image_savepath = upload_putpath+ptid+'_image_'+fname_image
       mask_savepath = upload_putpath+ptid+'_mask_'+fname_mask
-
       f_image.save(image_savepath)
       f_mask.save(mask_savepath)
 
-
-      if task_type in my_tasks:
-          myuploads[task_type].append(fname_image)
-      else:
-          myuploads[task_type] = ['fname_image']
-
       save_json_pretty(os.path.join(upload_putpath,'myuploads.json'), myuploads)
+
+      #create tiles from the nifti image and save in tile directory
       create_tiles(image_savepath, mask_savepath, slice_direction,
                    os.path.join('tile_files', ptid, slice_direction),
                    int(min_Nvox), 1, False, None)
+
 
       if len(fname_image) > 0 and len(fname_mask) >0:
           return 'file uploaded successfully'
