@@ -10,6 +10,7 @@ config = {
 }
 
 if (window.location.href.indexOf("testmedulina") >= 0){
+  console.log("USING TEST CONFIG")
   config = {
     mask_url: 'http://testapi.medulina.com/api/v1/mask',
     image_url: 'http://testapi.medulina.com/api/v1/image/',
