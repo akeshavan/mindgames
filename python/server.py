@@ -30,7 +30,7 @@ def upload_function():
           return 'file uploaded successfully'
       else:
           return "UHOH: please upload a valid file"
-      generate_tiles
+      #generate_tiles
 
 if __name__ == '__main__':
    #app.config['UPLOAD_FOLDER'] = "uploads/"
