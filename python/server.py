@@ -8,7 +8,7 @@ from nipype.utils.filemanip import load_json
 app = Flask(__name__)
 # Got from https://www.tutorialspoint.com/flask/flask_file_uploading.htm
 
-@app.route('/upload')
+@app.route('/')
 def upload_file():
    return render_template('upload.html')
 
@@ -63,4 +63,5 @@ if __name__ == '__main__':
    #if not os.path.exists(app.config['UPLOAD_FOLDER']):
    #    os.makedirs(app.config['UPLOAD_FOLDER'])
 
-   app.run(debug = True)
+   app.run(debug = True, port=7000)
+   print("running now")

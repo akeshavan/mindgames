@@ -62,6 +62,30 @@ def mplfig(data, outfile):
     fig.savefig(outfile, dpi=data.shape[0])
     plt.close()
 
+def create_image(image, mask, output_file, size=1):
+    mask_data = load_json(mask)
+    image_data = plt.imread(image)
+
+    mask_arr = np.zeros((image_data.shape[0], image_data.shape[1]))
+
+    for ikey, vald in mask_data.items():
+        for jkey, val in vald.items():
+            mask_arr[jkey, ikey] = val
+
+    mask_arr[mask_arr==0] = np.nan
+
+    fig = plt.figure(frameon=False)
+    fig.set_size_inches(float(image_data.shape[1])/image_data.shape[0]*size, 1*size)
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+
+    ax.imshow(image_data)
+    ax.imshow(mask_arr, cmap=plt.cm.autumn_r, alpha=0.5)
+
+    plt.savefig(output_file)
+    return output_file
+
 def create_tiles(base_file, mask_file, slice_direction, outdir,
                  vox_thresh=100, use_mpl=True, name_by_hash=True,
                  custom_fov = None):
@@ -140,6 +164,7 @@ def create_tiles(base_file, mask_file, slice_direction, outdir,
                 manifest["slices"][slice_num]["fov"] = fov.__repr__()
 
             print("wrote", out_base_filename, out_mask_filename)
+            create_image(out_base_filename, out_mask_filename, out_base_filename.replace(".jpg", ".png"))
 
 
 
