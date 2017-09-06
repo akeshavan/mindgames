@@ -1,10 +1,4 @@
 config = {
-  image_url: 'http://54.211.41.50/api/v1/image?max_results=1&page=', //'https://glacial-garden-24920.herokuapp.com/image?where=task==ms_lesion_t2&max_results=1&page=',
-  edit_url: 'https://glacial-garden-24920.herokuapp.com/edits',
-  player_url: 'https://glacial-garden-24920.herokuapp.com/player'
-}
-
-config = {
   mask_url: 'http://api.medulina.com/api/v1/mask',
   image_url: 'http://api.medulina.com/api/v1/image/',
   player_url: 'http://api.medulina.com/api/v1/user/',
@@ -14,6 +8,20 @@ config = {
   num: 15,
   total_num_images: 50,
 }
+
+if (window.location.href.indexOf("testmedulina") >= 0){
+  config = {
+    mask_url: 'http://testapi.medulina.com/api/v1/mask',
+    image_url: 'http://testapi.medulina.com/api/v1/image/',
+    player_url: 'http://testapi.medulina.com/api/v1/user/',
+    edit_url: 'http://testapi.medulina.com/api/v1/mask',
+    use_random: false,
+    task: "tumor001_fixed", //"hipp", //"ms_lesion_t2",
+    num: 15,
+    total_num_images: 50,
+  }
+}
+
 
 $.ajaxSetup({ cache: false });
 

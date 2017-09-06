@@ -66,6 +66,7 @@ function getUserInfo(user_token, callback){
 var auth_url = {
   "medulina.com": "http://api.medulina.com/api/authenticate/github/",
   "localhost:8000": "http://api.medulina.com/api/authenticate/githublocal/"
+  "medulinatest": "http://api.medulina.com/api/authenticate/githubtest/"
 }
 
 function Login(callback) {
@@ -89,8 +90,17 @@ Starts the whole process
     try {
       startProgress();
       var code = window.location.href.match(/\?code=(.*)/)[1];
-      console.log("auth url is", auth_url[window.location.host]+ code)
-      $.getJSON(auth_url[window.location.host]+ code, function (data) {
+
+
+      var oauth_url = auth_url[window.location.host];
+      if (window.location.href.indexOf("testmedulina") >= 0){
+        oauth_url = auth_url["medulinatest"]
+      }
+
+      console.log("auth url is", oauth_url+ code)
+
+
+      $.getJSON(oauth_url + code, function (data) {
         console.log('data token is', data.token);
         getUserInfo(data.token, function (profile) {
           console.log("", profile);
