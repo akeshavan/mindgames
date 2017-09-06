@@ -21,9 +21,10 @@ def upload_poo():
       f_image.save('uploaded_files/'+fname_image+'_image'+ext_image)
       f_mask.save('uploaded_files/'+fname_mask+'_mask'+ext_mask)
 
-      #slice_direction = request.files['slice_direction']
-      #task_type = request.files['task_type']
-      #min_Nvox = request.files['min_Nvox']
+      slice_direction = request.form['slice_direction']
+      task_type = request.form['task_type']
+      min_Nvox = request.form['min_Nvox']
+      print(slice_direction, task_type, min_Nvox)
       return 'file uploaded successfully'
 
 if __name__ == '__main__':

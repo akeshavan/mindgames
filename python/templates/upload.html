@@ -14,13 +14,11 @@
          <input type = "radio" name = "slice_direction" value = "Coronal"> Coronal
          <input type = "radio" name = "slice_direction" value = "Sagittal"> Sagittal
          <br>
-         4) Select type of task
-         <input type = "radio" name = "task_type" value = "Tumor" checked> Tumor
-         <input type = "radio" name = "task_type" value = "Stroke"> Stroke
-         <input type = "radio" name = "task_type" value = "T1_anat"> T1 Anatomy
+         4) Pick a name for your task
+         <input type = "text" name = "task_type" value = "Pick a name">
          <br>
          5) Select minimum # voxels to visualize
-         <input type = "number" name = "min_Nvox" min = 1 max = 1000 value = 5>
+         <input type = "number" name = "min_Nvox" min = 1 max = 1000 value = 100>
          <br>
          <input type = "submit"/>
       </form>
