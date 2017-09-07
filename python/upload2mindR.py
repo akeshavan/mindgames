@@ -49,11 +49,11 @@ def upload_to_mindR(imgPath, task, subject, username, password):
     print(img_dat)
     print(type(img_dat["shape"]))
     with open(str(i),'rb') as img:
-        context_pic = '/Users/akeshavan/Dropbox/software/mindgames/python/outputs/context/slice%03d.jpg' % int(img_dat["slice"])
-        print(context_pic)
-        with open(context_pic, 'rb') as c:
-            print(img_dat.keys())
-            r = requests.post(url+'image',files={'pic':img, 'context':c},
+        #context_pic = '/Users/akeshavan/Dropbox/software/mindgames/python/outputs/context/slice%03d.jpg' % int(img_dat["slice"])
+        #print(context_pic)
+        #with open(context_pic, 'rb') as c:
+        #    print(img_dat.keys())
+        r = requests.post(url+'image',files={'pic':img}, #'context':c},
             data=img_dat, headers={'Authorization':api_token})
 
     m = i.with_suffix('.json')
@@ -77,6 +77,7 @@ def upload_to_mindR(imgPath, task, subject, username, password):
                 headers={'Authorization':api_token},
                 #auth=(username, password)
                 )
+            
             print(rm.request.headers, rm.text)
             return rm
 

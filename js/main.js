@@ -16,6 +16,17 @@ window.onresize = function () {
   base.fitBounds(view.bounds);
   roi.fitBounds(view.bounds);
   window.zoomFactor = 1;
+
+  try {
+    fp.fitBounds(view.bounds)
+    tp.fitBounds(view.bounds)
+    fn.fitBounds(view.bounds)
+  } catch (e) {
+
+  } finally {
+
+  }
+
 };
 
 /*$( window ).resize(function() {
@@ -87,6 +98,7 @@ add_tp = function(tp_data){
   tp.position = view.center
   tp.initPixelLog()
   tp.fillPixelLog(tp_data, draw.LUT)
+
 }
 
 add_fp = function(data){
@@ -98,6 +110,7 @@ add_fp = function(data){
   fp.initPixelLog()
   var LUT = {0: draw.LUT[0], 1: "blue"}
   fp.fillPixelLog(data, LUT)
+
 }
 
 add_fn = function(data){
@@ -109,6 +122,7 @@ add_fn = function(data){
   fn.initPixelLog()
   var LUT = {0: draw.LUT[0], 1: "red"}
   fn.fillPixelLog(data, LUT)
+
 }
 
 Raster.prototype.getNonZeroPixels = function(){

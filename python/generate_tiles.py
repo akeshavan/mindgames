@@ -64,10 +64,10 @@ def mplfig(data, outfile):
     plt.close()
 
 def create_image(image, mask, output_file, size=1):
-    print("starting creating image")
+
     mask_data = load_json(mask)
     image_data = plt.imread(image)
-    print("imgae data shape is", image_data.shape)
+
     mask_arr = np.zeros((image_data.shape[0], image_data.shape[1]))
     for ikey, vald in mask_data.items():
         for jkey, val in vald.items():
@@ -85,6 +85,7 @@ def create_image(image, mask, output_file, size=1):
     ax.imshow(mask_arr, cmap=plt.cm.autumn_r, alpha=0.5)
 
     plt.savefig(output_file)
+    plt.close('all')
     return output_file
 
 def create_tiles(base_file, mask_file, slice_direction, outdir,

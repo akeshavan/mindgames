@@ -101,11 +101,11 @@ show_save = function(score){
   $("#titlebar").html(message)
   //var output = Mustache.render('<h4> accuracy: {{acc}}, points: {{xp}} <button class="btn btn-success btn-xsmall" onclick="get_next()">Next</button> </h4>', score)
   //$("#submit_button").html("Next")
-
+  */
   if (window.mode == "error"){
     app.score.points = "error"
     app.score.dice = "error"
-  } */
+  }
   app.status = "Next"
 
   console.log("setting click to get_next")
