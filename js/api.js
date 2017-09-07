@@ -10,7 +10,7 @@ config = {
   title: "Stroke"
 }
 
-if (window.location.href.indexOf("testmedulina") >= 0){
+if (window.location.host == "test.medulina.com"){
   console.log("USING TEST CONFIG")
   config = {
     mask_url: 'http://testapi.medulina.com/api/v1/mask',

@@ -285,14 +285,11 @@ Vue.component('modal', {
 var auth_id = {
   "medulina.com": "d0dee0089411bc5134ae",
   "localhost:8000": "f586bf4498f82125fc48",
-  "medulinatest": "7a33c7349ef2968b7480"
+  "test.medulina.com": "7a33c7349ef2968b7480"
 }
 
 function get_oauth_id(){
   var oauth_id = auth_id[window.location.host];
-  if (window.location.href.indexOf("testmedulina") >= 0){
-    oauth_id = auth_id["medulinatest"]
-  }
   return oauth_id
 }
 
