@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, current_app
 from werkzeug import secure_filename
 import os
 from generate_tiles import create_tiles, save_json_pretty
@@ -9,7 +9,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def upload_file():
-   return render_template('upload.html')
+   #return render_template('upload.html')
+   return current_app.send_static_file('upload.html')
 
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_function():
@@ -35,14 +36,14 @@ def upload_function():
       fname_mask = os.path.basename(secure_filename(f_mask.filename))
 
       #Make the json entry
-      myuploads[ptid] = {'mask_filename':secure_filename(f_mask.filename), \
+      myuploads['_'.join([task_type,ptid])] = {'patient_id':ptid,'mask_filename':secure_filename(f_mask.filename), \
       'image_filename':secure_filename(f_image.filename), \
       'Nvox_threshold':min_Nvox, 'task_type':task_type, \
       'slice_direction':slice_direction}
 
       #Save images in upload directory
-      image_savepath = upload_putpath+ptid+'_image_'+fname_image
-      mask_savepath = upload_putpath+ptid+'_mask_'+fname_mask
+      image_savepath = upload_putpath+ptid+'_image.nii.gz'
+      mask_savepath = upload_putpath+ptid+'_mask.nii.gz'
       f_image.save(image_savepath)
       f_mask.save(mask_savepath)
 
@@ -55,7 +56,7 @@ def upload_function():
 
 
       if len(fname_image) > 0 and len(fname_mask) >0:
-          return 'file uploaded successfully'
+          return 'file uploaded'
       else:
           return "UHOH: please upload a valid file"
 
