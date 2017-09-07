@@ -10,10 +10,12 @@ config = {
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: false,
-  task: "tumor001_fixed", //"hipp", //"ms_lesion_t2",
+  task: "atlas_lesions", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
 }
+
+paper.install(window)
 
 $.ajaxSetup({ cache: false });
 
@@ -120,7 +122,7 @@ do_save = function(score, edits){
     'pic': edits,
     'mode': 'try',
     'task': config.task,
-    'score': score.accuracy,
+    //'score': score.accuracy,
     'user_id': app.login.id, //score['name']
     'user_agent': navigator.userAgent,
     'resolution': [window.innerWidth, window.innerHeight]
@@ -136,7 +138,7 @@ do_save = function(score, edits){
   }*/
   //settings.headers['username'] = app.login.id
   //settings.headers['password'] = store.get("user_token")
-  //settings.url = "http://" + app.login.id + ":" + store.get("user_token") + "@" + settings.url.replace("http://", "")
+  //settings.url = "://" + app.login.id + ":" + store.get("user_token") + "@" + settings.url.replace("http://", "")
   console.log("settings are", settings)
   settings["error"] = function(e){
     alert("there has been an error", e, "settings were", settings)
@@ -150,6 +152,15 @@ do_save = function(score, edits){
   $.ajax(settings).done(function(response){
     show_save(score)
     console.log("response is", response)
+    window.response = response;
+
+    roi.clear()
+    //true positives
+    add_tp(response.tp)
+    add_fp(response.fp)
+    add_fn(response.fn)
+
+
     var profile = store.get('user_token');
     getUserInfo(profile, function(){
       stopProgress()
@@ -196,6 +207,9 @@ get_next = function(){
     roi.clear()
     draw.history = [[]]
     window.zoomFactor = 1
+    tp.clear()
+    fp.clear()
+    fn.clear()
     view.setZoom(1);
     window.panFactor = {x:0, y:0}
 

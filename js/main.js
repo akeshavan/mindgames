@@ -60,7 +60,7 @@ var initializeBaseRaster = function (raster) {
 
 
 
-var initialize_roi_raster = function(base_raster, roi_raster, alpha){
+initialize_roi_raster = function(base_raster, roi_raster, alpha){
   /*
     Initialize the roi image so that its the same size and position of the
     base image, and also set the opacity to alpha (0.25 by default)
@@ -77,6 +77,38 @@ var initialize_roi_raster = function(base_raster, roi_raster, alpha){
     allRasters[1] = roi_raster
   }
 
+}
+
+add_tp = function(tp_data){
+  tp = new Raster({})
+  tp.setSize(base.size)
+  tp.fitBounds(view.bounds)
+  tp.opacity = 0.5
+  tp.position = view.center
+  tp.initPixelLog()
+  tp.fillPixelLog(tp_data, draw.LUT)
+}
+
+add_fp = function(data){
+  fp = new Raster({})
+  fp.setSize(base.size)
+  fp.fitBounds(view.bounds)
+  fp.opacity = 0.5
+  fp.position = view.center
+  fp.initPixelLog()
+  var LUT = {0: draw.LUT[0], 1: "blue"}
+  fp.fillPixelLog(data, LUT)
+}
+
+add_fn = function(data){
+  fn = new Raster({})
+  fn.setSize(base.size)
+  fn.fitBounds(view.bounds)
+  fn.opacity = 0.5
+  fn.position = view.center
+  fn.initPixelLog()
+  var LUT = {0: draw.LUT[0], 1: "red"}
+  fn.fillPixelLog(data, LUT)
 }
 
 Raster.prototype.getNonZeroPixels = function(){
@@ -915,6 +947,7 @@ function start(base_url){
     //DEBUG: Set some global variables
     window.base = base
     window.roi = roi
+    console.log("view is", view)
     window.view = view
     doBrightCont()
     //("#currentTool").html(window.mode)

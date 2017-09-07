@@ -87,7 +87,7 @@ show_eval = function(){
 
 show_save = function(score){
 
-  score["acc"] = score["accuracy"].toString()
+  /*score["acc"] = score["accuracy"].toString()
   score["acc"] = score["acc"].slice(0,4)
   var snackbarContainer = document.querySelector('#demo-toast-example');
   var message = ""
@@ -105,7 +105,7 @@ show_save = function(score){
   if (window.mode == "error"){
     app.score.points = "error"
     app.score.dice = "error"
-  } 
+  } */
   app.status = "Next"
 
   console.log("setting click to get_next")
