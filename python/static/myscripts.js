@@ -1,5 +1,5 @@
 // register the grid component
-
+console.log("grid ocmponent")
 Vue.component('demo-grid', {
   template: '#grid-template',
   props: {

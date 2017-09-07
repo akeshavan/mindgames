@@ -13,9 +13,7 @@
     <!-- Bootstrap core CSS -->
     <link href="static/bootstrap.min.css" rel="stylesheet">
 
-    <!-- link to javascript for table -->
-    <script src="static/vue.min.js"></script>
-    <script src="static/myscripts.js" type="text/javascript"></script>
+
 
     <!-- Custom styles for this template -->
     <link href="static/dashboard.css" rel="stylesheet">
@@ -380,13 +378,25 @@
         <br>
         <button class="btn btn-primary form-control" type = "submit"/>Submit </button>
       </form>
+
+      <div id="demo">
+        <form id="search">
+          Search <input name="query" v-model="searchQuery">
+        </form>
+        <demo-grid
+          :data="gridData"
+          :columns="gridColumns"
+          :filter-key="searchQuery">
+        </demo-grid>
+      </div>
+
     </div>
 
 <!-- let's try a table -->
 <!-- https://vuejs.org/v2/examples/grid-component.html-->
 <!-- component template -->
     <script type="text/x-template" id="grid-template">
-      document.write(
+
       <table>
         <thead>
           <tr>
@@ -406,20 +416,15 @@
             </td>
           </tr>
         </tbody>
-      </table>)
+      </table>
     </script>
 
         <!-- demo root element -->
-    <div id="demo">
-      <form id="search">
-        Search <input name="query" v-model="searchQuery">
-      </form>
-      <demo-grid
-        :data="gridData"
-        :columns="gridColumns"
-        :filter-key="searchQuery">
-      </demo-grid>
-    </div>
+
+
+    <!-- link to javascript for table -->
+    <script src="static/vue.min.js"></script>
+    <script src="static/myscripts.js" type="text/javascript"></script>
 
     </body>
 
