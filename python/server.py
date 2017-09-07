@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from werkzeug import secure_filename
-from generate_tiles import create_tiles
 import os
 from generate_tiles import create_tiles, save_json_pretty
 from nipype.utils.filemanip import load_json
@@ -29,22 +28,23 @@ def upload_function():
 
       f_image = request.files['image_file']
       f_mask = request.files['mask_file']
+      slice_direction = request.form['slice_direction']
+      task_type = request.form['task_type']
+      min_Nvox = request.form['min_Nvox']
+      ptid = request.form['patient_id']
+      print(slice_direction, task_type, min_Nvox)
       print("hello!!!")
       #fname_image, ext_image = os.path.splitext(secure_filename(f_image.filename))
       #fname_mask, ext_mask = os.path.splitext(secure_filename(f_mask.filename))
       fname_image = os.path.basename(secure_filename(f_image.filename))
       fname_mask = os.path.basename(secure_filename(f_mask.filename))
 
-      image_savepath = upload_putpath+'image_'+fname_image
-      mask_savepath = upload_putpath+'mask_'+fname_mask
+      image_savepath = upload_putpath+ptid+'_image_'+fname_image
+      mask_savepath = upload_putpath+ptid+'_mask_'+fname_mask
 
       f_image.save(image_savepath)
       f_mask.save(mask_savepath)
 
-      slice_direction = request.form['slice_direction']
-      task_type = request.form['task_type']
-      min_Nvox = request.form['min_Nvox']
-      print(slice_direction, task_type, min_Nvox)
 
       if task_type in my_tasks:
           myuploads[task_type].append(fname_image)
@@ -52,7 +52,9 @@ def upload_function():
           myuploads[task_type] = ['fname_image']
 
       save_json_pretty(os.path.join(upload_putpath,'myuploads.json'), myuploads)
-      create_tiles(image_savepath, mask_savepath, slice_direction, 'tile_files/', int(min_Nvox), 1, False, None)
+      create_tiles(image_savepath, mask_savepath, slice_direction,
+                   os.path.join('tile_files', ptid, slice_direction),
+                   int(min_Nvox), 1, False, None)
 
       if len(fname_image) > 0 and len(fname_mask) >0:
           return 'file uploaded successfully'

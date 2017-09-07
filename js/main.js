@@ -16,6 +16,17 @@ window.onresize = function () {
   base.fitBounds(view.bounds);
   roi.fitBounds(view.bounds);
   window.zoomFactor = 1;
+
+  try {
+    fp.fitBounds(view.bounds)
+    tp.fitBounds(view.bounds)
+    fn.fitBounds(view.bounds)
+  } catch (e) {
+
+  } finally {
+
+  }
+
 };
 
 /*$( window ).resize(function() {
@@ -60,7 +71,7 @@ var initializeBaseRaster = function (raster) {
 
 
 
-var initialize_roi_raster = function(base_raster, roi_raster, alpha){
+initialize_roi_raster = function(base_raster, roi_raster, alpha){
   /*
     Initialize the roi image so that its the same size and position of the
     base image, and also set the opacity to alpha (0.25 by default)
@@ -76,6 +87,41 @@ var initialize_roi_raster = function(base_raster, roi_raster, alpha){
   else{
     allRasters[1] = roi_raster
   }
+
+}
+
+add_tp = function(tp_data){
+  tp = new Raster({})
+  tp.setSize(base.size)
+  tp.fitBounds(view.bounds)
+  tp.opacity = 0.5
+  tp.position = view.center
+  tp.initPixelLog()
+  tp.fillPixelLog(tp_data, draw.LUT)
+
+}
+
+add_fp = function(data){
+  fp = new Raster({})
+  fp.setSize(base.size)
+  fp.fitBounds(view.bounds)
+  fp.opacity = 0.5
+  fp.position = view.center
+  fp.initPixelLog()
+  var LUT = {0: draw.LUT[0], 1: "#87BCDE"}
+  fp.fillPixelLog(data, LUT)
+
+}
+
+add_fn = function(data){
+  fn = new Raster({})
+  fn.setSize(base.size)
+  fn.fitBounds(view.bounds)
+  fn.opacity = 0.5
+  fn.position = view.center
+  fn.initPixelLog()
+  var LUT = {0: draw.LUT[0], 1: "#FF595E" }
+  fn.fillPixelLog(data, LUT)
 
 }
 
@@ -736,6 +782,14 @@ doBrightCont = function(){
 
 hide = function(){
   allRasters[1].visible = !allRasters[1].visible
+  try {
+    tp.visible = ! tp.visible
+    fp.visible = ! fp.visible
+    fn.visible = ! fn.visible
+  }
+  catch (e) {
+
+  }
   /*if (allRasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
@@ -915,6 +969,7 @@ function start(base_url){
     //DEBUG: Set some global variables
     window.base = base
     window.roi = roi
+    console.log("view is", view)
     window.view = view
     doBrightCont()
     //("#currentTool").html(window.mode)
@@ -940,9 +995,12 @@ get_images = function(url, callback){
     config.total_num_images = data._meta.total;
     console.log("going to start")
 
-    var mask_url = get_mask_url(data._items[0])
-    console.log("mask url is", mask_url)
-    $.get(mask_url, function(data, status, jqXhr){
+    //var mask_url = get_mask_url(data._items[0])
+    //console.log("mask url is", mask_url)
+    callback(base_url)
+    window.appMode = "train"
+
+    /*$.get(mask_url, function(data, status, jqXhr){
       console.log("mask data is", data)
       if (data._items.length){
         var truth_data = data._items[0].pic
@@ -952,8 +1010,8 @@ get_images = function(url, callback){
       else{
         window.appMode = "test"
       }
-      callback(base_url)
-    })
+
+    })*/
   })
 }
 
