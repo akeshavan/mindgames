@@ -87,7 +87,7 @@
                     <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
 
-                    <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice}}
+                    <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice | | formatNumber}}
 
                   <i v-if="appMode=='test'">
                     Congrats, that was a new one!
@@ -212,9 +212,9 @@
 
         </div>
 
-        <div id="legend" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:45%; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
+        <div v-if="use_context" id="legend_context" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:45%; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
 
-          <img v-if="use_context" v-bind:src="context" width="100%">
+          <img  v-bind:src="context" width="100%">
 
         </div>
 
@@ -241,6 +241,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
   <script src="https://cdn.rawgit.com/HubSpot/shepherd/3bff2f1c/dist/js/shepherd.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
 
   <script src="js/tour.js"></script>
@@ -249,6 +250,11 @@
 
 
   <script>
+
+  Vue.filter("formatNumber", function (value) {
+    return numeral(value).format("0.0[0]"); // displaying other groupings/separators is possible, look at the docs
+  });
+
 
 Vue.component('modal', {
     template: `
@@ -316,7 +322,7 @@ var app =  new Vue({
         token: null
       },
       status: 'Submit',
-      instruction: 'Meningioma',
+      instruction: config.title,
       score: {
         dice: 0,
         points: 0,

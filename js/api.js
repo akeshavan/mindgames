@@ -13,6 +13,7 @@ config = {
   task: "atlas_lesions", //"hipp", //"ms_lesion_t2",
   num: 15,
   total_num_images: 50,
+  title: "Stroke"
 }
 
 
@@ -51,7 +52,7 @@ do_eval = function(){
   var profile = store.get('github_profile')
   var score = {'name': app.login.username, 'edit_data_id': data._id}
 
-  if (window.appMode == "train"){
+  /*if (window.appMode == "train"){
     var truth = window.truthData._items[0].pic
     var cscore_and_diff = roi.diff(truth)
     var cscore = cscore_and_diff[0]
@@ -63,7 +64,7 @@ do_eval = function(){
   } else {
     var diffvals = roi.pixelLog
     console.log("test: these are the vals", diffvals)
-  }
+  }*/
   var segmentation = roi.getNonZeroPixels()
   stopProgress()
   do_save(score, JSON.stringify(segmentation))
@@ -160,7 +161,7 @@ do_save = function(score, edits){
     add_fp(response.fp)
     add_fn(response.fn)
 
-    app.score.dice = response.score; 
+    app.score.dice = response.score;
 
 
     var profile = store.get('user_token');
@@ -206,7 +207,7 @@ get_next = function(){
   get_images(url, function(base_url){
     base.setSource('data:image/jpeg;base64,'+base_url)
 
-    roi.clear()
+    //roi.clear()
     draw.history = [[]]
     window.zoomFactor = 1
     tp.clear()

@@ -108,7 +108,7 @@ add_fp = function(data){
   fp.opacity = 0.5
   fp.position = view.center
   fp.initPixelLog()
-  var LUT = {0: draw.LUT[0], 1: "blue"}
+  var LUT = {0: draw.LUT[0], 1: "#87BCDE"}
   fp.fillPixelLog(data, LUT)
 
 }
@@ -120,7 +120,7 @@ add_fn = function(data){
   fn.opacity = 0.5
   fn.position = view.center
   fn.initPixelLog()
-  var LUT = {0: draw.LUT[0], 1: "red"}
+  var LUT = {0: draw.LUT[0], 1: "#FF595E" }
   fn.fillPixelLog(data, LUT)
 
 }
@@ -782,6 +782,14 @@ doBrightCont = function(){
 
 hide = function(){
   allRasters[1].visible = !allRasters[1].visible
+  try {
+    tp.visible = ! tp.visible
+    fp.visible = ! fp.visible
+    fn.visible = ! fn.visible
+  }
+  catch (e) {
+
+  }
   /*if (allRasters[1].visible){
     $("#show").show()
     $("#noshow").hide()
@@ -987,9 +995,12 @@ get_images = function(url, callback){
     config.total_num_images = data._meta.total;
     console.log("going to start")
 
-    var mask_url = get_mask_url(data._items[0])
-    console.log("mask url is", mask_url)
-    $.get(mask_url, function(data, status, jqXhr){
+    //var mask_url = get_mask_url(data._items[0])
+    //console.log("mask url is", mask_url)
+    callback(base_url)
+    window.appMode = "train"
+
+    /*$.get(mask_url, function(data, status, jqXhr){
       console.log("mask data is", data)
       if (data._items.length){
         var truth_data = data._items[0].pic
@@ -999,8 +1010,8 @@ get_images = function(url, callback){
       else{
         window.appMode = "test"
       }
-      callback(base_url)
-    })
+
+    })*/
   })
 }
 
