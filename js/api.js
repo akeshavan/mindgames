@@ -163,10 +163,10 @@ do_save = function(score, edits){
     window.response = response;
 
     roi.clear()
-    //true positives
     add_tp(response.tp)
     add_fp(response.fp)
     add_fn(response.fn)
+    roi.insertAbove(fn)
 
     app.score.dice = response.score;
 
@@ -214,7 +214,7 @@ get_next = function(){
   get_images(url, function(base_url){
     base.setSource('data:image/jpeg;base64,'+base_url)
 
-    //roi.clear()
+    roi.clear()
     draw.history = [[]]
     window.zoomFactor = 1
     tp.clear()

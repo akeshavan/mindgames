@@ -4,6 +4,8 @@
 
 var allRasters = [];
 window.allRasters = allRasters;
+allRastersDict = {}
+
 window.onresize = function () {
   /*
     When the window size changes, change the bounds of all rasters
@@ -93,35 +95,41 @@ initialize_roi_raster = function(base_raster, roi_raster, alpha){
 add_tp = function(tp_data){
   tp = new Raster({})
   tp.setSize(base.size)
-  tp.fitBounds(view.bounds)
-  tp.opacity = 0.5
   tp.position = view.center
+
+  tp.opacity = 0.5
   tp.initPixelLog()
   tp.fillPixelLog(tp_data, draw.LUT)
+  tp.fitBounds(base.bounds)
+  //tp.onMouseDrag = dragHandlerPan
 
 }
 
 add_fp = function(data){
   fp = new Raster({})
   fp.setSize(base.size)
-  fp.fitBounds(view.bounds)
+
   fp.opacity = 0.5
   fp.position = view.center
   fp.initPixelLog()
   var LUT = {0: draw.LUT[0], 1: "#87BCDE"}
   fp.fillPixelLog(data, LUT)
+  fp.fitBounds(base.bounds)
+  //fp.onMouseDrag = dragHandlerPan
 
 }
 
 add_fn = function(data){
   fn = new Raster({})
   fn.setSize(base.size)
-  fn.fitBounds(view.bounds)
+
   fn.opacity = 0.5
   fn.position = view.center
   fn.initPixelLog()
   var LUT = {0: draw.LUT[0], 1: "#FF595E" }
   fn.fillPixelLog(data, LUT)
+  fn.fitBounds(base.bounds)
+  //fn.onMouseDrag = dragHandler
 
 }
 
@@ -833,6 +841,21 @@ dragHandler = function(e){
     default:
       break
   }
+}
+
+dragHandlerPan = function(e){
+
+    /*
+      What to do when the user drags based on the window.mode
+    */
+
+    if (e.event.buttons == 2){
+      //right click and drag
+      doPan(e)
+      window.prevMode = "view"
+      return
+    }
+
 }
 
 clickHandler = function(e){
