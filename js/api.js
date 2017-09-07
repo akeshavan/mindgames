@@ -18,7 +18,7 @@ if (window.location.host == "test.medulina.com"){
     player_url: 'http://testapi.medulina.com/api/v1/user',
     edit_url: 'http://testapi.medulina.com/api/v1/mask',
     use_random: false,
-    task: "tumor001_fixed", //"hipp", //"ms_lesion_t2",
+    task: "atlas_lesions", //"hipp", //"ms_lesion_t2",
     num: 15,
     total_num_images: 50,
   }
