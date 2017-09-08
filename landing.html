@@ -218,7 +218,7 @@ backface-visibility: hidden;
   transition: .5s ease;
   opacity: 0;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%)
@@ -228,7 +228,7 @@ backface-visibility: hidden;
   transition: .5s ease;
   opacity: 0;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%)
@@ -238,7 +238,7 @@ backface-visibility: hidden;
   transition: .5s ease;
   opacity: 0;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%)
@@ -300,42 +300,41 @@ backface-visibility: hidden;
     <div class="container-fluid" id="main" v-cloak>
       <section class="jumbotron text-center">
         <div class="container">
-          <h1 class="jumbotron-heading">Medulina: A Game for Medical Image Segmentation</h1>
-          <p class="lead text-muted"> Put some words</p>
-          <p>
-            <a href="#" class="btn btn-primary">Main call to action</a>
-            <a href="#" class="btn btn-secondary">Secondary action</a>
-          </p>
+          <h1 class="jumbotron-heading">Medulina</h1>
+          <p class="lead text-muted"> Help us teach computers to read medical images</p>
         </div>
       </section>
 
       <div class="album text-muted">
       <div class="container">
-
         <div class="row">
           <div class="card card1">
             <img src="images/tumor_seg.png" alt="Tumor Image" class="image imageh">
             <div class="middle">
-              <button class="btn btn-primary"> Play Now </button>
+              <a href="http://tumor.medulina.com" class="btn btn-primary">Find Menigiomas</a>
             </div>
-            <p class="card-text"><a href="https://en.wikipedia.org/wiki/Meningioma">Menigiomas</a> are tumors that grow from the tissues that normally protect and surround the brain. You can help us teach computers how to find these tumors so that we can automate detection and better predict outcomes following surgery.
-            <br>
-            <br>
-            <b>These tumors stand out well from their surroundings and are a great place to start.</b></p>
+            <p class="card-text"><a href="https://en.wikipedia.org/wiki/Meningioma">Menigiomas</a> are tumors that grow from the brains covering. Help us teach computers to spot these tumors so we can automate detection and predict outcomes.</p>
+            <p>Menigiomas stand out from the surroundings and are <b>a great place to start.</b></p>
+
           </div>
           <div class="card card2">
             <img src="images/stroke_seg.png" alt="Stroke Image" class="image image1">
             <div class="middle2">
-              <button class="btn btn-primary"> Play Now </button>
+              <a href="http://stroke.medulina.com" class="btn btn-primary">Find Strokes</a>
             </div>
-            <p class="card-text"></p>
+            <p class="card-text"><a href="https://en.wikipedia.org/wiki/Stroke">Strokes</a> occur when the brain is damaged by lack of blood flow or by bleeding in the brain. Help us teach computers how to find damage caused by strokes.</p>
+            <p>The areas most damaged by a stroke are easy to spot, but finding the full extent of the damage <b>can be tricky.</b>
+            </p>
+
           </div>
           <div class="card card3">
             <img src="images/dg_seg.png" alt="Dentate Gyrus Image" class="image image2">
             <div class="middle3">
-              <button class="btn btn-primary"> Play Now </button>
+              <a href="http://dg.medulina.com" class="btn btn-primary">Find the Dentate Gyrus</a>
             </div>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text">The <a href="https://en.wikipedia.org/wiki/Dentate_gyrus"> dentate gyrus</a> is part of the hippocampus that helps form new memories. Help us spot its complex, curving structure so we can learn more about how it works.</p>
+            <p>The dentate gyrus is a band of darker tissue within the hippocampus that can be <b>quite challenging to spot.</b></p>
+
           </div>
 
           <!--<div class="card">
