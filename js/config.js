@@ -43,7 +43,7 @@ config = {
   task: task_dict[window.location.host],
   num: 15,
   total_num_images: 50,
-  title: title_dict[window.location.host]
+  title: title_dict[window.location.host],
   context: context_dict[window.location.host]
 }
 
