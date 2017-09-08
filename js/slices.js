@@ -210,7 +210,7 @@ paper.install(window)
 var app =  new Vue({
     el: '#main',
     data: {
-      task: task_dict[window.location.href],
+      task: task_dict[window.location.host],
       image_entries: [],
       next: null,
       current_image: {},

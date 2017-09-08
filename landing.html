@@ -181,6 +181,95 @@
     height: 28px;
     pointer-events: none;
     }
+
+    .image {
+      width: 100%;
+      background: black;
+    }
+
+  .imageh {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.image1 {
+opacity: 1;
+display: block;
+width: 100%;
+height: auto;
+transition: .5s ease;
+backface-visibility: hidden;
+}
+
+.image2 {
+opacity: 1;
+display: block;
+width: 100%;
+height: auto;
+transition: .5s ease;
+backface-visibility: hidden;
+}
+
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.middle2 {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.middle3 {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
+}
+
+.card1:hover .imageh {
+  opacity: 0.3;
+}
+
+.card2:hover .image1 {
+  opacity: 0.3;
+}
+
+.card3:hover .image2 {
+  opacity: 0.3;
+}
+
+.card1:hover .middle {
+  opacity: 1;
+}
+
+.card2:hover .middle2 {
+  opacity: 1;
+}
+
+.card3:hover .middle3 {
+  opacity: 1;
+}
+
+
+
     </style>
 
   </head>
@@ -224,19 +313,28 @@
       <div class="container">
 
         <div class="row">
-          <div class="card">
-            <img data-src="holder.js/100px280/thumb" alt="Card image cap">
+          <div class="card card1">
+            <img src="images/tumor_seg.png" alt="Tumor Image" class="image imageh">
+            <div class="middle">
+              <button class="btn btn-primary"> Play Now </button>
+            </div>
             <p class="card-text"><a href="https://en.wikipedia.org/wiki/Meningioma">Menigiomas</a> are tumors that grow from the tissues that normally protect and surround the brain. You can help us teach computers how to find these tumors so that we can automate detection and better predict outcomes following surgery.
             <br>
             <br>
             <b>These tumors stand out well from their surroundings and are a great place to start.</b></p>
           </div>
-          <div class="card">
-            <img data-src="holder.js/100px280/thumb" alt="Card image cap">
+          <div class="card card2">
+            <img src="images/stroke_seg.png" alt="Stroke Image" class="image image1">
+            <div class="middle2">
+              <button class="btn btn-primary"> Play Now </button>
+            </div>
             <p class="card-text"></p>
           </div>
-          <div class="card">
-            <img data-src="holder.js/100px280/thumb" alt="Card image cap">
+          <div class="card card3">
+            <img src="images/dg_seg.png" alt="Dentate Gyrus Image" class="image image2">
+            <div class="middle3">
+              <button class="btn btn-primary"> Play Now </button>
+            </div>
             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
           </div>
 
