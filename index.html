@@ -279,6 +279,7 @@
   </body>
   <!--<script src="https://unpkg.com/vue"></script>-->
   <script src="js/vue.min.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/store.everything.min.js"></script>
   <script src="js/mustache.min.js"></script>
   <script src="js/jquery.min.js"></script>
@@ -335,11 +336,7 @@ Vue.component('modal', {
   });
 
 
-var auth_id = {
-  "medulina.com": "d0dee0089411bc5134ae",
-  "localhost:8000": "f586bf4498f82125fc48",
-  "test.medulina.com": "7a33c7349ef2968b7480"
-}
+
 
 function get_oauth_id(){
   var oauth_id = auth_id[window.location.host];

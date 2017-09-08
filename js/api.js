@@ -1,28 +1,4 @@
-config = {
-  mask_url: 'http://api.medulina.com/api/v1/mask',
-  image_url: 'http://api.medulina.com/api/v1/image/',
-  player_url: 'http://api.medulina.com/api/v1/user/',
-  edit_url: 'http://api.medulina.com/api/v1/mask',
-  use_random: false,
-  task: "atlas_lesions", 
-  num: 15,
-  total_num_images: 50,
-  title: "Stroke"
-}
 
-if (window.location.host == "test.medulina.com"){
-  console.log("USING TEST CONFIG")
-  config = {
-    mask_url: 'http://testapi.medulina.com/api/v1/mask',
-    image_url: 'http://testapi.medulina.com/api/v1/image/',
-    player_url: 'http://testapi.medulina.com/api/v1/user',
-    edit_url: 'http://testapi.medulina.com/api/v1/mask',
-    use_random: false,
-    task: "atlas_lesions", 
-    num: 15,
-    total_num_images: 50,
-  }
-}
 
 
 $.ajaxSetup({ cache: false });
