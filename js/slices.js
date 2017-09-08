@@ -210,7 +210,7 @@ paper.install(window)
 var app =  new Vue({
     el: '#main',
     data: {
-      task: "tumor001_fixed",
+      task: "atlas_lesions",
       image_entries: [],
       next: null,
       current_image: {},
@@ -242,6 +242,8 @@ var app =  new Vue({
 
         a.remove("image_id")
         a.set("image_id", image._id)
+
+        r = url+'maskagg?aggregate={"$image_search":"' + image._id + '"}'
         //a.go()
         console.log("not refreshing?")
         window.history.pushState({path:a.url},'',a.url);
@@ -280,8 +282,20 @@ var app =  new Vue({
             console.log("averaging", ave_score, data._items.length)
             me.current_image_score = ave_score/data._items.length
 
+            $.get(r, function(agg){
+              console.log("agg is", agg)
+              var vote = agg.mask_sum
+              var max_vote = agg._items[0].nattempts
+
+              var LUT = {0:draw.LUT[0]}
+              for (i=1; i<max_vote+1; i++){
+                LUT[i] = d3.interpolateCool(i/max_vote)
+              }
+              roi2.fillPixelLog(vote, LUT);
+              
+            })
             /*collapse across user scores*/
-            me.current_image_tries.forEach(function(val, idx, arr){
+            /*me.current_image_tries.forEach(function(val, idx, arr){
               var roi_temp = new Raster({})
               initialize_roi_raster(base,roi_temp, 0)
               roi_temp.visible = false
@@ -309,13 +323,11 @@ var app =  new Vue({
                   }
                 }
               }
-            });
-            console.log("vote max is", max_vote, "vote is", vote)
-            var LUT = {0:draw.LUT[0]}
-            for (i=1; i<max_vote+1; i++){
-              LUT[i] = d3.interpolateCool(i/max_vote)
-            }
-            roi2.fillPixelLog(vote, LUT);
+            });*/
+
+
+
+
 
 
           });

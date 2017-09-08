@@ -6,9 +6,9 @@ var tour = new Shepherd.Tour({
 
 
 var tour_config = [
-  {
-    title: "Find the Dentate",
-    text: `Brain researchers need your help to identify the dentate gyrus:
+  /*{
+    title: "Segment the stroke lesions",
+    text: `Brain researchers need your help to identify stroke lesions:
     <br>
     <br>
     <img src="https://cdn.rawgit.com/medulina/context/f48d59e5/DentateGyrusSurface_black.png" width="200px;" class="mx-auto d-block" style="border-radius: 5px; border-style: solid; border-color:black;">
@@ -19,7 +19,7 @@ var tour_config = [
   },
 
   {
-    title: "Find the Dentate",
+    title: "Draw and fill",
     text: `On an MRI scan, it might look like:
     <br>
     <br>
@@ -64,7 +64,7 @@ var tour_config = [
     `,
     showCancelLink: true,
     attachTo: "legend right"
-  },
+  },*/
 
 ]
 
