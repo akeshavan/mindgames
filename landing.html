@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <title>Medulina Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+    <style>
+    [v-cloak] {
+        display: none;
+      }
+
+      .score {
+        position: relative;
+        top: -150px;
+        color: white;
+        font-size: 3em;
+      }
+
+      .scoreName {
+        position: relative;
+        top: -50px;
+      }
+
+      .scoreLabel {
+        position: relative;
+        top: -50px;
+      }
+
+      .user_avatar {
+        width: 45px;
+        height: 45px;
+      }
+
+      .bg-blue {
+        background-color: #313E50 !important;
+      }
+
+      #currentImg {
+        width: 100%;
+      }
+
+      /**
+       * Demo Styles
+       */
+
+
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+
+
+      /**
+       * Circle Styles
+       */
+
+      .circle {
+        position: relative;
+        display: block;
+        margin: 2em 0;
+        background-color: transparent;
+        color: #222;
+        text-align: center;
+      }
+
+      .circle:after {
+        display: block;
+        padding-bottom: 100%;
+        width: 100%;
+        height: 0;
+        border-radius: 50%;
+        background-color: #ddd;
+        content: "";
+      }
+
+
+      .circle__inner {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        height: 100%;
+
+      }
+
+      .circle__wrapper {
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+
+      .circle__content {
+        display: table-cell;
+        /*padding: 1em;*/
+        color: white;
+        font-size: 2em;
+        vertical-align: middle;
+      }
+
+      @media (min-width: 480px) {
+          .circle__content {
+            font-size: 3em;
+        }
+      }
+
+      @media (min-width: 576px) {
+          .circle__content {
+            font-size: 2em;
+        }
+      }
+
+      @media (min-width: 768px) {
+          .circle__content {
+            font-size: 2.5em;
+        }
+      }
+
+      .bright:after {
+        background-color: #FF595E;
+      }
+
+      .purple:after{
+        background-color: #33032F;
+      }
+
+      .light:after{
+        background-color: #87BCDE;
+      }
+
+      .dark:after{
+        background-color: #313E50;
+      }
+
+      a {
+        color: #313E50;
+        cursor: pointer;
+      }
+
+      a:hover {
+        color: #87BCDE;
+      }
+
+      .nav-link.active {
+        background-color: #FF595E !important;
+      }
+
+    </style>
+
+    <!-- D3 style stuff -->
+    <style>
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .dot {
+      stroke: #313E50;
+    }
+
+    .tooltip {
+      position: absolute;
+      width: 200px;
+      height: 28px;
+      pointer-events: none;
+    }
+
+    </style>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-blue">
+      <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand" src="https://cdn.rawgit.com/Shotgunosine/medulina_icon/b26e8ab5/icon_white.png" width="25px">
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Medulina <span class="sr-only">(current)</span></a>
+          </li>
+
+        </ul>
+        <!--<form class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+        </form>-->
+      </div>
+    </nav>
+
+    <div class="container-fluid" id="main" v-cloak>
+      <div class="row">
+
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
+
+    <script src="js/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+
+
+  </body>
+</html>
