@@ -112,7 +112,7 @@
               <div v-if="loading" style="color:white;">
                 <h4>
                   <a class="btn btn-outline-info btn-xs" href="http://medulina.com" style="padding:0;">
-                    <img src="https://cdn.rawgit.com/Shotgunosine/medulina_icon/b26e8ab5/icon_white.png" width="28px" style="padding: 2px;">
+                    <img src="https://cdn.rawgit.com/Shotgunosine/medulina_icon/b26e8ab5/icon_white.png" width="27px" style="padding: 2px;">
                   </a>
                   <i class="fa fa-cog fa-spin fa-fw"></i>
                 </h4>
@@ -120,14 +120,14 @@
               </div>
               <div v-else>
                 <h4 v-if="status == 'Submit'">
-                  <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
+                  <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
+                    <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
                   {{instruction}}
                 </h4>
                 <h4 v-if="status == 'Next'">
-                  <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
+                  <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
+                    <i class="fa fa-info" aria-hidden="true"></i>
                   </a>
 
                     <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice | | formatNumber}}

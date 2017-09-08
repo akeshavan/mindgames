@@ -16,19 +16,22 @@ var auth_url = {
 
 var task_dict = {
   "stroke.medulina.com": "atlas_lesions",
-  "tumor.medulina.com": "tumor001_fixed",
+  "tumor.medulina.com": "tumor002",
   "dg.medulina.com": "db_cor_context03",
+  "localhost:8000": "atlas_lesions"
 }
 
 var title_dict = {
   "stroke.medulina.com": "Stroke",
   "tumor.medulina.com": "Meningioma",
   "dg.medulina.com": "Dentate Gyrus",
+  "localhost:8000": "Stroke",
 }
 
 var context_dict = {
   "stroke.medulina.com": false,
   "tumor.medulina.com": false,
+  "localhost:8000": false,
   "dg.medulina.com": true,
 }
 
