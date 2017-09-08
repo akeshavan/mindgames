@@ -121,13 +121,17 @@
               <div v-else>
                 <h4 v-if="status == 'Submit'">
                   <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
-                    <i class="fa fa-info" aria-hidden="true"></i>
+                    <div class="avatar">
+                      <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
+                    </div>
                   </a>
                   {{instruction}}
                 </h4>
                 <h4 v-if="status == 'Next'">
                   <a class="btn btn-outline-info btn-xs" v-on:click="startTour">
-                    <i class="fa fa-info" aria-hidden="true"></i>
+                    <div class="avatar">
+                      <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
+                    </div>
                   </a>
 
                     <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice | | formatNumber}}
