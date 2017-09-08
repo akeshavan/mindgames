@@ -210,7 +210,7 @@ paper.install(window)
 var app =  new Vue({
     el: '#main',
     data: {
-      task: "atlas_lesions",
+      task: task_dict[window.location.href],
       image_entries: [],
       next: null,
       current_image: {},
@@ -292,7 +292,7 @@ var app =  new Vue({
                 LUT[i] = d3.interpolateCool(i/max_vote)
               }
               roi2.fillPixelLog(vote, LUT);
-              
+
             })
             /*collapse across user scores*/
             /*me.current_image_tries.forEach(function(val, idx, arr){

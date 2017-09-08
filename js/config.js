@@ -32,6 +32,8 @@ var context_dict = {
   "dg.medulina.com": true,
 }
 
+
+
 config = {
   mask_url: 'http://api.medulina.com/api/v1/mask',
   image_url: 'http://api.medulina.com/api/v1/image/',
