@@ -20,6 +20,12 @@ var task_dict = {
   "dg.medulina.com": "db_cor_context03",
 }
 
+var title_dict = {
+  "stroke.medulina.com": "Stroke",
+  "tumor.medulina.com": "Meningioma",
+  "dg.medulina.com": "Dentate Gyrus",
+}
+
 config = {
   mask_url: 'http://api.medulina.com/api/v1/mask',
   image_url: 'http://api.medulina.com/api/v1/image/',
@@ -29,7 +35,7 @@ config = {
   task: task_dict[window.location.host],
   num: 15,
   total_num_images: 50,
-  title: "Stroke"
+  title: title_dict[window.location.host]
 }
 
 if (window.location.host == "test.medulina.com"){
