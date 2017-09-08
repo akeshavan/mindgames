@@ -121,17 +121,13 @@
               <div v-else>
                 <h4 v-if="status == 'Submit'">
                   <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="avatar">
                       <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
-                    </div>
                   </a>
                   {{instruction}}
                 </h4>
                 <h4 v-if="status == 'Next'">
                   <a class="" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="avatar">
                       <img v-bind:src="login.avatar" v-bind:alt="login.username" class="rounded-circle colorOutline" style="width:100%;">
-                    </div>
                   </a>
 
                     <i v-if="appMode=='train'" class="fa fa-bullseye" aria-hidden="true" style="padding-right: 0.25em;"></i>{{score.dice | | formatNumber}}
