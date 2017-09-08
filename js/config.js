@@ -14,13 +14,19 @@ var auth_url = {
   "tumor.medulina.com": "http://api.medulina.com/api/authenticate/tumor/github/"
 }
 
+var task_dict = {
+  "stroke.medulina.com": "atlas_lesions",
+  "tumor.medulina.com": "tumor001_fixed"
+  "dg.medulina.com": "db_cor_context03",
+}
+
 config = {
   mask_url: 'http://api.medulina.com/api/v1/mask',
   image_url: 'http://api.medulina.com/api/v1/image/',
   player_url: 'http://api.medulina.com/api/v1/user/',
   edit_url: 'http://api.medulina.com/api/v1/mask',
   use_random: false,
-  task: "atlas_lesions",
+  task: task_dict[window.location.host],
   num: 15,
   total_num_images: 50,
   title: "Stroke"
