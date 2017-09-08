@@ -26,6 +26,12 @@ var title_dict = {
   "dg.medulina.com": "Dentate Gyrus",
 }
 
+var context_dict = {
+  "stroke.medulina.com": false,
+  "tumor.medulina.com": false,
+  "dg.medulina.com": true,
+}
+
 config = {
   mask_url: 'http://api.medulina.com/api/v1/mask',
   image_url: 'http://api.medulina.com/api/v1/image/',
@@ -36,6 +42,7 @@ config = {
   num: 15,
   total_num_images: 50,
   title: title_dict[window.location.host]
+  context: context_dict[window.location.host]
 }
 
 if (window.location.host == "test.medulina.com"){
