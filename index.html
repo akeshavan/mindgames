@@ -40,6 +40,49 @@
     [v-cloak] {
         display: none;
       }
+
+    .missed {
+      width:45px;
+      height:45px;
+      margin-right: 5px;
+      background-color: black;
+      border-color: #FF595E;
+      border-style: solid;
+      border-radius: 10px;
+    }
+
+    .missed.view {
+      background-color: #FF595E;
+    }
+
+    .incorrect {
+      width:45px;
+      height:45px;
+      margin-right: 5px;
+      background-color: black;
+      border-color: #87BCDE;
+      border-style: solid;
+      border-radius: 10px;
+    }
+
+    .incorrect.view {
+      background-color: #87BCDE;
+    }
+
+    .correct {
+      width:45px;
+      height:45px;
+      margin-right: 5px;
+      background-color: black;
+      border-color: darkviolet;
+      border-style: solid;
+      border-radius: 10px;
+    }
+
+    .correct.view {
+      background-color: darkviolet;
+    }
+
     </style>
 
   </head>
@@ -204,13 +247,23 @@
 
         <div id="legend" style="z-index:99999; background:rgba(1,1,1,1); position: fixed; right:3px; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px;" v-if="status=='Next'">
 
-          <div style="display:inline-flex;text-align:center;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: #FF595E; border-color: black; border-style: solid; border-radius: 10px;"></div> <span style="line-height:50px;">Missed</span></div>
-          <br>
-          <div style="display:inline-flex;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: #87BCDE; border-color: black; border-style: solid; border-radius: 10px;"></div>  <span style="line-height:50px;">Incorrect</span></div>
-          <br>
-          <div style="display:inline-flex;"><div id="falsePos" style="width:50px; height:50px; margin-right: 5px; background-color: darkviolet; border-color: black; border-style: solid; border-radius: 10px;"></div>  <span style="line-height:50px;">Correct</span></div>
+          <div style="display:inline-flex;text-align:center;">
+            <div id="falsePos" v-bind:class="{'missed': !view_feedback_foo.missed, 'missed view': view_feedback_foo.missed}" v-on:click="toggle('missed')"></div>
+            <span style="line-height:50px;">Missed</span>
+          </div>
 
-        </div>
+          <br>
+          <div style="display:inline-flex;">
+            <div id="falsePos" v-bind:class="{'incorrect': !view_feedback_foo.incorrect, 'incorrect view': view_feedback_foo.incorrect}" v-on:click="toggle('incorrect')"></div>
+            <span style="line-height:50px;">Incorrect</span>
+          </div>
+
+          <br>
+          <div style="display:inline-flex;">
+            <div id="falsePos" v-bind:class="{'correct': !view_feedback_foo.correct, 'correct view': view_feedback_foo.correct}" v-on:click="toggle('correct')"></div>
+            <span style="line-height:50px;">Correct</span></div>
+
+          </div>
 
         <div v-if="use_context" id="legend_context" style="z-index:2; background:rgba(1,1,1,1); position: fixed; left:45%; top:45px; color:white; display: block; border-color: black; border-style: solid; border-radius: 10px; width:100px;">
 
@@ -311,6 +364,11 @@ var app =  new Vue({
       use_context: false,
       startTime: null,
       current_slice: null,
+      view_feedback_foo: {
+        "missed": true,
+        "incorrect": true,
+        "correct": true
+      },
       login: {
         username: null,
         avatar: 'images/Octocat1.jpg',
@@ -337,12 +395,41 @@ var app =  new Vue({
     computed: {
       appMode: function(){
         return window.appMode
-      }
+      },
     },
     methods: {
       hide: function () {
+        fn.visible = this.overlay
+        fp.visible = this.overlay
+        tp.visible = this.overlay
+
+
+
         hide();
         this.overlay = !this.overlay;
+        this.view_feedback_foo.missed = this.overlay;
+        this.view_feedback_foo.incorrect = this.overlay;
+        this.view_feedback_foo.correct = this.overlay;
+      },
+
+
+      toggle: function(opt){
+        switch (opt) {
+          case 'missed':
+            fn.visible = !fn.visible
+            this.view_feedback_foo.missed = fn.visible
+            break;
+          case 'incorrect':
+            fp.visible = !fp.visible
+            this.view_feedback_foo.incorrect= fp.visible
+            break;
+          case 'correct':
+            tp.visible = !tp.visible
+            this.view_feedback_foo.correct= tp.visible
+            break;
+          default:
+            break;
+        }
       },
 
       undo: function () {
