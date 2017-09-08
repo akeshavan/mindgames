@@ -16,7 +16,7 @@ var auth_url = {
 
 var task_dict = {
   "stroke.medulina.com": "atlas_lesions",
-  "tumor.medulina.com": "tumor001_fixed"
+  "tumor.medulina.com": "tumor001_fixed",
   "dg.medulina.com": "db_cor_context03",
 }
 
