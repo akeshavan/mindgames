@@ -17,8 +17,68 @@
 
     <!-- Custom styles for this template -->
     <link href="css/dashboard.css" rel="stylesheet">
-    <link href="https://v4-alpha.getbootstrap.com/examples/album/album.css" rel="stylesheet">
+    <!--<link href="https://v4-alpha.getbootstrap.com/examples/album/album.css" rel="stylesheet">-->
     <style>
+
+    body {
+      min-height: 75rem; /* Can be removed; just added for demo purposes */
+    }
+
+    .navbar {
+      margin-bottom: 0;
+    }
+
+    .jumbotron {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+      margin-bottom: 0;
+      background-color: #fff;
+    }
+
+    .jumbotron p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jumbotron-heading {
+      font-weight: 300;
+    }
+
+    .jumbotron .container {
+      max-width: 40rem;
+    }
+
+    .album {
+      min-height: 50rem; /* Can be removed; just added for demo purposes */
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      background-color: #f7f7f7;
+    }
+
+    .card {
+      float: left;
+      padding: .75rem;
+      margin-bottom: 2rem;
+      border: 0;
+    }
+
+
+    .card > img {
+      margin-bottom: .75rem;
+    }
+
+    .card-text {
+      font-size: 85%;
+    }
+
+    footer {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    footer p {
+      margin-bottom: .25rem;
+    }
+
     .score {
       position: relative;
       top: -150px;
@@ -311,7 +371,7 @@ backface-visibility: hidden;
       <div class="album text-muted">
       <div class="container">
         <div class="row">
-          <div class="card card1">
+          <div class="card card1 col-lg-4 col-md-12">
             <img src="images/tumor_seg.png" alt="Tumor Image" class="image imageh">
             <div class="middle">
               <a href="http://tumor.medulina.com" class="btn btn-primary">Find Menigiomas</a>
@@ -322,7 +382,7 @@ backface-visibility: hidden;
             <p>Menigiomas stand out from the surroundings and are <b>a great place to start.</b></p>
 
           </div>
-          <div class="card card2">
+          <div class="card card2 col-lg-4 col-md-12">
             <img src="images/stroke_seg.png" alt="Stroke Image" class="image image1">
             <div class="middle2">
               <a href="http://stroke.medulina.com" class="btn btn-primary">Find Strokes</a>
@@ -334,7 +394,7 @@ backface-visibility: hidden;
             <p><small> The data is provided by the <a href="http://www.biorxiv.org/content/early/2017/08/26/179614">ATLAS dataset</a>, by <i>Liew et al. 2017</i></small></p>
 
           </div>
-          <div class="card card3">
+          <div class="card card3 col-lg-4 col-md-12">
             <img src="images/dg_seg.png" alt="Dentate Gyrus Image" class="image image2">
             <div class="middle3">
               <a href="http://dg.medulina.com" class="btn btn-primary">Find the Dentate Gyrus</a>
